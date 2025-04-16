@@ -1,35 +1,28 @@
 import { useState } from "react";
-import { Link } from "@inertiajs/react";
+import { Link, usePage } from "@inertiajs/react";
 import Image from "./Image";
 
 const Navbar = () => {
     const [open, setOpen] = useState(false);
     const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
     const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login state
-    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false); // Track profile dropdown state
+    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+
+    const { auth } = usePage().props;
+    const isLoggedIn = !!auth?.user;
 
     const toggleDesktopDropdown = () => {
         setDesktopDropdownOpen((prev) => !prev);
     };
 
+    const toggleProfileDropdown = () => {
+        setProfileDropdownOpen((prev) => !prev);
+    };
+
     const closeMobileMenu = () => {
         setOpen(false);
         setMobileDropdownOpen(false);
-    };
-
-    const handleLoginClick = () => {
-        // Simulate login logic (you can replace this with actual login logic)
-        setIsLoggedIn(true);
-    };
-
-    const handleLogoutClick = () => {
-        // Simulate logout logic (you can replace this with actual logout logic)
-        setIsLoggedIn(false);
-    };
-
-    const toggleProfileDropdown = () => {
-        setProfileDropdownOpen((prev) => !prev);
+        setProfileDropdownOpen(false);
     };
 
     return (
@@ -56,47 +49,27 @@ const Navbar = () => {
             {/* MOBILE MENU CONTENT */}
             {open && (
                 <div className="fixed inset-0 top-16 bg-[#A8ACC2] flex flex-col items-center justify-start pt-10 gap-6 font-medium text-lg z-40">
-                    <Link href="/" onClick={closeMobileMenu}>
-                        Home
-                    </Link>
-                    <Link href="/about" onClick={closeMobileMenu}>
-                        About
-                    </Link>
+                    <Link href="/" onClick={closeMobileMenu}>Home</Link>
+                    <Link href="/about" onClick={closeMobileMenu}>About</Link>
 
                     {/* Mobile Dropdown */}
                     <div className="text-center">
                         <button
-                            onClick={() =>
-                                setMobileDropdownOpen(!mobileDropdownOpen)
-                            }
+                            onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
                             className="focus:outline-none"
                         >
                             Service ▾
                         </button>
                         {mobileDropdownOpen && (
                             <div className="mt-2 space-y-2 text-sm">
-                                <Link href="/katalog" onClick={closeMobileMenu}>
-                                    Katalog
-                                </Link>
-                                <Link
-                                    href="/peminjaman"
-                                    onClick={closeMobileMenu}
-                                >
-                                    Peminjaman
-                                </Link>
-                                <Link
-                                    href="/pengembalian"
-                                    onClick={closeMobileMenu}
-                                >
-                                    Pengembalian
-                                </Link>
+                                <Link href="/katalog" onClick={closeMobileMenu}>Katalog</Link>
+                                <Link href="/peminjaman" onClick={closeMobileMenu}>Peminjaman</Link>
+                                <Link href="/pengembalian" onClick={closeMobileMenu}>Pengembalian</Link>
                             </div>
                         )}
                     </div>
 
-                    <Link href="/news" onClick={closeMobileMenu}>
-                        News
-                    </Link>
+                    <Link href="/news" onClick={closeMobileMenu}>News</Link>
 
                     {/* Login/Profile toggle */}
                     {isLoggedIn ? (
@@ -109,34 +82,24 @@ const Navbar = () => {
                             </button>
                             {profileDropdownOpen && (
                                 <div className="mt-2 space-y-2 text-sm">
+                                    <Link href="/profile" onClick={closeMobileMenu}>Profile</Link>
+                                    <Link href="/manage-account" onClick={closeMobileMenu}>Manage Account</Link>
+                                    <Link href="/security" onClick={closeMobileMenu}>Security</Link>
                                     <Link
-                                        href="/manage-account"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        Manage Account
-                                    </Link>
-                                    <Link
-                                        href="/security"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        Security
-                                    </Link>
-                                    <button
-                                        onClick={handleLogoutClick}
+                                        href="/logout"
+                                        method="post"
+                                        as="button"
                                         className="w-full text-left px-4 py-2 text-sm"
                                     >
                                         Logout
-                                    </button>
+                                    </Link>
                                 </div>
                             )}
                         </div>
                     ) : (
-                        <button
-                            onClick={handleLoginClick}
-                            className="w-full text-center"
-                        >
+                        <Link href="/login" className="w-full text-center">
                             Login
-                        </button>
+                        </Link>
                     )}
                 </div>
             )}
@@ -148,35 +111,14 @@ const Navbar = () => {
 
                 {/* Desktop Dropdown */}
                 <div className="relative">
-                    <button
-                        onClick={toggleDesktopDropdown}
-                        className="focus:outline-none"
-                    >
+                    <button onClick={toggleDesktopDropdown} className="focus:outline-none">
                         Service ▾
                     </button>
                     {desktopDropdownOpen && (
                         <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
-                            <Link
-                                href="/katalog"
-                                className="block px-4 py-2 hover:bg-blue-100"
-                                onClick={() => setDesktopDropdownOpen(false)}
-                            >
-                                Katalog
-                            </Link>
-                            <Link
-                                href="/peminjaman"
-                                className="block px-4 py-2 hover:bg-blue-100"
-                                onClick={() => setDesktopDropdownOpen(false)}
-                            >
-                                Peminjaman
-                            </Link>
-                            <Link
-                                href="/pengembalian"
-                                className="block px-4 py-2 hover:bg-blue-100"
-                                onClick={() => setDesktopDropdownOpen(false)}
-                            >
-                                Pengembalian
-                            </Link>
+                            <Link href="/katalog" className="block px-4 py-2 hover:bg-blue-100">Katalog</Link>
+                            <Link href="/peminjaman" className="block px-4 py-2 hover:bg-blue-100">Peminjaman</Link>
+                            <Link href="/pengembalian" className="block px-4 py-2 hover:bg-blue-100">Pengembalian</Link>
                         </div>
                     )}
                 </div>
@@ -186,39 +128,27 @@ const Navbar = () => {
                 {/* Login/Profile toggle */}
                 {isLoggedIn ? (
                     <div className="relative">
-                        <button
-                            onClick={toggleProfileDropdown}
-                            className="focus:outline-none"
-                        >
+                        <button onClick={toggleProfileDropdown} className="focus:outline-none">
                             Profile ▾
                         </button>
                         {profileDropdownOpen && (
                             <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
+                                <Link href="/profile" className="block px-4 py-2 hover:bg-blue-100">Profile</Link>
+                                <Link href="/manage-account" className="block px-4 py-2 hover:bg-blue-100">Manage Account</Link>
+                                <Link href="/security" className="block px-4 py-2 hover:bg-blue-100">Security</Link>
                                 <Link
-                                    href="/manage-account"
-                                    className="block px-4 py-2 hover:bg-blue-100"
-                                >
-                                    Manage Account
-                                </Link>
-                                <Link
-                                    href="/security"
-                                    className="block px-4 py-2 hover:bg-blue-100"
-                                >
-                                    Security
-                                </Link>
-                                <button
-                                    onClick={handleLogoutClick}
+                                    href="/logout"
+                                    method="post"
+                                    as="button"
                                     className="block w-full px-4 py-2 hover:bg-blue-100"
                                 >
                                     Logout
-                                </button>
+                                </Link>
                             </div>
                         )}
                     </div>
                 ) : (
-                    <button onClick={handleLoginClick} className="text-sm">
-                        Login
-                    </button>
+                    <Link href="/login" className="text-sm">Login</Link>
                 )}
             </div>
         </nav>

@@ -18,10 +18,46 @@ return new class extends Migration
             $table->date('tanggal_lahir');
             $table->string('email')->unique();
             $table->string('id_number');
-            $table->enum('role', ['siswa', 'guru']);
+            $table->enum('role', ['siswa', 'guru', 'admin']);
             $table->string('password');
             $table->timestamps();
         });
+
+        DB::table('users')->insert([
+            [
+                'name' => 'Admin Utama',
+                'alamat' => 'Jl. Contoh No.1',
+                'tanggal_lahir' => '1990-01-01',
+                'email' => 'admin@example.com',
+                'id_number' => 'ADM001',
+                'role' => 'admin',
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Siswa Satu',
+                'alamat' => 'Jl. Pelajar No.2',
+                'tanggal_lahir' => '2005-05-10',
+                'email' => 'siswa@example.com',
+                'id_number' => 'SIS001',
+                'role' => 'siswa',
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'name' => 'Guru Hebat',
+                'alamat' => 'Jl. Pendidikan No.3',
+                'tanggal_lahir' => '1985-03-20',
+                'email' => 'guru@example.com',
+                'id_number' => 'GUR001',
+                'role' => 'guru',
+                'password' => Hash::make('password'),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+        ]);
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();

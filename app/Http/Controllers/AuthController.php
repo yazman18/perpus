@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 use Illuminate\Validation\Rules\Password;
 
 class AuthController extends Controller
@@ -90,4 +91,44 @@ class AuthController extends Controller
 
         return redirect('/login');
     }
+
+    public function showLoginFormAdmin()
+{
+    return Inertia::render('admin/LoginAdmin'); // ← sesuai path di Pages/Admin/LoginAdmin.jsx
+}
+
+public function loginAdmin(Request $request)
+{
+    $credentials = $request->validate([
+        'identifier' => ['required', 'string'],
+        'password'   => ['required', 'string'],
+        'role'       => ['required', 'in:admin'],
+    ]);
+
+    $user = \App\Models\User::where('email', $credentials['identifier'])
+                ->where('role', 'admin')
+                ->first();
+
+    if (!$user) {
+        return back()->withErrors(['message' => 'Akun admin tidak ditemukan.']);
+    }
+
+    if (!Hash::check($credentials['password'], $user->password)) {
+        return back()->withErrors(['message' => 'Password salah.']);
+    }
+
+    Auth::login($user);
+    $request->session()->regenerate();
+
+    return redirect()->intended('/admin')->with('success', 'Berhasil login sebagai admin.');
+}
+
+public function logoutAdmin(Request $request)
+{
+    Auth::logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    return redirect()->route('admin/LoginAdmin');
+}
 }

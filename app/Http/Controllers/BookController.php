@@ -63,7 +63,7 @@ class BookController extends Controller
         $book->update($validated);
 
         // Return ke inertia dengan flash book
-        return redirect()->back()->with('book', $book);
+        return redirect()->back()->with('success', 'Buku berhasil diedit!');
     }
 
     public function destroy(Book $book)
