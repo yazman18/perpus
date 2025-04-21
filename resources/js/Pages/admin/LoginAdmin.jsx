@@ -26,7 +26,12 @@ const LoginAdmin = () => {
             {/* KIRI */}
             <div className="w-full lg:w-1/2 flex justify-center items-center p-8 relative z-10">
                 <div className="flex items-center gap-4">
-                    <Image src="logo.png" alt="SMAN 2 BANDUNG" w={100} h={100} />
+                    <Image
+                        src="/images/logo.png"
+                        alt="SMAN 2 BANDUNG"
+                        w={100}
+                        h={100}
+                    />
                     <h1 className="text-2xl md:text-3xl font-bold text-[#1E1B4B] text-left leading-tight">
                         SMAN 2 Bandung <br /> E-Library
                     </h1>

@@ -29,8 +29,8 @@ const News = ({ newsList }) => {
                 </div>
             </div>
 
-            <MainCategories />
-            <FeaturedPosts />
+            {/* <MainCategories />
+            <FeaturedPosts /> */}
 
             <div className="">
                 <h1 className="my-8 text-2xl text-grey-600">Recent Posts</h1>

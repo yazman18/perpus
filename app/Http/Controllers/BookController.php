@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
-use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 
 class BookController extends Controller
@@ -34,9 +33,19 @@ class BookController extends Controller
         return redirect()->back()->with('success', 'Buku berhasil disimpan!');
     }
 
-        public function index()
+    // Method untuk mencari dan paginate buku
+    public function index(Request $request)
     {
-        $books = Book::latest()->get();
+        $search = $request->query('search'); // Ambil query pencarian dari input
+
+        // Query untuk mencari buku dengan pagination
+        $books = Book::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%")
+                             ->orWhere('author', 'like', "%{$search}%");
+            })
+            ->paginate(10); // Pagination, 10 buku per halaman
+
         return response()->json($books);
     }
 
@@ -62,36 +71,51 @@ class BookController extends Controller
 
         $book->update($validated);
 
-        // Return ke inertia dengan flash book
         return redirect()->back()->with('success', 'Buku berhasil diedit!');
     }
 
     public function destroy(Book $book)
     {
         $book->delete();
-        return response()->json(['message' => 'Buku berhasil dihapus']);
+
+        return redirect()->back()->with('success', 'Buku berhasil dihapus');
     }
 
-        public function topPicks()
+    public function topPicks()
     {
         $books = Book::latest()->take(5)->get();
         return response()->json($books);
     }
 
     public function katalog()
+    {
+        $books = Book::latest()->get();
+        return Inertia::render('KatalogPage', [
+            'books' => $books,
+        ]);
+    }
+
+    public function show(Book $book)
+    {
+        return Inertia::render('BookDetail', [
+            'book' => $book
+        ]);
+    }
+
+    public function adminIndex(Request $request)
 {
-    $books = Book::latest()->get();
-    return Inertia::render('KatalogPage', [
-        'books' => $books,
-    ]);
+    // Ambil query pencarian dari input
+    $search = $request->query('search');
+
+    // Query untuk mencari buku dengan pagination
+    $books = Book::query()
+        ->when($search, function ($query, $search) {
+            return $query->where('title', 'like', "%{$search}%")
+                         ->orWhere('author', 'like', "%{$search}%")
+                         ->orWhere('isbn', 'like', "%{$search}%");
+        })
+        ->paginate(10); // Pagination, 10 buku per halaman
+
+    return response()->json($books); // Mengembalikan data buku dengan pagination
 }
-
-public function show(Book $book)
-{
-    return Inertia::render('BookDetail', [
-        'book' => $book
-    ]);
-}
-
-
 }

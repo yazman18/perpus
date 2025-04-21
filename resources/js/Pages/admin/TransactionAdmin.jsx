@@ -1,98 +1,177 @@
 import React, { useState } from "react";
 import AdminLayout from "../../Layouts/AdminLayout";
-
-const tabs = [
-    "Histori Transaksi",
-    "Perpanjangan",
-    "Konfirmasi",
-    "Rekapitulasi",
-    "Reservasi",
-    "Keterlambatan & Denda",
-    "Manajemen Denda",
-];
+import { usePage, router } from "@inertiajs/react";
 
 const TransactionAdmin = () => {
-    const [activeTab, setActiveTab] = useState("Histori Transaksi");
+    const { peminjamans = [], pengembalians = [] } = usePage().props;
+    const [activeTab, setActiveTab] = useState("peminjaman");
 
-    const renderContent = () => {
-        switch (activeTab) {
-            case "Histori Transaksi":
-                return <DummyTable title="Histori Transaksi" />;
-            case "Perpanjangan":
-                return <DummyTable title="Perpanjangan Peminjaman Buku" />;
-            case "Konfirmasi":
-                return <DummyTable title="Konfirmasi Transaksi Peminjaman" />;
-            case "Rekapitulasi":
-                return <DummyTable title="Rekapitulasi Transaksi" />;
-            case "Reservasi":
-                return (
-                    <DummyTable title="Daftar Reservasi Buku oleh Anggota" />
-                );
-            case "Keterlambatan & Denda":
-                return <DummyTable title="Transaksi Terlambat & Denda" />;
-            case "Manajemen Denda":
-                return (
-                    <DummyTable title="Manajemen Denda (Aturan, Pengecualian, Pembayaran)" />
-                );
-            default:
-                return null;
-        }
+    const handleAcc = (id) => {
+        router.post(`/transaksi/${id}/peminjaman/acc`);
+    };
+
+    const handleReject = (id) => {
+        router.post(`/transaksi/${id}/peminjaman/tolak`);
+    };
+
+    const handleKembaliAcc = (id) => {
+        router.post(`/transaksi/${id}/pengembalian/acc`);
+    };
+
+    const handleKembaliReject = (id) => {
+        router.post(`/transaksi/${id}/pengembalian/tolak`);
     };
 
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-bold mb-4">Halaman Transaksi</h2>
-            <div className="flex gap-2 flex-wrap mb-6">
-                {tabs.map((tab) => (
-                    <button
-                        key={tab}
-                        onClick={() => setActiveTab(tab)}
-                        className={`px-4 py-2 rounded ${
-                            activeTab === tab
-                                ? "bg-blue-600 text-white"
-                                : "bg-gray-200 hover:bg-gray-300"
-                        }`}
-                    >
-                        {tab}
-                    </button>
-                ))}
+            <h1 className="text-2xl font-bold mb-4">Manajemen Transaksi</h1>
+
+            {/* Tab Switch */}
+            <div className="mb-4 flex gap-2">
+                <button
+                    onClick={() => setActiveTab("peminjaman")}
+                    className={`px-4 py-2 rounded ${
+                        activeTab === "peminjaman"
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 text-black"
+                    }`}
+                >
+                    Peminjaman
+                </button>
+                <button
+                    onClick={() => setActiveTab("pengembalian")}
+                    className={`px-4 py-2 rounded ${
+                        activeTab === "pengembalian"
+                            ? "bg-blue-600 text-white"
+                            : "bg-gray-200 text-black"
+                    }`}
+                >
+                    Pengembalian
+                </button>
             </div>
 
-            <div className="bg-white rounded shadow p-4">{renderContent()}</div>
-        </div>
-    );
-};
+            {/* Peminjaman */}
+            {activeTab === "peminjaman" && (
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm border shadow">
+                        <thead className="bg-gray-100 text-center">
+                            <tr>
+                                <th className="p-2 border">Nama</th>
+                                <th className="p-2 border">Buku</th>
+                                <th className="p-2 border">Tanggal Pinjam</th>
+                                <th className="p-2 border">Status</th>
+                                <th className="p-2 border">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {peminjamans.map((item) => (
+                                <tr key={item.id} className="text-center">
+                                    <td className="border p-2">{item.nama}</td>
+                                    <td className="border p-2">
+                                        {item.book?.title}
+                                    </td>
+                                    <td className="border p-2">
+                                        {item.tanggal_pinjam}
+                                    </td>
+                                    <td className="border p-2 capitalize">
+                                        {item.status_peminjaman}
+                                    </td>
+                                    <td className="border p-2 space-x-2">
+                                        {item.status_peminjaman ===
+                                            "pending" && (
+                                            <>
+                                                <button
+                                                    onClick={() =>
+                                                        handleAcc(item.id)
+                                                    }
+                                                    className="bg-green-600 text-white px-3 py-1 rounded"
+                                                >
+                                                    Setujui
+                                                </button>
+                                                <button
+                                                    onClick={() =>
+                                                        handleReject(item.id)
+                                                    }
+                                                    className="bg-red-600 text-white px-3 py-1 rounded"
+                                                >
+                                                    Tolak
+                                                </button>
+                                            </>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
 
-const DummyTable = ({ title }) => {
-    return (
-        <div>
-            <h3 className="text-lg font-semibold mb-2">{title}</h3>
-            <table className="w-full text-sm border">
-                <thead>
-                    <tr className="bg-gray-100">
-                        <th className="border p-2">#</th>
-                        <th className="border p-2">Nama</th>
-                        <th className="border p-2">Judul Buku</th>
-                        <th className="border p-2">Tanggal</th>
-                        <th className="border p-2">Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {[1, 2, 3].map((i) => (
-                        <tr key={i} className="text-center">
-                            <td className="border p-2">{i}</td>
-                            <td className="border p-2">Nama {i}</td>
-                            <td className="border p-2">Buku {i}</td>
-                            <td className="border p-2">2025-04-0{i}</td>
-                            <td className="border p-2">Selesai</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {/* Pengembalian */}
+            {activeTab === "pengembalian" && (
+                <div className="overflow-x-auto">
+                    <table className="w-full text-sm border shadow">
+                        <thead className="bg-gray-100 text-center">
+                            <tr>
+                                <th className="p-2 border">Nama</th>
+                                <th className="p-2 border">Buku</th>
+                                <th className="p-2 border">Tanggal Pinjam</th>
+                                <th className="p-2 border">Tanggal Kembali</th>
+                                <th className="p-2 border">Status</th>
+                                <th className="p-2 border">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {pengembalians.map((item) => (
+                                <tr key={item.id} className="text-center">
+                                    <td className="border p-2">{item.nama}</td>
+                                    <td className="border p-2">
+                                        {item.book?.title}
+                                    </td>
+                                    <td className="border p-2">
+                                        {item.tanggal_pinjam}
+                                    </td>
+                                    <td className="border p-2">
+                                        {item.tanggal_kembali}
+                                    </td>
+                                    <td className="border p-2 capitalize">
+                                        {item.status_pengembalian}
+                                    </td>
+                                    <td className="border p-2 space-x-2">
+                                        {item.status_pengembalian ===
+                                            "pending" && (
+                                            <>
+                                                <button
+                                                    onClick={() =>
+                                                        handleKembaliAcc(
+                                                            item.id
+                                                        )
+                                                    }
+                                                    className="bg-green-600 text-white px-3 py-1 rounded"
+                                                >
+                                                    Setujui
+                                                </button>
+                                                <button
+                                                    onClick={() =>
+                                                        handleKembaliReject(
+                                                            item.id
+                                                        )
+                                                    }
+                                                    className="bg-red-600 text-white px-3 py-1 rounded"
+                                                >
+                                                    Tolak
+                                                </button>
+                                            </>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </div>
     );
 };
 
 TransactionAdmin.layout = (page) => <AdminLayout>{page}</AdminLayout>;
-
 export default TransactionAdmin;

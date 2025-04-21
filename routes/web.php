@@ -5,8 +5,9 @@ use App\Http\Controllers\NewsController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Middleware\CheckRole;
-
+use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ForgotPasswordController;
+use App\Http\Controllers\AdminController;
 use Inertia\Inertia;
 
 // MAIN LAYOUT
@@ -14,15 +15,10 @@ Route::get('/', fn () => Inertia::render('HomePage'));
 Route::get('/news', fn () => Inertia::render('News'));
 Route::get('/katalog', fn () => Inertia::render('KatalogPage'));
 
-
-
-
-
 Route::post('/news', [NewsController::class, 'store'])->name('news.store');
-// Menampilkan semua berita
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
-// Menampilkan 1 berita
 Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
+Route::get('/', [NewsController::class, 'indexHome'])->name('HomePage');
 
 Route::get('/books', [BookController::class, 'index']);
 Route::post('/books', [BookController::class, 'store']);
@@ -60,20 +56,33 @@ Route::get('/profile', fn () => Inertia::render('auth/Profile'));
 
 
 Route::middleware(['auth', CheckRole::class . ':guru,siswa'])->group(function () {
-    Route::get('/peminjaman', fn () => Inertia::render('PeminjamanPage'));
-    Route::get('/pengembalian', fn () => Inertia::render('PengembalianPage'));
+    Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
+    Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+    Route::get('/pengembalian', [PeminjamanController::class, 'pengembalianPage'])->name('pengembalian.index');
+    Route::post('/pengembalian/{id}/kembalikan', [PeminjamanController::class, 'kembalikan']);
+    Route::post('/pengembalian/{id}/perpanjang', [PeminjamanController::class, 'perpanjang']);
+
 });
+
+
 
 Route::get('/login-admin', [AuthController::class, 'showLoginFormAdmin'])->name('login-admin');
 Route::post('/login-admin', [AuthController::class, 'loginAdmin']);
 Route::post('/logout-admin', [AuthController::class, 'logoutAdmin'])->middleware('auth')->name('logout-admin');
 
+
+
 Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
-    // ADMIN LAYOUT
-    Route::get('/admin', fn () => Inertia::render('admin/HomeAdmin'));
+    Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/addbook', fn () => Inertia::render('admin/Addbook'));
-    Route::get('/reports', fn () => Inertia::render('admin/ReportAdmin'));
-    Route::get('/transaction', fn () => Inertia::render('admin/TransactionAdmin'));
+    Route::get('/reports', [AdminController::class, 'report'])->name('admin.report');
+    Route::get('/transaction', [PeminjamanController::class, 'adminTransaksi']);
+    Route::post('/transaksi/{id}/peminjaman/acc', [PeminjamanController::class, 'setujuiPeminjaman']);
+    Route::post('/transaksi/{id}/peminjaman/tolak', [PeminjamanController::class, 'tolakPeminjaman']);
+
+    // Untuk menyetujui pengembalian
+    Route::post('/transaksi/{id}/pengembalian/acc', [PeminjamanController::class, 'setujuiPengembalian']);
+    Route::post('/transaksi/{id}/pengembalian/tolak', [PeminjamanController::class, 'tolakPengembalian']);
     Route::get('/users', fn () => Inertia::render('admin/Admin'));
     Route::get('/addnews', fn () => Inertia::render('admin/AddNews'));
 });

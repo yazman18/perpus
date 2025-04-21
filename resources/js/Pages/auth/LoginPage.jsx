@@ -34,7 +34,7 @@ const LoginPage = () => {
             <div className="w-full lg:w-1/2 flex justify-center items-center p-8 relative z-10">
                 <div className="flex items-center gap-4">
                     <Image
-                        src="logo.png"
+                        src="/images/logo.png"
                         alt="SMAN 2 BANDUNG"
                         w={100}
                         h={100}

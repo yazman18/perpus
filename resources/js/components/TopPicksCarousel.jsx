@@ -6,9 +6,9 @@ import MainLayout from "../Layouts/MainLayout";
 const TopPicksCarousel = () => {
     const [topPicks, setTopPicks] = useState([]);
     const [offset, setOffset] = useState(0);
-    const cardsToShow = 4;
-    const cardWidth = 280;
-    const gap = 20;
+    const cardsToShow = 2; // Tampilkan 2 kartu per baris
+    const cardWidth = 350; // Lebar per card
+    const gap = 20; // Jarak antar card
 
     useEffect(() => {
         fetch("/books/top-picks")
@@ -35,6 +35,7 @@ const TopPicksCarousel = () => {
             </h2>
             <div className="relative overflow-hidden">
                 <div className="flex items-center">
+                    {/* Tombol Kiri */}
                     <button
                         onClick={handlePrev}
                         className="z-10 p-2 bg-white border border-gray-300 rounded-full shadow hover:bg-blue-100 transition"
@@ -42,6 +43,7 @@ const TopPicksCarousel = () => {
                         &#8592;
                     </button>
 
+                    {/* Konten Slider */}
                     <div className="w-full overflow-hidden px-4">
                         <div
                             className="flex transition-transform duration-500 ease-out"
@@ -66,27 +68,41 @@ const TopPicksCarousel = () => {
                                                 : 0
                                         }px`,
                                     }}
-                                    className="flex-shrink-0 bg-white rounded-lg shadow-md overflow-hidden"
+                                    className="flex-shrink-0 bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300"
                                 >
-                                    <Image
-                                        src={`/storage/${book.image}`}
-                                        alt={book.title}
-                                        className="rounded-2xl object-cover"
-                                        w="735"
-                                    />
-                                    <div className="p-4">
-                                        <h3 className="text-md font-semibold mb-1 text-blue-800">
-                                            {book.title}
-                                        </h3>
-                                        <p className="text-gray-600 text-sm">
-                                            {book.author} - {book.year}
-                                        </p>
+                                    {/* Flexbox Layout untuk Gambar dan Teks */}
+                                    <div className="flex w-full items-center">
+                                        {/* Gambar di Kiri */}
+                                        <div className="w-1/3">
+                                            <Image
+                                                src={book.image}
+                                                alt={book.title}
+                                                className="w-full h-full object-cover rounded-t-lg"
+                                            />
+                                        </div>
+
+                                        {/* Teks di Kanan */}
+                                        <div className="p-4 w-2/3">
+                                            {/* Judul Buku */}
+                                            <h3 className="text-lg font-semibold mb-2 text-blue-800">
+                                                {book.title}
+                                            </h3>
+                                            {/* Deskripsi Buku */}
+                                            <p className="text-gray-600 text-sm mb-4">
+                                                {book.description}
+                                            </p>
+                                            {/* Penulis dan Tahun */}
+                                            <p className="text-gray-600 text-sm">
+                                                {book.author} - {book.year}
+                                            </p>
+                                        </div>
                                     </div>
                                 </Link>
                             ))}
                         </div>
                     </div>
 
+                    {/* Tombol Kanan */}
                     <button
                         onClick={handleNext}
                         className="z-10 p-2 bg-white border border-gray-300 rounded-full shadow hover:bg-blue-100 transition"

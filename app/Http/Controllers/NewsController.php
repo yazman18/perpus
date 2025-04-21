@@ -52,4 +52,15 @@ class NewsController extends Controller
         ]);
     }
 
+    // Controller method
+    public function indexHome()
+    {
+        $news = News::latest()->take(4)->get();
+        return Inertia::render('HomePage', [
+            'news' => $news,
+        ]);
+    }
+
+
+
 }

@@ -129,6 +129,7 @@ public function logoutAdmin(Request $request)
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    return redirect()->route('admin/LoginAdmin');
+    return redirect()->route('login-admin');
 }
+
 }

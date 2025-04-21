@@ -1,45 +1,17 @@
 import { useState } from "react";
 import Image from "../components/Image";
 import MainLayout from "../Layouts/MainLayout";
+import { Link } from "@inertiajs/react";
 
-const newsData = [
-    {
-        title: "Kegiatan Literasi Mingguan",
-        description:
-            "Setiap hari Jumat, perpustakaan menyelenggarakan kegiatan literasi terbuka bagi semua siswa.",
-        image: "about-us.png",
-    },
-    {
-        title: "Donasi Buku oleh Alumni",
-        description:
-            "Alumni SMAN 2 Bandung menyumbangkan lebih dari 300 buku baru untuk memperkaya koleksi perpustakaan.",
-        image: "about-us.png",
-    },
-    {
-        title: "Bazar Buku Murah",
-        description:
-            "Perpustakaan mengadakan bazar buku murah untuk mendukung minat baca siswa.",
-        image: "about-us.png",
-    },
-    {
-        title: "Wadidaw",
-        description:
-            "Perpustakaan mengadakan bazar buku murah untuk mendukung minat baca siswa.",
-        image: "about-us.png",
-    },
-    {
-        title: "Event Literasi Nasional",
-        description:
-            "Perpustakaan ikut berpartisipasi dalam event literasi tingkat nasional.",
-        image: "about-us.png",
-    },
-];
+const Homepage = ({ news }) => {
+    console.log(news); // Log the data to check if it's received properly
 
-const Homepage = () => {
     const [offset, setOffset] = useState(0);
     const cardsToShow = 4;
-    const cardWidth = 280; // Adjusted card width for better alignment
-    const gap = 20; // consistent gap size
+    const cardWidth = 280;
+    const gap = 20;
+
+    const newsData = news || []; // Ensure news is always an array
 
     const handlePrev = () => {
         if (offset > 0) {
@@ -85,7 +57,7 @@ const Homepage = () => {
                     </div>
                     <div className="w-full md:max-w-[500px] aspect-w-4 aspect-h-3">
                         <Image
-                            src="about-us.png"
+                            src="/images/about-us.png"
                             alt="About Us"
                             className="object-contain rounded-lg shadow-md w-full h-full"
                             w="800"
@@ -134,21 +106,22 @@ const Homepage = () => {
                                     }px)`,
                                 }}
                             >
-                                {newsData.map((news, index) => (
-                                    <div
-                                        key={index}
+                                {newsData.map((news, indexHome) => (
+                                    <Link
+                                        key={indexHome}
+                                        href={`/news/${news.id}`} // Link to the single post page
+                                        className="flex-shrink-0 bg-white rounded-lg shadow-md overflow-hidden"
                                         style={{
                                             width: `${cardWidth}px`,
                                             marginRight: `${
-                                                index < newsData.length - 1
+                                                indexHome < newsData.length - 1
                                                     ? gap
                                                     : 0
                                             }px`,
                                         }}
-                                        className="flex-shrink-0 bg-white rounded-lg shadow-md overflow-hidden"
                                     >
                                         <Image
-                                            src={news.image}
+                                            src={news.cover}
                                             alt={news.title}
                                             className="rounded-2xl object-cover"
                                             w="735"
@@ -158,10 +131,10 @@ const Homepage = () => {
                                                 {news.title}
                                             </h3>
                                             <p className="text-gray-600 text-sm">
-                                                {news.description}
+                                                {news.short_description}
                                             </p>
                                         </div>
-                                    </div>
+                                    </Link>
                                 ))}
                             </div>
                         </div>

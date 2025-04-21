@@ -32,7 +32,12 @@ const Navbar = () => {
                 href="/"
                 className="flex items-center gap-3 text-lg md:text-2xl font-bold"
             >
-                <Image src="logo.png" alt="SMAN 2 BANDUNG" w={32} h={32} />
+                <Image
+                    src="/images/logo.png"
+                    alt="SMAN 2 BANDUNG"
+                    w={32}
+                    h={32}
+                />
                 <span>SMAN 2 Bandung</span>
             </Link>
 
@@ -49,27 +54,47 @@ const Navbar = () => {
             {/* MOBILE MENU CONTENT */}
             {open && (
                 <div className="fixed inset-0 top-16 bg-[#A8ACC2] flex flex-col items-center justify-start pt-10 gap-6 font-medium text-lg z-40">
-                    <Link href="/" onClick={closeMobileMenu}>Home</Link>
-                    <Link href="/about" onClick={closeMobileMenu}>About</Link>
+                    <Link href="/" onClick={closeMobileMenu}>
+                        Home
+                    </Link>
+                    <Link href="/about" onClick={closeMobileMenu}>
+                        About
+                    </Link>
 
                     {/* Mobile Dropdown */}
                     <div className="text-center">
                         <button
-                            onClick={() => setMobileDropdownOpen(!mobileDropdownOpen)}
+                            onClick={() =>
+                                setMobileDropdownOpen(!mobileDropdownOpen)
+                            }
                             className="focus:outline-none"
                         >
                             Service ▾
                         </button>
                         {mobileDropdownOpen && (
                             <div className="mt-2 space-y-2 text-sm">
-                                <Link href="/katalog" onClick={closeMobileMenu}>Katalog</Link>
-                                <Link href="/peminjaman" onClick={closeMobileMenu}>Peminjaman</Link>
-                                <Link href="/pengembalian" onClick={closeMobileMenu}>Pengembalian</Link>
+                                <Link href="/katalog" onClick={closeMobileMenu}>
+                                    Katalog
+                                </Link>
+                                <Link
+                                    href="/peminjaman"
+                                    onClick={closeMobileMenu}
+                                >
+                                    Peminjaman
+                                </Link>
+                                <Link
+                                    href="/pengembalian"
+                                    onClick={closeMobileMenu}
+                                >
+                                    Pengembalian
+                                </Link>
                             </div>
                         )}
                     </div>
 
-                    <Link href="/news" onClick={closeMobileMenu}>News</Link>
+                    <Link href="/news" onClick={closeMobileMenu}>
+                        News
+                    </Link>
 
                     {/* Login/Profile toggle */}
                     {isLoggedIn ? (
@@ -82,9 +107,24 @@ const Navbar = () => {
                             </button>
                             {profileDropdownOpen && (
                                 <div className="mt-2 space-y-2 text-sm">
-                                    <Link href="/profile" onClick={closeMobileMenu}>Profile</Link>
-                                    <Link href="/manage-account" onClick={closeMobileMenu}>Manage Account</Link>
-                                    <Link href="/security" onClick={closeMobileMenu}>Security</Link>
+                                    <Link
+                                        href="/profile"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        Profile
+                                    </Link>
+                                    <Link
+                                        href="/manage-account"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        Manage Account
+                                    </Link>
+                                    <Link
+                                        href="/security"
+                                        onClick={closeMobileMenu}
+                                    >
+                                        Security
+                                    </Link>
                                     <Link
                                         href="/logout"
                                         method="post"
@@ -111,14 +151,32 @@ const Navbar = () => {
 
                 {/* Desktop Dropdown */}
                 <div className="relative">
-                    <button onClick={toggleDesktopDropdown} className="focus:outline-none">
+                    <button
+                        onClick={toggleDesktopDropdown}
+                        className="focus:outline-none"
+                    >
                         Service ▾
                     </button>
                     {desktopDropdownOpen && (
                         <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
-                            <Link href="/katalog" className="block px-4 py-2 hover:bg-blue-100">Katalog</Link>
-                            <Link href="/peminjaman" className="block px-4 py-2 hover:bg-blue-100">Peminjaman</Link>
-                            <Link href="/pengembalian" className="block px-4 py-2 hover:bg-blue-100">Pengembalian</Link>
+                            <Link
+                                href="/katalog"
+                                className="block px-4 py-2 hover:bg-blue-100"
+                            >
+                                Katalog
+                            </Link>
+                            <Link
+                                href="/peminjaman"
+                                className="block px-4 py-2 hover:bg-blue-100"
+                            >
+                                Peminjaman
+                            </Link>
+                            <Link
+                                href="/pengembalian"
+                                className="block px-4 py-2 hover:bg-blue-100"
+                            >
+                                Pengembalian
+                            </Link>
                         </div>
                     )}
                 </div>
@@ -128,14 +186,32 @@ const Navbar = () => {
                 {/* Login/Profile toggle */}
                 {isLoggedIn ? (
                     <div className="relative">
-                        <button onClick={toggleProfileDropdown} className="focus:outline-none">
+                        <button
+                            onClick={toggleProfileDropdown}
+                            className="focus:outline-none"
+                        >
                             Profile ▾
                         </button>
                         {profileDropdownOpen && (
                             <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
-                                <Link href="/profile" className="block px-4 py-2 hover:bg-blue-100">Profile</Link>
-                                <Link href="/manage-account" className="block px-4 py-2 hover:bg-blue-100">Manage Account</Link>
-                                <Link href="/security" className="block px-4 py-2 hover:bg-blue-100">Security</Link>
+                                <Link
+                                    href="/profile"
+                                    className="block px-4 py-2 hover:bg-blue-100"
+                                >
+                                    Profile
+                                </Link>
+                                <Link
+                                    href="/manage-account"
+                                    className="block px-4 py-2 hover:bg-blue-100"
+                                >
+                                    Manage Account
+                                </Link>
+                                <Link
+                                    href="/security"
+                                    className="block px-4 py-2 hover:bg-blue-100"
+                                >
+                                    Security
+                                </Link>
                                 <Link
                                     href="/logout"
                                     method="post"
@@ -148,7 +224,9 @@ const Navbar = () => {
                         )}
                     </div>
                 ) : (
-                    <Link href="/login" className="text-sm">Login</Link>
+                    <Link href="/login" className="text-sm">
+                        Login
+                    </Link>
                 )}
             </div>
         </nav>

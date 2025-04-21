@@ -1,10 +1,43 @@
+import { useState, useEffect } from "react";
 import { usePage, Link } from "@inertiajs/react";
 import Image from "../components/Image";
-import TopPicksCarousel from "../components/TopPicksCarousel";
 import MainLayout from "../Layouts/MainLayout";
+import TopPicksCarousel from "../components/TopPicksCarousel";
 
 const KatalogPage = () => {
     const { books } = usePage().props;
+    const [search, setSearch] = useState(""); // State untuk pencarian
+    const [booksData, setBooksData] = useState([]); // Buku yang ditampilkan
+    const [pagination, setPagination] = useState({}); // Pagination info
+
+    // Mengambil data buku dari API dengan pencarian
+    const handleSearch = async (e) => {
+        e.preventDefault();
+        const response = await fetch(`/books?search=${search}`);
+        const data = await response.json();
+        setBooksData(data.data);
+        setPagination(data); // Update pagination data
+    };
+
+    // Menghandle pagination
+    const handlePagination = async (url) => {
+        const response = await fetch(url);
+        const data = await response.json();
+        setBooksData(data.data);
+        setPagination(data);
+    };
+
+    useEffect(() => {
+        // Initial fetch on page load to get books and pagination data
+        const fetchBooks = async () => {
+            const response = await fetch(`/books`);
+            const data = await response.json();
+            setBooksData(data.data);
+            setPagination(data); // Save pagination data
+        };
+
+        fetchBooks();
+    }, []); // Empty dependency array to run on mount
 
     return (
         <div className="px-6 py-10 bg-gray-100 font-sans min-h-screen">
@@ -22,46 +55,73 @@ const KatalogPage = () => {
                 </p>
 
                 {/* ✅ Top Picks Carousel */}
-                <TopPicksCarousel books={books.slice(0, 5)} />
+                <div className="gap-4 mb-10">
+                    <TopPicksCarousel books={books.slice(0, 5)} />
+                </div>
 
                 {/* 🔍 Search Bar */}
                 <div className="flex gap-4 mb-10">
                     <input
                         type="text"
                         placeholder="Search here..."
-                        className="flex-grow px-4 border rounded-md shadow-sm"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="flex-grow px-4 py-3 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-green-500"
                     />
-                    <button className="px-8 py-4 bg-green-500 text-white font-semibold rounded-md shadow hover:bg-green-600">
+                    <button
+                        onClick={handleSearch}
+                        className="px-8 py-3 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                    >
                         Search
                     </button>
                 </div>
 
                 {/* 📚 Catalog List */}
-                <div className="grid grid-cols-2 md:grid-cols-5 gap-6 bg-gray-200 p-6 rounded-md">
-                    {books.map((book) => (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 bg-gray-200 p-6 rounded-md">
+                    {booksData?.map((book) => (
                         <Link
                             href={`/books/${book.id}`}
                             key={book.id}
-                            className="bg-gray-200 p-4 flex flex-col items-start hover:scale-[1.02] transition duration-150"
+                            className="bg-white p-4 flex flex-col items-center hover:scale-[1.02] transition duration-300 ease-in-out transform rounded-lg shadow-md"
                         >
                             <Image
-                                src={`storage/${book.image}`}
+                                src={book.image}
                                 alt={book.title}
                                 w={200}
                                 h={240}
-                                className="max-w-full h-[240px] object-cover mb-3"
+                                className="max-w-full h-[240px] object-cover mb-3 rounded-lg"
                             />
-                            <h4 className="text-sm font-bold mb-1 text-left">
+                            <h4 className="text-sm font-semibold text-center text-gray-800 mb-2">
                                 {book.title}
                             </h4>
-                            <p className="text-xs text-left text-gray-600">
+                            <p className="text-xs text-center text-gray-600">
                                 {book.author} <br /> {book.publisher} (
                                 {book.year})
                             </p>
-                            <p className="text-xs text-left text-gray-500 mt-1">
-                                {book.isbn} <br /> {book.pages} halaman
+                            <p className="text-xs text-center text-gray-500 mt-2">
+                                ISBN: {book.isbn} <br /> {book.pages} pages
                             </p>
                         </Link>
+                    ))}
+                </div>
+
+                {/* Pagination */}
+                <div className="flex justify-center mt-6">
+                    {pagination.links?.map((link, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handlePagination(link.url)}
+                            disabled={!link.url}
+                            className={`px-3 py-1 mx-1 rounded border ${
+                                link.active
+                                    ? "bg-green-600 text-white"
+                                    : "bg-white text-gray-700"
+                            }`}
+                        >
+                            <span
+                                dangerouslySetInnerHTML={{ __html: link.label }}
+                            />
+                        </button>
                     ))}
                 </div>
             </div>

@@ -40,7 +40,7 @@ const RegisterPage = () => {
             <div className="w-1/2 flex justify-center items-center relative z-10">
                 <div className="flex items-center gap-4">
                     <Image
-                        src="logo.png"
+                        src="/image/logo.png"
                         alt="SMAN 2 BANDUNG"
                         w={120}
                         h={120}

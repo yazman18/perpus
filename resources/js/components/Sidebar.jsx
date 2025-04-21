@@ -42,7 +42,7 @@ const Sidebar = () => {
                 <div className="bg-[#1F2937] p-4 text-center">
                     <div className="flex items-center justify-center gap-2 mb-2">
                         <Image
-                            src="logo.png"
+                            src="/images/logo.png"
                             alt="SMAN 2 BANDUNG"
                             w={32}
                             h={32}

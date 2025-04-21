@@ -5,17 +5,17 @@ import Image from "./Image";
 const PostListItem = ({ news }) => {
     return (
         <div className="flex flex-col xl:flex-row gap-8">
-            {/* image */}
+            {/* Image */}
             <div className="md:hidden xl:block xl:w-1/3">
                 <Image
-                    src={`/storage/${news.cover}`}
-                    className="rounded-2xl object-cover"
-                    w="735"
+                    src={news.cover}
                     alt={news.title}
+                    className="rounded-2xl object-contain w-full h-auto" // Ensure image is fully contained and responsive
+                    w="100%" // Set width to 100% to ensure it fills the container
                 />
             </div>
 
-            {/* details */}
+            {/* Details */}
             <div className="flex flex-col gap-4 xl:w-2/3">
                 <Link
                     href={`/news/${news.id}`}
