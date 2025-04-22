@@ -6,6 +6,8 @@ use App\Models\Peminjaman;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Book;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -65,42 +67,51 @@ class AdminController extends Controller
 
 
 
-    public function dashboard()
-    {
-        $totalStaff = \App\Models\User::where('role', 'admin')->count();
-        $totalStudents = \App\Models\User::where('role', 'siswa')->count();
-        $totalLecturers = \App\Models\User::where('role', 'guru')->count();
-        $totalCatalogs = \App\Models\Book::count();
+public function dashboard()
+{
+    // Paginate students and lecturers
+    $students = User::where('role', 'siswa')->paginate(10); // Assuming 10 students per page
+    $lecturers = User::where('role', 'guru')->paginate(10); // Assuming 10 lecturers per page
 
-        $totalLateReturns = \App\Models\Peminjaman::whereNotNull('tanggal_kembali')
-            ->whereRaw('DATEDIFF(tanggal_kembali, tanggal_pinjam) > durasi')
-            ->count();
+    // Other stats (already existing)
+    $totalStaff = User::where('role', 'admin')->count();
+    $totalStudents = User::where('role', 'siswa')->count();
+    $totalLecturers = User::where('role', 'guru')->count();
+    $totalCatalogs = Book::count();
 
-        $totalReturns = \App\Models\Peminjaman::whereNotNull('tanggal_kembali')->count();
-        $latePercentage = $totalReturns > 0
-            ? round(($totalLateReturns / $totalReturns) * 100)
-            : 0;
+    $totalLateReturns = Peminjaman::whereNotNull('tanggal_kembali')
+        ->whereRaw('DATEDIFF(tanggal_kembali, tanggal_pinjam) > durasi')
+        ->count();
 
-        $avgPerMonth = \App\Models\Peminjaman::selectRaw('MONTH(tanggal_pinjam) as bulan, COUNT(*) as total')
-            ->groupBy('bulan')
-            ->orderBy('bulan')
-            ->get();
+    $totalReturns = Peminjaman::whereNotNull('tanggal_kembali')->count();
+    $latePercentage = $totalReturns > 0
+        ? round(($totalLateReturns / $totalReturns) * 100)
+        : 0;
 
-        $labels = $avgPerMonth->map(fn($item) => \Carbon\Carbon::create()->month($item->bulan)->format('M'));
-        $data = $avgPerMonth->pluck('total');
+    $avgPerMonth = Peminjaman::selectRaw('MONTH(tanggal_pinjam) as bulan, COUNT(*) as total')
+        ->groupBy('bulan')
+        ->orderBy('bulan')
+        ->get();
 
-        return Inertia::render('admin/HomeAdmin', [
-            'stats' => [
-                'staff' => $totalStaff,
-                'students' => $totalStudents,
-                'lecturers' => $totalLecturers,
-                'catalogs' => $totalCatalogs,
-                'latePercentage' => $latePercentage,
-            ],
-            'chartData' => [
-                'labels' => $labels,
-                'data' => $data,
-            ],
-        ]);
-    }
+    $labels = $avgPerMonth->map(fn($item) => \Carbon\Carbon::create()->month($item->bulan)->format('M'));
+    $data = $avgPerMonth->pluck('total');
+
+    return Inertia::render('admin/HomeAdmin', [
+        'stats' => [
+            'staff' => $totalStaff,
+            'students' => $totalStudents,
+            'lecturers' => $totalLecturers,
+            'catalogs' => $totalCatalogs,
+            'latePercentage' => $latePercentage,
+        ],
+        'chartData' => [
+            'labels' => $labels,
+            'data' => $data,
+        ],
+        // Passing paginated data for students and lecturers
+        'students' => $students,
+        'lecturers' => $lecturers,
+    ]);
+}
+
 }

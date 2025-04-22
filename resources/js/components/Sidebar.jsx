@@ -87,7 +87,7 @@ const Sidebar = () => {
             {/* Bottom Section */}
             <div className="px-4 pb-6">
                 <Link
-                    href="/logout"
+                    href="/logout-admin"
                     method="post"
                     as="button"
                     className="w-full flex items-center gap-3 p-2 rounded-md bg-red-600 hover:bg-red-700 text-sm"
