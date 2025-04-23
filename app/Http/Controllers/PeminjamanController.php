@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\User;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -10,9 +11,6 @@ use Inertia\Inertia;
 
 class PeminjamanController extends Controller
 {
-    /**
-     * Menampilkan halaman peminjaman dengan data buku dan peminjaman user login.
-     */
     public function index()
     {
         $peminjamans = Peminjaman::with('book')
@@ -31,32 +29,42 @@ class PeminjamanController extends Controller
                     'status_pengembalian' => $p->status_pengembalian,
                     'book' => [
                         'title' => $p->book->title,
+                        'author' => $p->book->author,
                         'image' => $p->book->image,
                     ],
                 ];
             });
 
-        $books = Book::all();
-
         return Inertia::render('PeminjamanPage', [
             'peminjamans' => $peminjamans,
+        ]);
+    }
+
+    public function create($book_id)
+    {
+        $book = Book::findOrFail($book_id);
+        $user = Auth::user();
+        $books = Book::all();
+
+        return Inertia::render('PeminjamanForm', [
+            'book' => $book,
+            'user' => $user,
             'books' => $books,
         ]);
     }
 
-    /**
-     * Menyimpan data peminjaman buku baru.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
             'nama' => 'required|string|max:255',
             'kelas' => 'required|string|max:255',
             'book_id' => 'required|exists:books,id',
+            'user_id' => 'required|exists:users,id',
             'tanggal_pinjam' => 'required|date',
         ]);
 
-        $book = Book::find($validated['book_id']);
+        $book = Book::findOrFail($validated['book_id']);
+
         if ($book->stock <= 0) {
             return back()->withErrors(['book_id' => 'Stok buku habis']);
         }
@@ -64,12 +72,14 @@ class PeminjamanController extends Controller
         $book->decrement('stock');
 
         Peminjaman::create([
-            'user_id' => Auth::id(),
+            'user_id' => $validated['user_id'],
             'nama' => $validated['nama'],
             'kelas' => $validated['kelas'],
             'book_id' => $validated['book_id'],
             'tanggal_pinjam' => $validated['tanggal_pinjam'],
-            'durasi' => 7, // assuming 7 days by default
+            'durasi' => 7,
+            'status_peminjaman' => 'pending',
+            'status_pengembalian' => null, // atau tidak diset sama sekali!
         ]);
 
         return redirect('/peminjaman')->with('success', 'Peminjaman berhasil disimpan');
@@ -79,6 +89,7 @@ class PeminjamanController extends Controller
     {
         $pengembalians = Peminjaman::with('book')
             ->where('user_id', Auth::id())
+            ->whereNotNull('tanggal_kembali')
             ->latest()
             ->get();
 
@@ -87,67 +98,65 @@ class PeminjamanController extends Controller
         ]);
     }
 
-    public function kembalikan($id)
-    {
-        $peminjaman = Peminjaman::where('id', $id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+    public function kembalikan($id, Request $request)
+{
+    // Temukan peminjaman berdasarkan ID
+    $peminjaman = Peminjaman::findOrFail($id);
 
-        $today = now();
-
-        // ✅ Validasi: tanggal kembali tidak boleh sebelum tanggal pinjam
-        if ($today->lt($peminjaman->tanggal_pinjam)) {
-            return redirect()->back()->withErrors([
-                'tanggal_kembali' => 'Tanggal pengembalian tidak valid (lebih awal dari tanggal pinjam).'
-            ]);
-        }
-
-        // Tambahkan stok buku
-        $peminjaman->book->increment('stock');
-
-        $peminjaman->tanggal_kembali = $today;
-        $peminjaman->save();
-
-        return redirect()->back()->with('success', 'Buku berhasil dikembalikan.');
+    // Periksa apakah status peminjaman disetujui
+    if ($peminjaman->status_peminjaman !== 'disetujui') {
+        return redirect()->back()->withErrors([
+            'status_peminjaman' => 'Peminjaman belum disetujui oleh admin.'
+        ]);
     }
 
-    public function perpanjang($id)
-    {
-        $peminjaman = Peminjaman::where('id', $id)
-            ->where('user_id', Auth::id())
-            ->firstOrFail();
+    // Pastikan tanggal pengembalian valid
+    $peminjaman->tanggal_kembali = $request->tanggal_kembali;
+    $peminjaman->status_pengembalian = 'pending'; // Status pengembalian yang menunggu konfirmasi admin
+    $peminjaman->save();
 
-        $peminjaman->durasi += 7;
-        $peminjaman->save();
+    return redirect()->back()->with('success', 'Pengembalian sedang menunggu persetujuan admin.');
+}
 
-        return redirect()->back()->with('success', 'Peminjaman diperpanjang 7 hari.');
-    }
 
-    /**
-     * Admin Transaction Page: Shows pending reservations and returns
-     */
+    
+
+public function perpanjang($id)
+{
+    // Mencari peminjaman berdasarkan ID
+    $peminjaman = Peminjaman::findOrFail($id);
+
+    // Perpanjang durasi 7 hari
+    $peminjaman->durasi += 7;
+    $peminjaman->save();
+
+    return redirect()->back()->with('success', 'Peminjaman diperpanjang 7 hari.');
+}
+
     public function adminTransaksi()
     {
         $peminjamans = Peminjaman::with('book')
             ->where('status_peminjaman', 'pending')
             ->latest()
             ->get();
-
+    
+        // Data pengembalian hanya muncul jika:
+        // - User sudah klik tombol pengembalian
+        // - Sudah mengisi tanggal_kembali
+        // - status_pengembalian = 'pending'
         $pengembalians = Peminjaman::with('book')
             ->whereNotNull('tanggal_kembali')
             ->where('status_pengembalian', 'pending')
             ->latest()
             ->get();
-
+    
         return Inertia::render('admin/TransactionAdmin', [
             'peminjamans' => $peminjamans,
             'pengembalians' => $pengembalians,
         ]);
     }
+    
 
-    /**
-     * Approve a borrowing request (approve)
-     */
     public function setujuiPeminjaman($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
@@ -157,27 +166,16 @@ class PeminjamanController extends Controller
         return redirect()->back()->with('success', 'Peminjaman disetujui.');
     }
 
-    /**
-     * Reject a borrowing request (reject)
-     * Return the book stock to the original value
-     */
     public function tolakPeminjaman($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
-        $book = $peminjaman->book;
-
-        // Restoring stock to the book if the reservation is rejected
-        $book->increment('stock');
-
+        $peminjaman->book->increment('stock');
         $peminjaman->status_peminjaman = 'ditolak';
         $peminjaman->save();
 
         return redirect()->back()->with('success', 'Peminjaman ditolak. Stok buku dikembalikan.');
     }
 
-    /**
-     * Approve a return request (approve return)
-     */
     public function setujuiPengembalian($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
@@ -187,15 +185,13 @@ class PeminjamanController extends Controller
         return redirect()->back()->with('success', 'Pengembalian disetujui.');
     }
 
-    /**
-     * Reject a return request (reject)
-     */
     public function tolakPengembalian($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
         $peminjaman->status_pengembalian = 'ditolak';
+        $peminjaman->book->increment('stock');
         $peminjaman->save();
 
-        return redirect()->back()->with('success', 'Pengembalian ditolak.');
+        return redirect()->back()->with('success', 'Pengembalian ditolak. Stok buku dikembalikan.');
     }
 }

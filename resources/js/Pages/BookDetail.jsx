@@ -55,7 +55,7 @@ const BookDetail = ({ book, books }) => {
                             {/* Button & Status */}
                             <div className="text-right">
                                 <Link
-                                    href={`/peminjaman`}
+                                     href={`/peminjaman/${book.id}`}
                                     disabled={!isAvailable}
                                     className={`px-6 py-2 text-white text-sm font-semibold rounded-md ${
                                         isAvailable

@@ -1,45 +1,16 @@
 import React, { useState } from "react";
-import { useForm, usePage, router } from "@inertiajs/react";
+import { Link } from "@inertiajs/react";
 import MainLayout from "../Layouts/MainLayout";
+import { useForm, usePage, router } from "@inertiajs/react"; // Menggunakan useForm dan router dari inertiajs
 
-const PeminjamanPage = ({ peminjamans, books }) => {
-    const [showForm, setShowForm] = useState(false);
+const PeminjamanPage = ({ peminjamans }) => {
     const [selectedReturnId, setSelectedReturnId] = useState(null);
+    const [isReturning, setIsReturning] = useState(false);
     const { flash } = usePage().props;
 
     const { data, setData, post, reset, errors } = useForm({
-        nama: "",
-        kelas: "",
-        book_id: "",
-        tanggal_pinjam: "",
-        tanggal_kembali: "", // untuk form pengembalian
+        tanggal_kembali: "",
     });
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        post("/peminjaman", {
-            onSuccess: () => {
-                reset();
-                setShowForm(false);
-            },
-        });
-    };
-
-    const handleReturnSubmit = (e, id) => {
-        e.preventDefault();
-        router.post(`/pengembalian/${id}/kembalikan`, {
-            _method: "post",
-            tanggal_kembali: data.tanggal_kembali,
-            onSuccess: () => {
-                reset("tanggal_kembali");
-                setSelectedReturnId(null);
-            },
-        });
-    };
-
-    const handlePerpanjang = (id) => {
-        router.post(`/pengembalian/${id}/perpanjang`);
-    };
 
     const dendaPerHari = 1000;
 
@@ -50,6 +21,24 @@ const PeminjamanPage = ({ peminjamans, books }) => {
         const now = new Date();
         const diff = Math.ceil((returnDate - now) / (1000 * 60 * 60 * 24));
         return diff;
+    };
+
+    // Fungsi untuk menghandle pengembalian
+    const handleReturnSubmit = (e, id) => {
+        e.preventDefault(); // Menghindari form default submit
+        router.post(`/pengembalian/${id}/kembalikan`, {
+            tanggal_kembali: data.tanggal_kembali,  // Mengirimkan tanggal pengembalian ke backend
+            onSuccess: () => {
+                reset("tanggal_kembali");  // Reset data setelah sukses
+                setSelectedReturnId(null); // Reset selected return ID
+            },
+        });
+    };
+    
+
+    // Fungsi untuk memperpanjang peminjaman
+    const handlePerpanjang = (id) => {
+        router.post(`/peminjaman/${id}/perpanjang`);
     };
 
     return (
@@ -63,82 +52,23 @@ const PeminjamanPage = ({ peminjamans, books }) => {
                     </div>
                 )}
 
-                {!peminjamans.length && !showForm && (
+                {!peminjamans.length && (
                     <div className="text-center py-10">
-                        <p className="mb-4 text-gray-600">
-                            Tidak ada buku yang dipinjam
-                        </p>
-                        <button
-                            onClick={() => setShowForm(true)}
+                        <p className="mb-4 text-gray-600">Tidak ada buku yang dipinjam</p>
+                        <Link
+                            href="/peminjaman/create"
                             className="px-4 py-2 bg-blue-600 text-white rounded"
                         >
-                            Pinjam
-                        </button>
+                            Pinjam Buku
+                        </Link>
                     </div>
                 )}
 
-                {showForm && (
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <h2 className="text-xl font-semibold">
-                            Form Peminjaman Buku
-                        </h2>
-                        <input
-                            type="text"
-                            name="nama"
-                            value={data.nama}
-                            onChange={(e) => setData("nama", e.target.value)}
-                            placeholder="Nama"
-                            className="w-full p-2 border rounded"
-                        />
-                        <input
-                            type="text"
-                            name="kelas"
-                            value={data.kelas}
-                            onChange={(e) => setData("kelas", e.target.value)}
-                            placeholder="Kelas"
-                            className="w-full p-2 border rounded"
-                        />
-                        <select
-                            name="book_id"
-                            value={data.book_id}
-                            onChange={(e) => setData("book_id", e.target.value)}
-                            className="w-full p-2 border rounded"
-                        >
-                            <option value="">Pilih Buku</option>
-                            {books.map((b) => (
-                                <option key={b.id} value={b.id}>
-                                    {b.title} — stok: {b.stock}
-                                </option>
-                            ))}
-                        </select>
-                        <input
-                            type="date"
-                            name="tanggal_pinjam"
-                            value={data.tanggal_pinjam}
-                            onChange={(e) =>
-                                setData("tanggal_pinjam", e.target.value)
-                            }
-                            className="w-full p-2 border rounded"
-                        />
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-green-600 text-white rounded"
-                        >
-                            Simpan
-                        </button>
-                    </form>
-                )}
-
-                {!!peminjamans.length && !showForm && (
+                {!!peminjamans.length && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-2">
-                            Daftar Buku yang Dipinjam
-                        </h2>
+                        <h2 className="text-lg font-semibold mb-2">Daftar Buku yang Dipinjam</h2>
                         {peminjamans.map((item) => {
-                            const sisaDurasi = calculateSisaDurasi(
-                                item.tanggal_pinjam,
-                                item.durasi
-                            );
+                            const sisaDurasi = calculateSisaDurasi(item.tanggal_pinjam, item.durasi);
                             const terlambat = sisaDurasi < 0;
                             const denda = terlambat
                                 ? Math.abs(sisaDurasi) * dendaPerHari
@@ -167,16 +97,11 @@ const PeminjamanPage = ({ peminjamans, books }) => {
                                             }
                                         >
                                             {terlambat
-                                                ? `Terlambat ${Math.abs(
-                                                      sisaDurasi
-                                                  )} hari`
+                                                ? `Terlambat ${Math.abs(sisaDurasi)} hari`
                                                 : `${sisaDurasi} hari`}
                                         </span>
                                     </p>
-                                    <p>
-                                        Denda: Rp{" "}
-                                        {denda.toLocaleString("id-ID")}
-                                    </p>
+                                    <p>Denda: Rp {denda.toLocaleString("id-ID")}</p>
 
                                     {/* STATUS */}
                                     {item.status_peminjaman !== "disetujui" ? (
@@ -187,8 +112,7 @@ const PeminjamanPage = ({ peminjamans, books }) => {
                                                 ? "Ditolak"
                                                 : "Menunggu Konfirmasi"}
                                         </p>
-                                    ) : item.status_pengembalian ===
-                                      "disetujui" ? (
+                                    ) : item.status_pengembalian === "disetujui" ? (
                                         <p className="font-semibold text-green-600">
                                             Buku telah dikembalikan
                                         </p>
@@ -265,7 +189,7 @@ const PeminjamanPage = ({ peminjamans, books }) => {
                                                 "pending" &&
                                                 !selectedReturnId && (
                                                     <p className="font-semibold mt-2">
-                                                        Status Pengembalian:{" "}
+                                                        Status Pengembalian:{" Buku telah dikembalikan"}
                                                         {item.status_pengembalian ===
                                                         "ditolak"
                                                             ? "Ditolak"
@@ -277,16 +201,17 @@ const PeminjamanPage = ({ peminjamans, books }) => {
                                 </div>
                             );
                         })}
-                        <div className="text-center mt-4">
-                            <button
-                                onClick={() => setShowForm(true)}
-                                className="px-4 py-2 bg-blue-600 text-white rounded"
-                            >
-                                Pinjam Lagi
-                            </button>
-                        </div>
                     </div>
                 )}
+
+                <div className="mt-6 text-center">
+                    <Link
+                        href="/katalog"
+                        className="px-4 py-2 bg-blue-600 text-white rounded"
+                    >
+                        Pinjam Buku
+                    </Link>
+                </div>
             </div>
         </div>
     );
