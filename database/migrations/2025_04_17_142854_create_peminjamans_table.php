@@ -11,7 +11,7 @@ return new class extends Migration
         Schema::create('peminjamans', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->string('kelas');
+            $table->string('kelas')->nullable();
             $table->foreignId('book_id')->constrained('books')->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('tanggal_pinjam');

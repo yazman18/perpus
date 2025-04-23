@@ -8,6 +8,7 @@ use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminController;
+
 use Inertia\Inertia;
 
 // MAIN LAYOUT
@@ -57,12 +58,20 @@ Route::get('/profile', fn () => Inertia::render('auth/Profile'));
 
 Route::middleware(['auth', CheckRole::class . ':guru,siswa'])->group(function () {
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
-    Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
     Route::get('/pengembalian', [PeminjamanController::class, 'pengembalianPage'])->name('pengembalian.index');
-    Route::post('/pengembalian/{id}/kembalikan', [PeminjamanController::class, 'kembalikan']);
-    Route::post('/pengembalian/{id}/perpanjang', [PeminjamanController::class, 'perpanjang']);
+
+    Route::post('/pengembalian/{id}/kembalikan', [PeminjamanController::class, 'kembalikan'])->name('pengembalian.kembalikan');
+    Route::post('/peminjaman/perpanjang/{id}', [PeminjamanController::class, 'perpanjang'])->name('peminjaman.perpanjang');
+
+    Route::get('/peminjaman/{book_id}', [PeminjamanController::class, 'create'])->name('peminjaman.create');
+    Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+
+    Route::post('/peminjaman/{id}/perpanjang', [PeminjamanController::class, 'perpanjang']);
 
 });
+
+
+
 
 
 
@@ -79,10 +88,9 @@ Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
     Route::get('/transaction', [PeminjamanController::class, 'adminTransaksi']);
     Route::post('/transaksi/{id}/peminjaman/acc', [PeminjamanController::class, 'setujuiPeminjaman']);
     Route::post('/transaksi/{id}/peminjaman/tolak', [PeminjamanController::class, 'tolakPeminjaman']);
-
-    // Untuk menyetujui pengembalian
     Route::post('/transaksi/{id}/pengembalian/acc', [PeminjamanController::class, 'setujuiPengembalian']);
     Route::post('/transaksi/{id}/pengembalian/tolak', [PeminjamanController::class, 'tolakPengembalian']);
     Route::get('/users', fn () => Inertia::render('admin/Admin'));
     Route::get('/addnews', fn () => Inertia::render('admin/AddNews'));
+    
 });
