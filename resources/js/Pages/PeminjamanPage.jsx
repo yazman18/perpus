@@ -189,7 +189,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                                                 "pending" &&
                                                 !selectedReturnId && (
                                                     <p className="font-semibold mt-2">
-                                                        Status Pengembalian:{" "}
+                                                        Status Pengembalian:{" Buku telah dikembalikan"}
                                                         {item.status_pengembalian ===
                                                         "ditolak"
                                                             ? "Ditolak"

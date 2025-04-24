@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use App\Models\User;
+use App\Models\User;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -141,8 +142,8 @@ class PeminjamanController extends Controller
         $peminjaman->durasi += 7;
         $peminjaman->save();
 
-        return redirect()->back()->with('success', 'Peminjaman diperpanjang 7 hari.');
-    }
+    return redirect()->back()->with('success', 'Peminjaman diperpanjang 7 hari.');
+}
 
     public function adminTransaksi()
     {
@@ -150,13 +151,17 @@ class PeminjamanController extends Controller
             ->where('status_peminjaman', 'pending')
             ->latest()
             ->get();
-
+    
+        // Data pengembalian hanya muncul jika:
+        // - User sudah klik tombol pengembalian
+        // - Sudah mengisi tanggal_kembali
+        // - status_pengembalian = 'pending'
         $pengembalians = Peminjaman::with('book')
             ->whereNotNull('tanggal_kembali')
             ->where('status_pengembalian', 'pending')
             ->latest()
             ->get();
-
+    
         return Inertia::render('admin/TransactionAdmin', [
             'peminjamans' => $peminjamans,
             'pengembalians' => $pengembalians,
