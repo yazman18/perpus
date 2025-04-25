@@ -24,7 +24,7 @@ class Peminjaman extends Model
 
     protected $attributes = [
         'status_peminjaman' => 'pending',
-        'status_pengembalian' => 'pending',
+        'status_pengembalian' => 'belum melakukan pengembalian',
     ];
 
     public function user()

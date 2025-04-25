@@ -9,7 +9,7 @@ return new class extends Migration {
     {
         Schema::table('peminjamans', function (Blueprint $table) {
             $table->enum('status_peminjaman', ['pending', 'disetujui', 'ditolak'])->default('pending');
-            $table->enum('status_pengembalian', ['pending', 'disetujui', 'ditolak'])->nullable()->default('pending');
+            $table->enum('status_pengembalian', ['belum melakukan pengembalian','pending', 'disetujui', 'ditolak'])->nullable()->default('belum melakukan pengembalian');
         });
     }
 

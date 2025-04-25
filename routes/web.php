@@ -58,7 +58,6 @@ Route::get('/profile', fn () => Inertia::render('auth/Profile'));
 
 Route::middleware(['auth', CheckRole::class . ':guru,siswa'])->group(function () {
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
-    Route::get('/pengembalian', [PeminjamanController::class, 'pengembalianPage'])->name('pengembalian.index');
 
     Route::post('/pengembalian/{id}/kembalikan', [PeminjamanController::class, 'kembalikan'])->name('pengembalian.kembalikan');
     Route::post('/peminjaman/perpanjang/{id}', [PeminjamanController::class, 'perpanjang'])->name('peminjaman.perpanjang');
@@ -92,5 +91,5 @@ Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
     Route::post('/transaksi/{id}/pengembalian/tolak', [PeminjamanController::class, 'tolakPengembalian']);
     Route::get('/users', fn () => Inertia::render('admin/Admin'));
     Route::get('/addnews', fn () => Inertia::render('admin/AddNews'));
-    
+
 });

@@ -1,16 +1,10 @@
-import React, { useState } from "react";
-import { Link } from "@inertiajs/react";
+import { useState } from "react";
+import { Link, usePage, router } from "@inertiajs/react";
 import MainLayout from "../Layouts/MainLayout";
-import { useForm, usePage, router } from "@inertiajs/react"; // Menggunakan useForm dan router dari inertiajs
 
 const PeminjamanPage = ({ peminjamans }) => {
-    const [selectedReturnId, setSelectedReturnId] = useState(null);
-    const [isReturning, setIsReturning] = useState(false);
     const { flash } = usePage().props;
-
-    const { data, setData, post, reset, errors } = useForm({
-        tanggal_kembali: "",
-    });
+    const [selectedReturnId, setSelectedReturnId] = useState(null);
 
     const dendaPerHari = 1000;
 
@@ -23,20 +17,15 @@ const PeminjamanPage = ({ peminjamans }) => {
         return diff;
     };
 
-    // Fungsi untuk menghandle pengembalian
     const handleReturnSubmit = (e, id) => {
-        e.preventDefault(); // Menghindari form default submit
+        e.preventDefault(); // Menghentikan aksi default form submission
         router.post(`/pengembalian/${id}/kembalikan`, {
-            tanggal_kembali: data.tanggal_kembali,  // Mengirimkan tanggal pengembalian ke backend
             onSuccess: () => {
-                reset("tanggal_kembali");  // Reset data setelah sukses
-                setSelectedReturnId(null); // Reset selected return ID
+                setSelectedReturnId(null); // Reset selected return ID setelah pengembalian berhasil
             },
         });
     };
-    
 
-    // Fungsi untuk memperpanjang peminjaman
     const handlePerpanjang = (id) => {
         router.post(`/peminjaman/${id}/perpanjang`);
     };
@@ -54,9 +43,11 @@ const PeminjamanPage = ({ peminjamans }) => {
 
                 {!peminjamans.length && (
                     <div className="text-center py-10">
-                        <p className="mb-4 text-gray-600">Tidak ada buku yang dipinjam</p>
+                        <p className="mb-4 text-gray-600">
+                            Tidak ada buku yang dipinjam
+                        </p>
                         <Link
-                            href="/peminjaman/create"
+                            href="/katalog"
                             className="px-4 py-2 bg-blue-600 text-white rounded"
                         >
                             Pinjam Buku
@@ -66,9 +57,14 @@ const PeminjamanPage = ({ peminjamans }) => {
 
                 {!!peminjamans.length && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-2">Daftar Buku yang Dipinjam</h2>
+                        <h2 className="text-lg font-semibold mb-2">
+                            Daftar Buku yang Dipinjam
+                        </h2>
                         {peminjamans.map((item) => {
-                            const sisaDurasi = calculateSisaDurasi(item.tanggal_pinjam, item.durasi);
+                            const sisaDurasi = calculateSisaDurasi(
+                                item.tanggal_pinjam,
+                                item.durasi
+                            );
                             const terlambat = sisaDurasi < 0;
                             const denda = terlambat
                                 ? Math.abs(sisaDurasi) * dendaPerHari
@@ -76,6 +72,11 @@ const PeminjamanPage = ({ peminjamans }) => {
 
                             const isReturnPending =
                                 item.status_pengembalian === "pending";
+                            const isReturned =
+                                item.status_pengembalian === "disetujui";
+                            const notYetReturned =
+                                item.status_pengembalian ===
+                                "belum melakukan pengembalian";
 
                             return (
                                 <div
@@ -87,52 +88,80 @@ const PeminjamanPage = ({ peminjamans }) => {
                                     </h2>
                                     <p>Penulis: {item.book?.author}</p>
                                     <p>Durasi: {item.durasi} hari</p>
+
+                                    {/* Tanggal Peminjaman */}
                                     <p>
-                                        Sisa Durasi:{" "}
-                                        <span
-                                            className={
-                                                terlambat
-                                                    ? "text-red-600"
-                                                    : "text-green-600"
-                                            }
-                                        >
-                                            {terlambat
-                                                ? `Terlambat ${Math.abs(sisaDurasi)} hari`
-                                                : `${sisaDurasi} hari`}
-                                        </span>
+                                        Tanggal Peminjaman:{" "}
+                                        {new Date(
+                                            item.tanggal_pinjam
+                                        ).toLocaleDateString()}
                                     </p>
-                                    <p>Denda: Rp {denda.toLocaleString("id-ID")}</p>
+
+                                    {/* Tanggal Pengembalian */}
+                                    {item.tanggal_kembali && (
+                                        <p>
+                                            Tanggal Pengembalian:{" "}
+                                            {new Date(
+                                                item.tanggal_kembali
+                                            ).toLocaleDateString()}
+                                        </p>
+                                    )}
+
+                                    {/* Menyembunyikan sisa durasi jika buku sudah dikembalikan */}
+                                    {!isReturned && (
+                                        <p>
+                                            Sisa Durasi:{" "}
+                                            <span
+                                                className={
+                                                    terlambat
+                                                        ? "text-red-600"
+                                                        : "text-green-600"
+                                                }
+                                            >
+                                                {terlambat
+                                                    ? `Terlambat ${Math.abs(
+                                                          sisaDurasi
+                                                      )} hari`
+                                                    : `${sisaDurasi} hari`}
+                                            </span>
+                                        </p>
+                                    )}
+                                    <p>
+                                        Denda: Rp{" "}
+                                        {denda.toLocaleString("id-ID")}
+                                    </p>
 
                                     {/* STATUS */}
                                     {item.status_peminjaman !== "disetujui" ? (
-                                        <p className="font-semibold">
-                                            Status Peminjaman:{" "}
-                                            {item.status_peminjaman ===
-                                            "ditolak"
-                                                ? "Ditolak"
-                                                : "Menunggu Konfirmasi"}
+                                        <p className="font-semibold text-yellow-600 mt-2">
+                                            Menunggu Konfirmasi Admin
                                         </p>
-                                    ) : item.status_pengembalian === "disetujui" ? (
-                                        <p className="font-semibold text-green-600">
+                                    ) : isReturned ? (
+                                        <p className="font-semibold text-green-600 mt-2">
                                             Buku telah dikembalikan
                                         </p>
                                     ) : (
                                         <>
                                             {/* Tombol jika belum return form */}
-                                            {!selectedReturnId &&
-                                                item.status_pengembalian ===
-                                                    "pending" && (
+                                            {notYetReturned &&
+                                                selectedReturnId !==
+                                                    item.id && (
                                                     <div className="flex gap-2 mt-2">
                                                         <button
-                                                            onClick={() =>
+                                                            onClick={(e) => {
                                                                 setSelectedReturnId(
                                                                     item.id
-                                                                )
-                                                            }
+                                                                );
+                                                                handleReturnSubmit(
+                                                                    e,
+                                                                    item.id
+                                                                );
+                                                            }}
                                                             className="bg-green-600 text-white px-4 py-2 rounded"
                                                         >
-                                                            Kembalikan
+                                                            Kembalikan Buku
                                                         </button>
+
                                                         <button
                                                             onClick={() =>
                                                                 handlePerpanjang(
@@ -146,54 +175,13 @@ const PeminjamanPage = ({ peminjamans }) => {
                                                     </div>
                                                 )}
 
-                                            {/* FORM PENGEMBALIAN */}
-                                            {selectedReturnId === item.id && (
-                                                <form
-                                                    onSubmit={(e) =>
-                                                        handleReturnSubmit(
-                                                            e,
-                                                            item.id
-                                                        )
-                                                    }
-                                                    className="mt-4"
-                                                >
-                                                    <label className="block mb-1 font-semibold">
-                                                        Tanggal Pengembalian:
-                                                    </label>
-                                                    <input
-                                                        type="date"
-                                                        name="tanggal_kembali"
-                                                        value={
-                                                            data.tanggal_kembali ||
-                                                            ""
-                                                        }
-                                                        onChange={(e) =>
-                                                            setData(
-                                                                "tanggal_kembali",
-                                                                e.target.value
-                                                            )
-                                                        }
-                                                        className="w-full p-2 border rounded mb-2"
-                                                    />
-                                                    <button
-                                                        type="submit"
-                                                        className="bg-green-700 text-white px-4 py-2 rounded"
-                                                    >
-                                                        Simpan Pengembalian
-                                                    </button>
-                                                </form>
-                                            )}
-
-                                            {/* Status jika sudah mengajukan return */}
-                                            {item.status_pengembalian !==
+                                            {/* STATUS PENGEMBALIAN PENDING */}
+                                            {item.status_pengembalian ===
                                                 "pending" &&
                                                 !selectedReturnId && (
-                                                    <p className="font-semibold mt-2">
-                                                        Status Pengembalian:{" Buku telah dikembalikan"}
-                                                        {item.status_pengembalian ===
-                                                        "ditolak"
-                                                            ? "Ditolak"
-                                                            : "Menunggu Konfirmasi"}
+                                                    <p className="font-semibold mt-2 text-yellow-600">
+                                                        Menunggu Konfirmasi
+                                                        Pengembalian Admin
                                                     </p>
                                                 )}
                                         </>

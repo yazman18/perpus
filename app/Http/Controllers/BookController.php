@@ -17,9 +17,7 @@ class BookController extends Controller
             'year' => 'nullable|integer',
             'isbn' => 'nullable|string',
             'pages' => 'nullable|integer',
-            'language' => 'nullable|string',
             'stock' => 'nullable|integer',
-            'category' => 'nullable|string',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
         ]);
@@ -58,9 +56,7 @@ class BookController extends Controller
             'year' => 'nullable|integer',
             'isbn' => 'nullable|string',
             'pages' => 'nullable|integer',
-            'language' => 'nullable|string',
             'stock' => 'nullable|integer',
-            'category' => 'nullable|string',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
         ]);

@@ -13,9 +13,7 @@ class Book extends Model
         'year',
         'isbn',
         'pages',
-        'language',
         'stock',
-        'category',
         'description',
         'image',
     ];

@@ -72,9 +72,7 @@ const Addbook = () => {
             year: book.year || "",
             isbn: book.isbn || "",
             pages: book.pages || "",
-            language: book.language || "",
             stock: book.stock || "",
-            category: book.category || "",
             description: book.description || "",
             image: null,
         });
@@ -348,46 +346,6 @@ const Addbook = () => {
                                         }
                                         className="p-2 border rounded w-full"
                                     />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        Bahasa
-                                    </label>
-                                    <input
-                                        name="language"
-                                        value={data.language}
-                                        onChange={(e) =>
-                                            setData("language", e.target.value)
-                                        }
-                                        className="p-2 border rounded w-full"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        Kategori
-                                    </label>
-                                    <select
-                                        name="category"
-                                        value={data.category}
-                                        onChange={(e) =>
-                                            setData("category", e.target.value)
-                                        }
-                                        className="p-2 border rounded w-full"
-                                    >
-                                        <option value="">Pilih Kategori</option>
-                                        <option value="Fiksi">Fiksi</option>
-                                        <option value="Nonfiksi">
-                                            Nonfiksi
-                                        </option>
-                                        <option value="Sains">Sains</option>
-                                        <option value="Novel">Novel</option>
-                                        <option value="Biografi">
-                                            Biografi
-                                        </option>
-                                    </select>
                                 </div>
                             </div>
 

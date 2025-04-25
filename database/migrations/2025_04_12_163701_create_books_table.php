@@ -19,9 +19,7 @@ return new class extends Migration
         $table->year('year')->nullable();
         $table->string('isbn')->nullable();
         $table->integer('pages')->nullable();
-        $table->string('language')->nullable();
         $table->integer('stock')->default(0);
-        $table->string('category')->nullable();
         $table->text('description')->nullable();
         $table->string('image')->nullable(); // cover
         $table->timestamps();
