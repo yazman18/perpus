@@ -4,8 +4,6 @@ import MainLayout from "../Layouts/MainLayout";
 import { Link } from "@inertiajs/react";
 
 const Homepage = ({ news }) => {
-    console.log(news); // Log the data to check if it's received properly
-
     const [offset, setOffset] = useState(0);
     const cardsToShow = 4;
     const cardWidth = 280;
@@ -26,19 +24,19 @@ const Homepage = ({ news }) => {
     };
 
     return (
-        <div className="w-full min-h-screen p-10 bg-gray-100 font-sans">
-            <h1 className="text-5xl font-bold text-center mb-4 text-blue-900 font-montserrat">
+        <div className="w-full min-h-screen p-5 md:p-10 bg-gray-100 font-sans">
+            <h1 className="text-3xl md:text-5xl font-bold text-center mb-4 text-blue-900 font-montserrat">
                 Membaca, Menjelajah, Menginspirasi
             </h1>
 
-            <p className="text-md italic text-center mb-10 text-gray-700 font-montserrat">
+            <p className="text-sm md:text-md italic text-center mb-10 text-gray-700 font-montserrat">
                 Welcome! This is an official library website of SMAN 2 Bandung
             </p>
 
-            <div className="mb-16">
-                <div className="flex flex-col md:flex-row gap-8 items-center md:items-center">
-                    <div className="md:w-1/2 w-full">
-                        <h2 className="text-2xl font-semibold mb-4 text-gray-800 font-plusjakarta">
+            <div className="mb-8 mt-20">
+                <div className="flex flex-col md:flex-row md:gap-28 items-center">
+                    <div className="md:w-1/2 px-8 ml-20">
+                        <h2 className="text-xl md:text-2xl font-semibold mb-4 text-gray-800 font-plusjakarta">
                             About Us
                         </h2>
                         <p className="text-gray-700 leading-relaxed text-justify font-plusjakarta">
@@ -55,7 +53,7 @@ const Homepage = ({ news }) => {
                             bagi seluruh siswa dan tenaga pendidik.
                         </p>
                     </div>
-                    <div className="w-full md:max-w-[500px] aspect-w-4 aspect-h-3">
+                    <div className="w-full md:max-w-[600px] aspect-w-4 aspect-h-3">
                         <Image
                             src="/images/about-us.png"
                             alt="About Us"

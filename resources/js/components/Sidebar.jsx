@@ -6,6 +6,7 @@ import {
     FaSignOutAlt,
     FaBook,
     FaNewspaper,
+    FaRegNewspaper,
 } from "react-icons/fa";
 import Image from "../components/Image";
 import { Link, usePage } from "@inertiajs/react";
@@ -26,6 +27,11 @@ const Sidebar = () => {
         { to: "/admin", icon: <FaHome size={18} />, label: "Home" },
         { to: "/addbook", icon: <FaBook size={18} />, label: "Manajemen Buku" },
         { to: "/addnews", icon: <FaNewspaper size={18} />, label: "Add News" },
+        {
+            to: "/admin/news",
+            icon: <FaRegNewspaper size={18} />,
+            label: "Manajemen News",
+        },
         { to: "/reports", icon: <FaChartBar size={18} />, label: "Reports" },
         {
             to: "/transaction",

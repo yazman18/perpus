@@ -7,33 +7,37 @@ import MainLayout from "../Layouts/MainLayout";
 
 const News = ({ newsList }) => {
     return (
-        <div className="mt-4 flex flex-col gap-4">
-            <div className="flex gap-1">
-                <Link to="/" className="">
+        <div className="mt-6 px-4 md:px-12 lg:px-24 flex flex-col gap-8">
+            {/* Breadcrumb */}
+            <div className="text-sm text-gray-600 flex gap-2 items-center">
+                <Link href="/" className="hover:underline text-blue-600">
                     Home
                 </Link>
-                <span className="">/</span>
-                <span className="text-blue-800">News</span>
+                <span>/</span>
+                <span className="text-gray-800 font-medium">News</span>
             </div>
 
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-gray-800 text-2xl md:text-5xl lg:text-6xl font-bold">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting
-                    </h1>
-                    <p className="mt-8 text-md md:text-xl">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry.
-                    </p>
-                </div>
+            {/* Header */}
+            <div className="text-center md:text-left">
+                <h1 className="text-gray-900 text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
+                    Tetap Terinformasi dengan Berita Terbaru Kami
+                </h1>
+                <p className="mt-6 text-gray-700 text-base md:text-lg max-w-3xl">
+                    Dapatkan update terkini seputar kegiatan sekolah, pengumuman
+                    penting, dan informasi menarik lainnya hanya di halaman
+                    berita ini.
+                </p>
             </div>
 
-            {/* <MainCategories />
-            <FeaturedPosts /> */}
+            {/* Optional future components */}
+            {/* <MainCategories /> */}
+            {/* <FeaturedPosts /> */}
 
-            <div className="">
-                <h1 className="my-8 text-2xl text-grey-600">Recent Posts</h1>
+            {/* Recent Posts */}
+            <div>
+                <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">
+                    Postingan Terbaru
+                </h2>
                 <PostList newsList={newsList} />
             </div>
         </div>

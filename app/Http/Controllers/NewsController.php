@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Log;
 
 class NewsController extends Controller
 {
@@ -31,28 +32,26 @@ class NewsController extends Controller
             'cover' => $coverPath ?? null,
         ]);
 
+
         return redirect()->back()->with('success', 'Berita berhasil ditambahkan!');
-    }
-
-    public function index()
-    {
-        $news = News::latest()->get();
-
-        return Inertia::render('News', [
-            'newsList' => $news,
-        ]);
     }
 
     public function show($id)
     {
         $news = News::findOrFail($id);
-
         return Inertia::render('SinglePostPage', [
             'news' => $news,
         ]);
     }
 
-    // Controller method
+    public function index()
+    {
+        $news = News::latest()->get();
+        return Inertia::render('News', [
+            'newsList' => $news,
+        ]);
+    }
+
     public function indexHome()
     {
         $news = News::latest()->take(4)->get();
@@ -61,6 +60,61 @@ class NewsController extends Controller
         ]);
     }
 
+    public function indexAdmin()
+    {
+        $news = News::latest()->get();
 
+        return Inertia::render('admin/NewsIndex', [
+            'news' => $news,
+        ]);
+    }
 
+    // Menampilkan form untuk mengedit berita
+    public function edit($id)
+    {
+        $news = News::findOrFail($id);
+
+        return Inertia::render('admin/EditNews', [
+            'news' => $news,
+        ]);
+    }
+
+    public function update(Request $request, $id)
+{
+    $validated = $request->validate([
+        'title' => 'required|string|max:255',
+        'category' => 'required|string|max:255',
+        'short_description' => 'required|string',
+        'content' => 'required|string',
+        'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Optional cover image validation
+    ]);
+
+    $news = News::findOrFail($id);
+
+    // Update the data
+    $news->update([
+        'title' => $validated['title'],
+        'category' => $validated['category'],
+        'short_description' => $validated['short_description'],
+        'content' => $validated['content'],
+    ]);
+
+    // If there's a new cover, upload it
+    if ($request->hasFile('cover')) {
+        $coverPath = $request->file('cover')->store('covers', 'public');
+        $news->cover = $coverPath;
+        $news->save();
+    }
+
+    return redirect()->route('news.index')->with('success', 'News updated successfully!');
+}
+
+    // Menghapus berita
+    public function destroy($id)
+    {
+        $news = News::findOrFail($id);
+        $news->delete();
+
+        return redirect()->route('news.index')->with('success', 'Berita berhasil dihapus.');
+    }
 }

@@ -1,17 +1,16 @@
-import { useState } from "react";
 import Image from "./Image";
 
 const Footer = () => {
     return (
         <footer className="bg-[#A8ACC2] px-6 md:px-16 py-10 text-sm text-black rounded-md">
-            <div className="flex flex-col md:flex-row justify-between gap-10">
+            <div className="max-w-screen-xl mx-auto flex flex-wrap justify-between gap-x-10 gap-y-8">
                 {/* KIRI: Logo & Info */}
-                <div className="flex-1 min-w-[250px]">
+                <div className="flex-1 min-w-[280px] break-words">
                     <div className="flex items-center gap-3 mb-4">
                         <Image
                             src="/images/logo.png"
                             alt="Logo SMAN 2 Bandung"
-                            w={80} // Set the size of the logo here
+                            w={80}
                             h={80}
                         />
                         <h2 className="text-lg font-semibold">
@@ -25,7 +24,7 @@ const Footer = () => {
                         memfasilitasi akses informasi bagi siswa dan masyarakat.
                     </p>
 
-                    <p className="border-t border-black pt-4 text-sm max-w-sm mt-4">
+                    <p className="border-t border-black pt-4 text-sm mt-4">
                         📍 Alamat: Jl. Cihampelas No. 173, Cipaganti, Kec.
                         Coblong, Kota Bandung, Jawa Barat 40131
                         <br />
@@ -41,8 +40,8 @@ const Footer = () => {
                     </p>
                 </div>
 
-                {/* TENGAH: Google Map + Jam & QR */}
-                <div className="flex-1 min-w-[250px] flex flex-col gap-4">
+                {/* KANAN: Map + Jam + QR */}
+                <div className="flex-1 min-w-[280px] flex flex-col gap-4">
                     <iframe
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63355.27029722567!2d107.5607544108726!3d-6.902479243695683!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e68e65f35b36b23%3A0xb17b5749465aa9ae!2sSMAN%202%20Bandung!5e0!3m2!1sen!2sid!4v1647265845837!5m2!1sen!2sid"
                         width="100%"
@@ -52,9 +51,9 @@ const Footer = () => {
                         loading="lazy"
                     ></iframe>
 
-                    <div className="flex justify-between items-start gap-4">
+                    <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
                         {/* Jam Operasional */}
-                        <div>
+                        <div className="flex-1">
                             <h3 className="text-base font-semibold mb-1">
                                 Jam Operasional:
                             </h3>
@@ -66,11 +65,11 @@ const Footer = () => {
                         </div>
 
                         {/* QR Code */}
-                        <div>
+                        <div className="flex-1">
                             <Image
                                 src="/images/qr.png"
                                 alt="QR Code"
-                                w={150} // Set the size of the QR code here
+                                w={150}
                                 h={150}
                             />
                         </div>
@@ -78,7 +77,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            <div className="text-center text-sm mt-10 pt-4">
+            <div className="text-center text-sm mt-10 pt-4 border-t border-black">
                 Copyright © 2025 SMAN 2 Bandung. All rights reserved
             </div>
         </footer>

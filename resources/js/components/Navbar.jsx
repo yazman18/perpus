@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import Image from "./Image";
 
@@ -25,6 +25,17 @@ const Navbar = () => {
         setProfileDropdownOpen(false);
     };
 
+    useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth >= 768) {
+                setOpen(false);
+                setMobileDropdownOpen(false);
+            }
+        };
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
     return (
         <nav className="bg-[#A8ACC2] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 relative z-50">
             {/* LOGO */}
@@ -41,19 +52,43 @@ const Navbar = () => {
                 <span>SMAN 2 Bandung</span>
             </Link>
 
-            {/* MOBILE MENU BUTTON */}
-            <div className="md:hidden z-50">
-                <button
-                    onClick={() => setOpen(!open)}
-                    className="text-3xl focus:outline-none"
+            {/* Hamburger Icon */}
+            <button
+                onClick={() => setOpen(!open)}
+                className="md:hidden focus:outline-none z-50"
+            >
+                <svg
+                    className="w-6 h-6 text-black"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                 >
-                    {open ? "✖" : "≡"}
-                </button>
-            </div>
+                    {open ? (
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    ) : (
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M4 6h16M4 12h16M4 18h16"
+                        />
+                    )}
+                </svg>
+            </button>
 
-            {/* MOBILE MENU CONTENT */}
-            {open && (
-                <div className="fixed inset-0 top-16 bg-[#A8ACC2] flex flex-col items-center justify-start pt-10 gap-6 font-medium text-lg z-40">
+            {/* Mobile Menu */}
+            <div
+                className={`md:hidden fixed top-16 left-0 w-full bg-[#A8ACC2] transition-all duration-300 ${
+                    open ? "max-h-screen py-8" : "max-h-0 overflow-hidden"
+                }`}
+            >
+                <div className="flex flex-col items-center gap-4 font-medium text-lg">
                     <Link href="/" onClick={closeMobileMenu}>
                         Home
                     </Link>
@@ -61,7 +96,6 @@ const Navbar = () => {
                         About
                     </Link>
 
-                    {/* Mobile Dropdown */}
                     <div className="text-center">
                         <button
                             onClick={() =>
@@ -72,7 +106,7 @@ const Navbar = () => {
                             Service ▾
                         </button>
                         {mobileDropdownOpen && (
-                            <div className="mt-2 space-y-2 text-sm">
+                            <div className="mt-2 flex flex-col items-start gap-2 text-sm">
                                 <Link href="/katalog" onClick={closeMobileMenu}>
                                     Katalog
                                 </Link>
@@ -96,7 +130,6 @@ const Navbar = () => {
                         News
                     </Link>
 
-                    {/* Login/Profile toggle */}
                     {isLoggedIn ? (
                         <div className="text-center">
                             <button
@@ -106,7 +139,7 @@ const Navbar = () => {
                                 Profile ▾
                             </button>
                             {profileDropdownOpen && (
-                                <div className="mt-2 space-y-2 text-sm">
+                                <div className="mt-2 flex flex-col items-start gap-2 text-sm">
                                     <Link
                                         href="/profile"
                                         onClick={closeMobileMenu}
@@ -120,12 +153,6 @@ const Navbar = () => {
                                         Manage Account
                                     </Link>
                                     <Link
-                                        href="/security"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        Security
-                                    </Link>
-                                    <Link
                                         href="/logout"
                                         method="post"
                                         as="button"
@@ -137,20 +164,19 @@ const Navbar = () => {
                             )}
                         </div>
                     ) : (
-                        <Link href="/login" className="w-full text-center">
+                        <Link href="/login" onClick={closeMobileMenu}>
                             Login
                         </Link>
                     )}
                 </div>
-            )}
+            </div>
 
-            {/* DESKTOP MENU */}
+            {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-8 font-medium relative">
                 <Link href="/">Home</Link>
                 <Link href="/about">About</Link>
 
-                {/* Desktop Dropdown */}
-                <div className="relative">
+                <div className="relative hidden md:block">
                     <button
                         onClick={toggleDesktopDropdown}
                         className="focus:outline-none"
@@ -171,12 +197,12 @@ const Navbar = () => {
                             >
                                 Peminjaman
                             </Link>
-                            <Link
+                            {/* <Link
                                 href="/pengembalian"
                                 className="block px-4 py-2 hover:bg-blue-100"
                             >
                                 Pengembalian
-                            </Link>
+                            </Link> */}
                         </div>
                     )}
                 </div>
@@ -205,12 +231,6 @@ const Navbar = () => {
                                     className="block px-4 py-2 hover:bg-blue-100"
                                 >
                                     Manage Account
-                                </Link>
-                                <Link
-                                    href="/security"
-                                    className="block px-4 py-2 hover:bg-blue-100"
-                                >
-                                    Security
                                 </Link>
                                 <Link
                                     href="/logout"

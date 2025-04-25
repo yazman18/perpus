@@ -1,20 +1,19 @@
-import "react-quill-new/dist/quill.snow.css";
-import ReactQuill from "react-quill-new";
+import React from "react";
 import { useForm } from "@inertiajs/react";
 import AdminLayout from "../../Layouts/AdminLayout";
 
-const AddNews = () => {
+const EditNews = ({ news }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
-        title: "",
-        category: "general",
-        desc: "",
-        content: "",
+        title: news.title,
+        category: news.category,
+        short_description: news.short_description, // Bind the short_description
+        content: news.content,
         cover: null,
     });
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/news", {
+        post(`/news/${news.id}`, {
             forceFormData: true,
             onSuccess: () => reset(),
         });
@@ -23,7 +22,7 @@ const AddNews = () => {
     return (
         <div className="p-6 md:p-10 bg-white rounded-lg shadow-sm">
             <h1 className="text-3xl font-bold mb-8 text-gray-800">
-                Tambahkan Berita Baru
+                Edit Berita
             </h1>
 
             <form
@@ -55,7 +54,6 @@ const AddNews = () => {
                     </label>
                     <input
                         type="text"
-                        placeholder="Masukkan judul..."
                         value={data.title}
                         onChange={(e) => setData("title", e.target.value)}
                         className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -88,21 +86,22 @@ const AddNews = () => {
                     )}
                 </div>
 
-                {/* DESC */}
+                {/* SHORT DESCRIPTION */}
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Deskripsi Singkat
                     </label>
                     <textarea
-                        placeholder="Tulis deskripsi singkat di sini..."
-                        value={data.desc}
-                        onChange={(e) => setData("desc", e.target.value)}
+                        value={data.short_description}
+                        onChange={(e) =>
+                            setData("short_description", e.target.value)
+                        }
                         className="w-full p-3 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows={4}
                     />
-                    {errors.desc && (
+                    {errors.short_description && (
                         <p className="text-red-500 text-sm mt-1">
-                            {errors.desc}
+                            {errors.short_description}
                         </p>
                     )}
                 </div>
@@ -112,11 +111,11 @@ const AddNews = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Konten Lengkap
                     </label>
-                    <ReactQuill
-                        theme="snow"
+                    <textarea
                         value={data.content}
-                        onChange={(value) => setData("content", value)}
-                        className="bg-white"
+                        onChange={(e) => setData("content", e.target.value)}
+                        className="w-full p-3 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        rows={6}
                     />
                     {errors.content && (
                         <p className="text-red-500 text-sm mt-1">
@@ -132,7 +131,7 @@ const AddNews = () => {
                         disabled={processing}
                         className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition duration-200"
                     >
-                        {processing ? "Menyimpan..." : "Publikasikan"}
+                        {processing ? "Menyimpan..." : "Edit Berita"}
                     </button>
                 </div>
             </form>
@@ -140,6 +139,6 @@ const AddNews = () => {
     );
 };
 
-AddNews.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+EditNews.layout = (page) => <AdminLayout>{page}</AdminLayout>;
 
-export default AddNews;
+export default EditNews;

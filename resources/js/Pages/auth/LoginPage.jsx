@@ -119,15 +119,6 @@ const LoginPage = () => {
                             </div>
                         </div>
 
-                        {/* Tombol Login */}
-                        <button
-                            type="submit"
-                            className="w-full bg-[#1E1B4B] text-white py-2 rounded hover:bg-[#312E81] transition"
-                            disabled={processing || !role}
-                        >
-                            {processing ? "Loading..." : "Login"}
-                        </button>
-
                         {/* Tombol Role */}
                         <div className="flex justify-between mt-4">
                             <button
@@ -153,6 +144,15 @@ const LoginPage = () => {
                                 Guru
                             </button>
                         </div>
+
+                        {/* Tombol Login */}
+                        <button
+                            type="submit"
+                            className="w-full bg-[#1E1B4B] text-white py-2 rounded hover:bg-[#312E81] transition"
+                            disabled={processing || !role}
+                        >
+                            {processing ? "Loading..." : "Login"}
+                        </button>
 
                         {/* Tombol Registrasi */}
                         <div className="pt-4 text-sm">
