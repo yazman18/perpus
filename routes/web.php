@@ -15,7 +15,6 @@ use Inertia\Inertia;
 Route::get('/', fn () => Inertia::render('HomePage'));
 Route::get('/news', fn () => Inertia::render('News'));
 Route::get('/katalog', fn () => Inertia::render('KatalogPage'));
-
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{id}', [NewsController::class, 'show'])->name('news.show');
 Route::get('/', [NewsController::class, 'indexHome'])->name('HomePage');
@@ -51,13 +50,6 @@ Route::post('/login-admin', [AuthController::class, 'loginAdmin']);
 Route::post('/logout-admin', [AuthController::class, 'logoutAdmin'])->middleware('auth')->name('logout-admin');
 
 Route::middleware(['auth', CheckRole::class . ':guru,siswa'])->group(function () {
-    Route::post('/books', [BookController::class, 'store']);
-    Route::post('/books/{book}', [BookController::class, 'update']);
-    Route::delete('/books/{book}', [BookController::class, 'destroy']);
-
-});
-
-Route::middleware(['auth', CheckRole::class . ':guru,siswa'])->group(function () {
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman.index');
     Route::post('/pengembalian/{id}/kembalikan', [PeminjamanController::class, 'kembalikan'])->name('pengembalian.kembalikan');
     Route::post('/peminjaman/perpanjang/{id}', [PeminjamanController::class, 'perpanjang'])->name('peminjaman.perpanjang');
@@ -66,6 +58,12 @@ Route::middleware(['auth', CheckRole::class . ':guru,siswa'])->group(function ()
     Route::post('/peminjaman/{id}/perpanjang', [PeminjamanController::class, 'perpanjang']);
 });
 
+
+Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
+    Route::post('/books', [BookController::class, 'store']);
+    Route::post('/books/{book}', [BookController::class, 'update']);
+    Route::delete('/books/{book}', [BookController::class, 'destroy']);
+});
 
 Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
     Route::post('/news', [NewsController::class, 'store'])->name('news.store');
