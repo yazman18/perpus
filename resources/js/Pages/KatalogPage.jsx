@@ -42,6 +42,14 @@ const KatalogPage = () => {
     return (
         <div className="px-6 py-10 bg-gray-100 font-sans min-h-screen">
             <div className="max-w-7xl mx-auto">
+                <div className="text-sm text-gray-600 flex gap-2 items-center mb-8">
+                    <Link href="/" className="hover:underline text-blue-600">
+                        Home
+                    </Link>
+                    <span>/</span>
+                    <span className="text-gray-800 font-medium">Katalog</span>
+                </div>
+
                 <h1 className="text-3xl md:text-4xl mb-2 font-inter">
                     Katalog Perpustakaan{" "}
                     <span className="font-bold font-inter">SMAN 2 Bandung</span>

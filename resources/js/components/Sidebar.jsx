@@ -7,6 +7,7 @@ import {
     FaBook,
     FaNewspaper,
     FaRegNewspaper,
+    FaCapsules,
 } from "react-icons/fa";
 import Image from "../components/Image";
 import { Link, usePage } from "@inertiajs/react";

@@ -1,32 +1,61 @@
-import React from 'react';
-import { usePage, Link } from '@inertiajs/react';
+import React from "react";
+import { usePage, Link } from "@inertiajs/react";
+import { LogOut, Lock, ArrowLeft } from "lucide-react";
 
 const Profile = () => {
-  const { auth } = usePage().props;
-  const user = auth?.user;
+    const { auth } = usePage().props;
+    const user = auth?.user;
 
-  return (
-    <div className="max-w-2xl mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
-      <h1 className="text-2xl font-bold mb-4">Profil Pengguna</h1>
+    return (
+        <div className="max-w-3xl mx-auto mt-12 p-8 bg-white shadow-lg rounded-2xl border border-gray-100">
+            <h1 className="text-3xl font-semibold text-gray-800 mb-6">
+                Profil Pengguna
+            </h1>
 
-      <div className="space-y-2">
-        <p><strong>Nama:</strong> {user?.name}</p>
-        <p><strong>Email:</strong> {user?.email}</p>
-        <p><strong>Terdaftar Sejak:</strong> {new Date(user?.created_at).toLocaleDateString()}</p>
-      </div>
+            <div className="space-y-4 text-gray-700 text-lg">
+                <div>
+                    <span className="font-semibold">👤 Nama:</span> {user?.name}
+                </div>
+                <div>
+                    <span className="font-semibold">📧 Email:</span>{" "}
+                    {user?.email}
+                </div>
+                <div>
+                    <span className="font-semibold">📅 Terdaftar Sejak:</span>{" "}
+                    {new Date(user?.created_at).toLocaleDateString()}
+                </div>
+            </div>
 
-      <div className="mt-6">
-        <Link
-          href="/logout"
-          method="post"
-          as="button"
-          className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-        >
-          Logout
-        </Link>
-      </div>
-    </div>
-  );
+            <div className="mt-8 flex flex-col space-y-4">
+                <Link
+                    href="/change-password"
+                    className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                >
+                    <Lock className="w-5 h-5" />
+                    Ubah Password
+                </Link>
+
+                <Link
+                    href="/logout"
+                    method="post"
+                    as="button"
+                    className="inline-flex items-center justify-center gap-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
+                >
+                    <LogOut className="w-5 h-5" />
+                    Logout
+                </Link>
+
+                <Link
+                    href="/"
+                    as="button"
+                    className="inline-flex items-center justify-center gap-2 bg-gray-300 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                    Kembali
+                </Link>
+            </div>
+        </div>
+    );
 };
 
 export default Profile;

@@ -8,7 +8,7 @@ use App\Http\Middleware\CheckRole;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminController;
-
+use App\Http\Controllers\ProfileController;
 use Inertia\Inertia;
 
 // MAIN LAYOUT
@@ -28,18 +28,17 @@ Route::get('/book/{id}', function ($id) {
 });
 
 
-Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('password.request');
-Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
-Route::get('/reset-password/{token}', function (string $token) {
-    return Inertia::render('auth/ResetPassword', [
-        'token' => $token,
-        'email' => request()->query('email'),
-    ]);
-})->name('password.reset');
-Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
 
+Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('forgot-password.show');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('forgot-password.send');
+Route::get('/reset-password/{email}', [ForgotPasswordController::class, 'showResetForm'])->name('reset-password.show');
+Route::post('/reset-password/{email}', [ForgotPasswordController::class, 'reset'])->name('reset-password.update');
 
 Route::get('/profile', fn () => Inertia::render('auth/Profile'));
+Route::get('/change-password', [ProfileController::class, 'showChangePasswordForm'])->name('change.password');
+Route::post('/change-password', [ProfileController::class, 'changePassword'])->name('change-password');
+
+
 Route::get('/register', [AuthController::class, 'showRegisterForm']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login'); // ⬅️ Tambahkan ini
@@ -57,7 +56,6 @@ Route::middleware(['auth', CheckRole::class . ':guru,siswa'])->group(function ()
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])->name('peminjaman.store');
     Route::post('/peminjaman/{id}/perpanjang', [PeminjamanController::class, 'perpanjang']);
 });
-
 
 Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
     Route::post('/books', [BookController::class, 'store']);
@@ -86,4 +84,7 @@ Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
     Route::get('/users', fn () => Inertia::render('admin/Admin'));
     Route::get('/addnews', fn () => Inertia::render('admin/AddNews'));
     Route::get('/management-news', fn () => Inertia::render('admin/ManajemenNews'));
+    Route::get('/admin/peminjaman/create', [PeminjamanController::class, 'adminCreateForm'])->name('admin.peminjaman.createForm');
+    Route::post('/admin/peminjaman', [PeminjamanController::class, 'adminCreate'])->name('admin.peminjaman.create');
+    Route::get('/admin/pengembalian/create', [PeminjamanController::class, 'adminCreatePengembalianForm'])->name('admin.pengembalian.create');
 });

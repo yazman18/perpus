@@ -3,8 +3,22 @@ import AdminLayout from "../../Layouts/AdminLayout";
 import { usePage, router } from "@inertiajs/react";
 
 const TransactionAdmin = () => {
-    const { peminjamans = [], pengembalians = [] } = usePage().props;
+    const {
+        peminjamans = [],
+        pengembalians = [],
+        search = "",
+    } = usePage().props;
     const [activeTab, setActiveTab] = useState("peminjaman");
+    const [searchTerm, setSearchTerm] = useState(search);
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        router.get(
+            "/admin/transaksi",
+            { search: searchTerm },
+            { preserveState: true }
+        );
+    };
 
     const handleAcc = (id) => {
         router.post(`/transaksi/${id}/peminjaman/acc`);
@@ -25,6 +39,23 @@ const TransactionAdmin = () => {
     return (
         <div className="p-6">
             <h1 className="text-2xl font-bold mb-4">Manajemen Transaksi</h1>
+
+            {/* Search Form */}
+            <form onSubmit={handleSearch} className="mb-4 flex gap-2">
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search for transactions"
+                    className="px-4 py-2 border rounded"
+                />
+                <button
+                    type="submit"
+                    className="bg-green-500 text-white px-4 py-2 rounded"
+                >
+                    Search
+                </button>
+            </form>
 
             {/* Tab Switch */}
             <div className="mb-4 flex gap-2">
@@ -50,7 +81,27 @@ const TransactionAdmin = () => {
                 </button>
             </div>
 
-            {/* Peminjaman */}
+            {/* Add Button */}
+            <div className="mb-4 flex gap-2">
+                {activeTab === "peminjaman" && (
+                    <button
+                        onClick={() => router.get("/admin/peminjaman/create")}
+                        className="bg-blue-600 text-white px-4 py-2 rounded"
+                    >
+                        Tambah Peminjaman
+                    </button>
+                )}
+                {activeTab === "pengembalian" && (
+                    <button
+                        onClick={() => router.get("/admin/pengembalian/create")}
+                        className="bg-blue-600 text-white px-4 py-2 rounded"
+                    >
+                        Tambah Pengembalian
+                    </button>
+                )}
+            </div>
+
+            {/* Peminjaman Tab */}
             {activeTab === "peminjaman" && (
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm border shadow">
@@ -64,7 +115,7 @@ const TransactionAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {peminjamans.map((item) => (
+                            {peminjamans.data.map((item) => (
                                 <tr key={item.id} className="text-center">
                                     <td className="border p-2">{item.nama}</td>
                                     <td className="border p-2">
@@ -103,10 +154,31 @@ const TransactionAdmin = () => {
                             ))}
                         </tbody>
                     </table>
+                    {/* Pagination */}
+                    <div className="mt-4 flex justify-center">
+                        {peminjamans.links.map((link, index) => (
+                            <button
+                                key={index}
+                                disabled={!link.url}
+                                onClick={() => router.visit(link.url)}
+                                className={`px-3 py-1 mx-1 rounded ${
+                                    link.active
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-white text-gray-700"
+                                }`}
+                            >
+                                <span
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
+                                />
+                            </button>
+                        ))}
+                    </div>
                 </div>
             )}
 
-            {/* Pengembalian */}
+            {/* Pengembalian Tab */}
             {activeTab === "pengembalian" && (
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm border shadow">
@@ -121,7 +193,7 @@ const TransactionAdmin = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {pengembalians.map((item) => (
+                            {pengembalians.data.map((item) => (
                                 <tr key={item.id} className="text-center">
                                     <td className="border p-2">{item.nama}</td>
                                     <td className="border p-2">
@@ -167,6 +239,27 @@ const TransactionAdmin = () => {
                             ))}
                         </tbody>
                     </table>
+                    {/* Pagination */}
+                    <div className="mt-4 flex justify-center">
+                        {pengembalians.links.map((link, index) => (
+                            <button
+                                key={index}
+                                disabled={!link.url}
+                                onClick={() => router.visit(link.url)}
+                                className={`px-3 py-1 mx-1 rounded ${
+                                    link.active
+                                        ? "bg-blue-600 text-white"
+                                        : "bg-white text-gray-700"
+                                }`}
+                            >
+                                <span
+                                    dangerouslySetInnerHTML={{
+                                        __html: link.label,
+                                    }}
+                                />
+                            </button>
+                        ))}
+                    </div>
                 </div>
             )}
         </div>

@@ -127,29 +127,42 @@ public function kembalikan(Request $request, $id)
     }
 
 
-
    // Halaman transaksi admin
-public function adminTransaksi()
-{
-    // Ambil semua peminjaman yang status peminjamannya pending
-    $peminjamans = Peminjaman::with('book')
-        ->where('status_peminjaman', 'pending')
-        ->latest()
-        ->get();
+   public function adminTransaksi(Request $request)
+   {
+       // Ambil input search (jika ada)
+       $search = $request->input('search', '');
 
-    // Ambil semua pengembalian yang status pengembaliannya pending
-    $pengembalians = Peminjaman::with('book')
-        ->whereNotNull('tanggal_kembali')
-        ->where('status_pengembalian', 'pending')
-        ->latest()
-        ->get();
+       // Ambil semua peminjaman yang status peminjamannya pending dengan search dan pagination
+       $peminjamans = Peminjaman::with('book')
+           ->where('status_peminjaman', 'pending')
+           ->when($search, function ($query, $search) {
+               return $query->where('nama', 'like', "%{$search}%")
+                            ->orWhereHas('book', function($q) use ($search) {
+                                $q->where('title', 'like', "%{$search}%");
+                            });
+           })
+           ->paginate(10);  // Menggunakan pagination, 10 item per halaman
 
-    return Inertia::render('admin/TransactionAdmin', [
-        'peminjamans' => $peminjamans,
-        'pengembalians' => $pengembalians,
-    ]);
-}
+       // Ambil semua pengembalian yang status pengembaliannya pending dengan search dan pagination
+       $pengembalians = Peminjaman::with('book')
+           ->whereNotNull('tanggal_kembali')
+           ->where('status_pengembalian', 'pending')
+           ->when($search, function ($query, $search) {
+               return $query->where('nama', 'like', "%{$search}%")
+                            ->orWhereHas('book', function($q) use ($search) {
+                                $q->where('title', 'like', "%{$search}%");
+                            });
+           })
+           ->paginate(10);  // Menggunakan pagination, 10 item per halaman
 
+       // Kirim data ke view Inertia
+       return Inertia::render('admin/TransactionAdmin', [
+           'peminjamans' => $peminjamans,  // Kirim data peminjaman dengan pagination
+           'pengembalians' => $pengembalians,  // Kirim data pengembalian dengan pagination
+           'search' => $search,  // Menyertakan query pencarian
+       ]);
+   }
 
     // Menyetujui peminjaman oleh admin
     public function setujuiPeminjaman($id)
@@ -209,4 +222,67 @@ public function adminTransaksi()
 
         return redirect()->back()->with('success', 'Pengembalian ditolak. Stok buku dikembalikan.');
     }
+
+    public function adminCreate(Request $request)
+    {
+        $rules = [
+            'nama' => 'required|string|max:255',
+            'book_id' => 'required|exists:books,id',
+            'user_id' => 'required|exists:users,id',
+            'tanggal_pinjam' => 'required|date',
+        ];
+
+        if (Auth::user()->role != 'guru') {
+            $rules['kelas'] = 'required|string|max:255';
+        }
+
+        $validated = $request->validate($rules);
+        $book = Book::findOrFail($validated['book_id']);
+
+        if ($book->stock <= 0) {
+            return back()->withErrors(['book_id' => 'Stok buku habis']);
+        }
+
+        $book->decrement('stock');
+        $tanggalPinjam = new \Carbon\Carbon($validated['tanggal_pinjam']);
+        $tanggalKembali = $tanggalPinjam->addDays(7);
+
+        Peminjaman::create([
+            'user_id' => $validated['user_id'],
+            'nama' => $validated['nama'],
+            'kelas' => isset($validated['kelas']) ? $validated['kelas'] : null,
+            'book_id' => $validated['book_id'],
+            'tanggal_pinjam' => $validated['tanggal_pinjam'],
+            'tanggal_kembali' => $tanggalKembali->toDateString(),
+            'durasi' => 7,
+            'status_peminjaman' => 'pending',  // Menunggu konfirmasi admin
+            'status_pengembalian' => 'belum melakukan pengembalian',  // Status awal pengembalian
+        ]);
+
+        return redirect()->route('admin.peminjaman.create')->with('success', 'Peminjaman berhasil dibuat');
+    }
+
+
+public function adminCreateForm()
+{
+    $books = Book::all(); // atau Book::where('stock', '>', 0)->get();
+    $users = User::all(); // atau filter sesuai kebutuhan
+
+    return Inertia::render('admin/PeminjamanFormAdmin', [
+        'books' => $books,
+        'users' => $users,
+    ]);
+}
+
+public function adminCreatePengembalianForm()
+{
+    $peminjamans = Peminjaman::with('book')
+        ->where('status_pengembalian', 'belum melakukan pengembalian')
+        ->get();
+
+    return Inertia::render('admin/PengembalianFormAdmin', [
+        'peminjamans' => $peminjamans,
+    ]);
+}
+
 }

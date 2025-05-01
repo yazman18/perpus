@@ -227,12 +227,6 @@ const Navbar = () => {
                                     Profile
                                 </Link>
                                 <Link
-                                    href="/manage-account"
-                                    className="block px-4 py-2 hover:bg-blue-100"
-                                >
-                                    Manage Account
-                                </Link>
-                                <Link
                                     href="/logout"
                                     method="post"
                                     as="button"
