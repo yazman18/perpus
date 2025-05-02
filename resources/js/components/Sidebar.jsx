@@ -39,7 +39,6 @@ const Sidebar = () => {
             icon: <FaBookOpen size={18} />,
             label: "Transaction",
         },
-        { to: "/users", icon: <FaUsers size={18} />, label: "Users" },
     ];
 
     return (
