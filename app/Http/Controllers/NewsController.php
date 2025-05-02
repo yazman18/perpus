@@ -11,27 +11,31 @@ class NewsController extends Controller
 {
     public function store(Request $request)
     {
+        // Validasi input
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'category' => 'required|string|max:100',
             'desc' => 'nullable|string',
-            'content' => 'required|string',
+            'content' => 'required|string', // Pastikan content diinput sebagai string
             'cover' => 'nullable|image|max:2048',
         ]);
 
-        // Upload file
+        // Upload file jika ada
         if ($request->hasFile('cover')) {
             $coverPath = $request->file('cover')->store('covers', 'public');
         }
 
+        // Bersihkan tag HTML dari content menggunakan strip_tags
+        $cleanContent = strip_tags($validated['content']);
+
+        // Simpan data ke database
         News::create([
             'title' => $validated['title'],
             'category' => $validated['category'],
             'short_description' => $validated['desc'],
-            'content' => $validated['content'],
+            'content' => $cleanContent, // Simpan content yang sudah dibersihkan dari tag HTML
             'cover' => $coverPath ?? null,
         ]);
-
 
         return redirect()->back()->with('success', 'Berita berhasil ditambahkan!');
     }

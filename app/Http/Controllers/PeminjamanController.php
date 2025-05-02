@@ -276,8 +276,10 @@ public function adminCreateForm()
 
 public function adminCreatePengembalianForm()
 {
+    // Exclude rejected borrowings when fetching borrowings for return
     $peminjamans = Peminjaman::with('book')
         ->where('status_pengembalian', 'belum melakukan pengembalian')
+        ->where('status_peminjaman', '!=', 'ditolak') // Exclude rejected borrowings
         ->get();
 
     return Inertia::render('admin/PengembalianFormAdmin', [

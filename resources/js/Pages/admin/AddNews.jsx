@@ -116,7 +116,7 @@ const AddNews = () => {
                         theme="snow"
                         value={data.content}
                         onChange={(value) => setData("content", value)}
-                        className="bg-white"
+                        className="bg-white h-50"
                     />
                     {errors.content && (
                         <p className="text-red-500 text-sm mt-1">
@@ -126,7 +126,7 @@ const AddNews = () => {
                 </div>
 
                 {/* SUBMIT */}
-                <div className="flex justify-end">
+                <div className="flex justify-end mt-8 pt-4">
                     <button
                         type="submit"
                         disabled={processing}

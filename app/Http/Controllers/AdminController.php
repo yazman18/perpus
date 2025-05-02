@@ -14,28 +14,39 @@ class AdminController extends Controller
 {
     public function report(Request $request)
 {
+    // Get the search query from the request
     $search = $request->query('search');
-    $query = Peminjaman::with('book', 'user')
-        ->where('status_peminjaman', 'disetujui')
-        ->orWhere('status_pengembalian', 'disetujui');
 
+    // Base query for Peminjaman with related models book and user
+    $query = Peminjaman::with('book', 'user')
+        ->where(function ($query) {
+            // Only select peminjaman where status is approved
+            $query->where('status_peminjaman', 'disetujui')
+                ->orWhere('status_pengembalian', 'disetujui');
+        });
+
+    // Apply the search filter if the search query exists
     if ($search) {
         $query->where(function ($q) use ($search) {
-            $q->whereHas('book', fn ($q2) => $q2->where('title', 'like', "%{$search}%"))
-              ->orWhere('nama', 'like', "%{$search}%");
+            // Search by book title or nama (borrower name)
+            $q->whereHas('book', function ($q2) use ($search) {
+                $q2->where('title', 'like', "%{$search}%");
+            })
+            ->orWhere('nama', 'like', "%{$search}%");
         });
     }
 
+    // Execute the query and paginate the results
     $data = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
+    // Map the results to add calculated fields like 'denda'
     $transactions = $data->map(function ($item) {
-
         $expectedReturn = \Carbon\Carbon::parse($item->tanggal_pinjam)->addDays($item->durasi);
 
         if ($item->tanggal_kembali) {
             $actualReturn = \Carbon\Carbon::parse($item->tanggal_kembali);
         } else {
-            $actualReturn = now();
+            $actualReturn = now(); // If the book hasn't been returned yet, use the current date
         }
 
         $selisihHari = $actualReturn->diffInDays($expectedReturn, false);
@@ -53,17 +64,18 @@ class AdminController extends Controller
         ];
     });
 
-
+    // Return the data to the Inertia view
     return Inertia::render('admin/ReportAdmin', [
         'transactions' => $transactions,
         'totalBorrowed' => Peminjaman::where('status_peminjaman', 'disetujui')->count(),
         'totalReturned' => Peminjaman::whereNotNull('tanggal_kembali')
-        ->where('status_pengembalian', 'disetujui')
-        ->count(),
-        'links' => $data->toArray()['links'],
+            ->where('status_pengembalian', 'disetujui')
+            ->count(),
+        'links' => $data->toArray()['links'], // Pagination links
         'search' => $search,
     ]);
 }
+
 
 
 

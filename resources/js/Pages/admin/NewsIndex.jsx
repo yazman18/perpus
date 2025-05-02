@@ -29,7 +29,7 @@ const NewsIndex = ({ news }) => {
                 Daftar Berita
             </h1>
 
-            <div className="space-y-6">
+            <div className="space-y-6 max-h-[600px] overflow-y-auto pr-2">
                 {news.map((item) => (
                     <div
                         key={item.id}
