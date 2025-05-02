@@ -1,33 +1,68 @@
-import { FaBars } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import { FaBars, FaBell } from "react-icons/fa";
 
 const NavbarAdmin = ({ toggleSidebar }) => {
+    const [notifications, setNotifications] = useState([]);
+    const [showNotifications, setShowNotifications] = useState(false);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const newNotification = {
+                id: Date.now(),
+                message: `Notifikasi baru pada ${new Date().toLocaleTimeString()}`,
+                read: false,
+            };
+
+            setNotifications((prev) => [newNotification, ...prev]);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const toggleNotificationDropdown = () => {
+        setShowNotifications(!showNotifications);
+    };
+
     return (
-        <div className="bg-blue-200 h-14 flex items-center justify-between px-4 shadow">
-            {/* Minimize Button */}
+        <div className="bg-blue-200 h-14 flex items-center justify-between px-4 md:px-6 shadow-md w-full">
+            {/* Sidebar toggle */}
             <button onClick={toggleSidebar} className="text-gray-800">
                 <FaBars size={20} />
             </button>
 
-            {/* Notifikasi / Aksi */}
-            <div className="flex items-center gap-4">
-                <button className="relative">
-                    <svg
-                        className="w-5 h-5 text-gray-700"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg"
-                    >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002
-                                6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C8.67 6.165
-                                8 7.388 8 8.75v5.408c0 .538-.214 1.055-.595 1.437L6 17h5"
-                        />
-                    </svg>
+            {/* Notification */}
+            <div className="relative">
+                <button
+                    onClick={toggleNotificationDropdown}
+                    className="relative"
+                >
+                    <FaBell size={20} className="text-gray-700" />
+                    {notifications.filter((n) => !n.read).length > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                            {notifications.filter((n) => !n.read).length}
+                        </span>
+                    )}
                 </button>
+
+                {/* Dropdown */}
+                {showNotifications && (
+                    <div className="absolute right-0 mt-2 w-72 bg-white shadow-lg rounded-lg z-50 max-h-72 overflow-y-auto">
+                        <ul className="py-2">
+                            {notifications.map((notification) => (
+                                <li
+                                    key={notification.id}
+                                    className={`px-4 py-2 text-sm ${
+                                        notification.read
+                                            ? "text-gray-600"
+                                            : "font-bold text-black"
+                                    }`}
+                                >
+                                    {notification.message}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
             </div>
         </div>
     );

@@ -78,6 +78,9 @@ const PeminjamanPage = ({ peminjamans }) => {
                                 item.status_pengembalian ===
                                 "belum melakukan pengembalian";
 
+                            const isRejected =
+                                item.status_peminjaman === "ditolak"; // Check for rejected borrowing
+
                             return (
                                 <div
                                     key={item.id}
@@ -107,8 +110,15 @@ const PeminjamanPage = ({ peminjamans }) => {
                                         </p>
                                     )}
 
-                                    {/* Menyembunyikan sisa durasi jika buku sudah dikembalikan */}
-                                    {!isReturned && (
+                                    {/* Display rejection message if the borrowing is rejected */}
+                                    {isRejected && (
+                                        <p className="text-red-600 font-semibold">
+                                            Peminjaman Ditolak
+                                        </p>
+                                    )}
+
+                                    {/* Menyembunyikan sisa durasi dan denda jika buku sudah dikembalikan atau ditolak */}
+                                    {!isRejected && !isReturned && (
                                         <p>
                                             Sisa Durasi:{" "}
                                             <span
@@ -126,16 +136,22 @@ const PeminjamanPage = ({ peminjamans }) => {
                                             </span>
                                         </p>
                                     )}
-                                    <p>
-                                        Denda: Rp{" "}
-                                        {denda.toLocaleString("id-ID")}
-                                    </p>
+
+                                    {/* Hide denda if the borrowing is rejected */}
+                                    {!isRejected && (
+                                        <p>
+                                            Denda: Rp{" "}
+                                            {denda.toLocaleString("id-ID")}
+                                        </p>
+                                    )}
 
                                     {/* STATUS */}
                                     {item.status_peminjaman !== "disetujui" ? (
-                                        <p className="font-semibold text-yellow-600 mt-2">
-                                            Menunggu Konfirmasi Admin
-                                        </p>
+                                        !isRejected && (
+                                            <p className="font-semibold text-yellow-600 mt-2">
+                                                Menunggu Konfirmasi Admin
+                                            </p>
+                                        )
                                     ) : isReturned ? (
                                         <p className="font-semibold text-green-600 mt-2">
                                             Buku telah dikembalikan
