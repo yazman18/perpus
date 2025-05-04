@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaBars, FaBell } from "react-icons/fa";
 import { usePage, router } from "@inertiajs/react";
 
@@ -16,23 +16,19 @@ const NavbarAdmin = ({ toggleSidebar }) => {
             `/admin/notifications/${id}/read`,
             {},
             {
-                onSuccess: (response) => {
-                    // Menampilkan alert setelah notifikasi dibaca
-                    if (response.props.status === "success") {
-                        alert(response.props.message); // alert if success
-                    } else {
-                        alert(response.props.message); // alert if error
-                    }
-                },
-                onError: (error) => {
-                    console.error(
-                        "Terjadi kesalahan saat memperbarui status notifikasi:",
-                        error
-                    );
-                },
+                preserveScroll: true,
+                preserveState: true,
             }
         );
     };
+
+    const { flash } = usePage().props;
+
+    useEffect(() => {
+        if (flash && flash.message) {
+            alert(flash.message); // atau tampilkan pakai toast, modal, dsb.
+        }
+    }, [flash]);
 
     return (
         <div className="bg-blue-200 h-14 flex items-center justify-between px-4 md:px-6 shadow-md w-full">

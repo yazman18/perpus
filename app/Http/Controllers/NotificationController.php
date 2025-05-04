@@ -4,23 +4,25 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class NotificationController extends Controller
 {
     public function markAsRead($id)
-    {
-        $notification = Notification::find($id);
+{
+    $notification = Notification::find($id);
 
-        // Pastikan notifikasi ditemukan
-        if ($notification) {
-            $notification->read = true;
-            $notification->save();  // Simpan perubahan status
+    if ($notification) {
+        $notification->read = true;
+        $notification->save();
 
-            // Kirim pesan sukses dengan status 200
-            return response()->json(['message' => 'Notifikasi berhasil diperbarui', 'status' => 'success']);
-        }
-
-        // Jika tidak ditemukan, kirim pesan error
-        return response()->json(['message' => 'Notifikasi tidak ditemukan', 'status' => 'error'], 404);
+        // Flash message ke Inertia
+        Session::flash('flash', ['type' => 'success', 'message' => 'Notifikasi berhasil ditandai sebagai dibaca.']);
+        return back(); // redirect ke halaman sebelumnya
     }
+
+    Session::flash('flash', ['type' => 'error', 'message' => 'Notifikasi tidak ditemukan.']);
+    return back();
+}
+
 }
