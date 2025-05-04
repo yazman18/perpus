@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; // Pastikan useState diimpor di sini
 import Sidebar from "../components/Sidebar";
-
 import NavbarAdmin from "../components/NavbarAdmin";
 
-const AdminLayout = ({ children }) => {
+// AdminLayout.jsx
+
+const AdminLayout = ({ children, notifications }) => {
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     return (
@@ -15,6 +16,7 @@ const AdminLayout = ({ children }) => {
             <div className="flex-1 flex flex-col bg-gray-100">
                 <NavbarAdmin
                     toggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+                    notifications={notifications} // Meneruskan notifikasi ke NavbarAdmin
                 />
                 <main className="p-4 overflow-auto">{children}</main>
             </div>

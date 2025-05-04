@@ -8,7 +8,8 @@ use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
-
+use Illuminate\Support\Facades\Log;
+use App\Models\Notification;
 class PeminjamanController extends Controller
 {
     public function index()
@@ -63,6 +64,7 @@ class PeminjamanController extends Controller
             'user_id' => 'required|exists:users,id',
             'tanggal_pinjam' => 'required|date',
         ];
+
         if (Auth::user()->role != 'guru') {
             $rules['kelas'] = 'required|string|max:255';
         }
@@ -89,30 +91,42 @@ class PeminjamanController extends Controller
             'status_pengembalian' => 'belum melakukan pengembalian',
         ]);
 
+        // Menambahkan notifikasi ke session (untuk admin)
+        Notification::create([
+            'user_id' => 1,  // Admin yang menerima notifikasi
+            'message' => 'Ada peminjaman buku baru dari ' . $validated['nama'] . ' yang perlu disetujui.',
+            'read' => false,  // Notifikasi belum dibaca
+        ]);
+
         return redirect('/peminjaman')->with('success', 'Peminjaman berhasil disimpan');
     }
 
-   // Konfirmasi pengembalian buku
-public function kembalikan(Request $request, $id)
-{
-    $peminjaman = Peminjaman::where('id', $id)
-        ->where('user_id', Auth::id())
-        ->firstOrFail();
+    public function kembalikan(Request $request, $id)
+    {
+        $peminjaman = Peminjaman::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
-    // Periksa apakah peminjaman sudah disetujui
-    if ($peminjaman->status_peminjaman !== 'disetujui') {
-        return redirect()->back()->withErrors([
-            'status_peminjaman' => 'Peminjaman belum disetujui oleh admin.'
+        // Periksa apakah peminjaman sudah disetujui
+        if ($peminjaman->status_peminjaman !== 'disetujui') {
+            return redirect()->back()->withErrors([
+                'status_peminjaman' => 'Peminjaman belum disetujui oleh admin.'
+            ]);
+        }
+
+        // Mengubah status pengembalian menjadi pending
+        $peminjaman->status_pengembalian = 'pending';
+        $peminjaman->save(); // Simpan perubahan status pengembalian
+
+        // Menambahkan notifikasi ke session (untuk admin)
+        session()->push('notifications'. Auth::id(), [
+            'message' => 'Pengembalian buku oleh ' . $peminjaman->nama . ' sedang menunggu persetujuan admin.',
+            'read' => false,
         ]);
+
+        return redirect()->back()->with('success', 'Pengembalian sedang menunggu persetujuan admin.');
     }
 
-    // Mengubah status pengembalian menjadi pending
-    $peminjaman->status_pengembalian = 'pending';
-    $peminjaman->save(); // Simpan perubahan status pengembalian
-
-    // Pengembalian sukses
-    return redirect()->back()->with('success', 'Pengembalian sedang menunggu persetujuan admin.');
-}
 
 
     public function perpanjang($id)
@@ -156,11 +170,14 @@ public function kembalikan(Request $request, $id)
            })
            ->paginate(10);  // Menggunakan pagination, 10 item per halaman
 
+           $notifications = Notification::where('user_id', 1)->get();
+
        // Kirim data ke view Inertia
        return Inertia::render('admin/TransactionAdmin', [
            'peminjamans' => $peminjamans,  // Kirim data peminjaman dengan pagination
            'pengembalians' => $pengembalians,  // Kirim data pengembalian dengan pagination
            'search' => $search,  // Menyertakan query pencarian
+           'notifications' => $notifications, // Kirim data notifikasi
        ]);
    }
 

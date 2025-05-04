@@ -7,10 +7,11 @@ const TransactionAdmin = () => {
         peminjamans = [],
         pengembalians = [],
         search = "",
+        notifications = [],
     } = usePage().props;
     const [activeTab, setActiveTab] = useState("peminjaman");
     const [searchTerm, setSearchTerm] = useState(search);
-
+    console.log(notifications);
     const handleSearch = (e) => {
         e.preventDefault();
         router.get(

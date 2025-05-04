@@ -1,26 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { FaBars, FaBell } from "react-icons/fa";
+import { usePage, router } from "@inertiajs/react";
 
 const NavbarAdmin = ({ toggleSidebar }) => {
-    const [notifications, setNotifications] = useState([]);
+    const { notifications } = usePage().props;
     const [showNotifications, setShowNotifications] = useState(false);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            const newNotification = {
-                id: Date.now(),
-                message: `Notifikasi baru pada ${new Date().toLocaleTimeString()}`,
-                read: false,
-            };
-
-            setNotifications((prev) => [newNotification, ...prev]);
-        }, 5000);
-
-        return () => clearInterval(interval);
-    }, []);
 
     const toggleNotificationDropdown = () => {
         setShowNotifications(!showNotifications);
+    };
+
+    // Fungsi untuk menandai notifikasi sebagai dibaca
+    const markAsRead = (id) => {
+        router.post(
+            `/admin/notifications/${id}/read`,
+            {},
+            {
+                onSuccess: (response) => {
+                    // Menampilkan alert setelah notifikasi dibaca
+                    if (response.props.status === "success") {
+                        alert(response.props.message); // alert if success
+                    } else {
+                        alert(response.props.message); // alert if error
+                    }
+                },
+                onError: (error) => {
+                    console.error(
+                        "Terjadi kesalahan saat memperbarui status notifikasi:",
+                        error
+                    );
+                },
+            }
+        );
     };
 
     return (
@@ -44,18 +55,23 @@ const NavbarAdmin = ({ toggleSidebar }) => {
                     )}
                 </button>
 
-                {/* Dropdown */}
-                {showNotifications && (
+                {/* Dropdown Notifikasi */}
+                {showNotifications && notifications.length > 0 && (
                     <div className="absolute right-0 mt-2 w-72 bg-white shadow-lg rounded-lg z-50 max-h-72 overflow-y-auto">
                         <ul className="py-2">
-                            {notifications.map((notification) => (
+                            {notifications.map((notification, index) => (
                                 <li
-                                    key={notification.id}
-                                    className={`px-4 py-2 text-sm ${
+                                    key={index}
+                                    className={`px-4 py-2 text-sm cursor-pointer ${
                                         notification.read
-                                            ? "text-gray-600"
-                                            : "font-bold text-black"
+                                            ? "text-gray-600 bg-gray-200" // Sudah dibaca
+                                            : "font-bold text-black" // Belum dibaca
                                     }`}
+                                    onClick={() => markAsRead(notification.id)} // Menambahkan onClick untuk menandai notifikasi dibaca
+                                    style={{
+                                        transition:
+                                            "background-color 0.3s, color 0.3s", // Efek transisi untuk klik
+                                    }}
                                 >
                                     {notification.message}
                                 </li>

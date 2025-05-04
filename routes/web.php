@@ -9,6 +9,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
 use Inertia\Inertia;
 
 // MAIN LAYOUT
@@ -87,4 +88,5 @@ Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
     Route::get('/admin/peminjaman/create', [PeminjamanController::class, 'adminCreateForm'])->name('admin.peminjaman.createForm');
     Route::post('/admin/peminjaman', [PeminjamanController::class, 'adminCreate'])->name('admin.peminjaman.create');
     Route::get('/admin/pengembalian/create', [PeminjamanController::class, 'adminCreatePengembalianForm'])->name('admin.pengembalian.create');
+    Route::post('/admin/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
 });
