@@ -6,6 +6,7 @@ import { Link } from "@inertiajs/react";
 import MainLayout from "../Layouts/MainLayout";
 
 const News = ({ newsList }) => {
+
     return (
         <div className="mt-6 px-4 md:px-12 lg:px-24 flex flex-col gap-8">
             {/* Breadcrumb */}
@@ -19,8 +20,8 @@ const News = ({ newsList }) => {
 
             {/* Header */}
             <div className="text-center md:text-left">
-                <h1 className="text-gray-900 text-3xl md:text-5xl lg:text-6xl font-bold leading-tight">
-                    Tetap Terinformasi dengan Berita Terbaru Kami
+                <h1 className="text-gray-900 text-3xl md:text-2xl lg:text-4xl font-bold leading-tight italic">
+                    Tetap Terinformasi dengan Berita Terbaru Kami!
                 </h1>
                 <p className="mt-6 text-gray-700 text-base md:text-lg max-w-3xl">
                     Dapatkan update terkini seputar kegiatan sekolah, pengumuman
@@ -44,5 +45,10 @@ const News = ({ newsList }) => {
     );
 };
 
-News.layout = (page) => <MainLayout>{page}</MainLayout>;
+News.layout = (page) => (
+    <MainLayout aboutData={page.props.aboutData}>
+        {page}
+    </MainLayout>
+);
+
 export default News;

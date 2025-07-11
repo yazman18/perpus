@@ -7,7 +7,7 @@ const TopPicksCarousel = () => {
     const [topPicks, setTopPicks] = useState([]);
     const [offset, setOffset] = useState(0);
     const cardsToShow = 2; // Tampilkan 2 kartu per baris
-    const cardWidth = 350; // Lebar per card
+    const cardWidth = 400; // Lebar per card
     const gap = 20; // Jarak antar card
 
     useEffect(() => {
@@ -88,8 +88,12 @@ const TopPicksCarousel = () => {
                                                 {book.title}
                                             </h3>
                                             {/* Deskripsi Buku */}
-                                            <p className="text-gray-600 text-sm mb-4">
-                                                {book.description}
+                                            <p className="text-gray-600 text-sm mb-4 mr-3">
+                                                {book.description?.substring(
+                                                    0,
+                                                    80
+                                                )}
+                                                ...
                                             </p>
                                             {/* Penulis dan Tahun */}
                                             <p className="text-gray-600 text-sm">

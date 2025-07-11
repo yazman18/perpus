@@ -58,7 +58,7 @@ const AddNews = () => {
                         placeholder="Masukkan judul..."
                         value={data.title}
                         onChange={(e) => setData("title", e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-3 border italic border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {errors.title && (
                         <p className="text-red-500 text-sm mt-1">
@@ -97,7 +97,7 @@ const AddNews = () => {
                         placeholder="Tulis deskripsi singkat di sini..."
                         value={data.desc}
                         onChange={(e) => setData("desc", e.target.value)}
-                        className="w-full p-3 border border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full p-3 border italic border-gray-300 rounded resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
                         rows={4}
                     />
                     {errors.desc && (
@@ -113,6 +113,7 @@ const AddNews = () => {
                         Konten Lengkap
                     </label>
                     <ReactQuill
+                        placeholder="Tulis konten lengkap di sini..."
                         theme="snow"
                         value={data.content}
                         onChange={(value) => setData("content", value)}
@@ -140,6 +141,10 @@ const AddNews = () => {
     );
 };
 
-AddNews.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+AddNews.layout = (page) => (
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
+);
 
 export default AddNews;

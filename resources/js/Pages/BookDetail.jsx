@@ -130,7 +130,7 @@ const BookDetail = ({ book, books }) => {
                 {/* Abstract */}
                 <div className="mt-8">
                     <h2 className="text-lg font-semibold mb-2">Abstrak</h2>
-                    <p className="text-sm text-gray-800 leading-relaxed">
+                    <p className="text-sm text-gray-800 leading-relaxed text-justify">
                         {book.description}
                     </p>
                 </div>

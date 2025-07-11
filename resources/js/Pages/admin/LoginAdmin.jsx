@@ -3,7 +3,7 @@ import Image from "../../components/Image";
 import AuthLayout from "../../Layouts/AuthLayout";
 
 const LoginAdmin = () => {
-    const { flash } = usePage().props;
+    const { flash, aboutData } = usePage().props;
 
     const { data, setData, post, processing, errors } = useForm({
         identifier: "",
@@ -26,14 +26,13 @@ const LoginAdmin = () => {
             {/* KIRI */}
             <div className="w-full lg:w-1/2 flex justify-center items-center p-8 relative z-10">
                 <div className="flex items-center gap-4">
-                    <Image
-                        src="/images/logo.png"
-                        alt="SMAN 2 BANDUNG"
-                        w={100}
-                        h={100}
+                    <img
+                        src={`/storage/${aboutData?.logo_sekolah ?? "images/logo.png"}`}
+                        alt="Logo SMAN 1 Baleendah"
+                        style={{ maxWidth: "100px", height: "100px" }}
                     />
-                    <h1 className="text-2xl md:text-3xl font-bold text-[#1E1B4B] text-left leading-tight">
-                        SMAN 2 Bandung <br /> E-Library
+                    <h1 className="text-2xl md:text-2xl font-bold text-[#1E1B4B] text-left leading-tight">
+                        {aboutData?.nama_sekolah ?? "Nama sekolah belum ada"} <br /> E-Library
                     </h1>
                 </div>
             </div>
@@ -88,13 +87,14 @@ const LoginAdmin = () => {
                                 onChange={(e) =>
                                     setData("password", e.target.value)
                                 }
+                                placeholder="Masukkan password"
                                 required
                                 className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                             />
                             <div className="mt-1 text-right text-sm">
                                 <Link
                                     href="/forgot-password"
-                                    className="text-blue-600 hover:underline"
+                                    className="text-blue-600 italic hover:underline"
                                 >
                                     Lupa password?
                                 </Link>
@@ -117,7 +117,7 @@ const LoginAdmin = () => {
                             </span>
                             <Link
                                 href="/register"
-                                className="text-blue-700 font-semibold hover:underline"
+                                className="text-blue-700 font-semibold italic hover:underline"
                             >
                                 Daftar di sini
                             </Link>
@@ -129,6 +129,10 @@ const LoginAdmin = () => {
     );
 };
 
-LoginAdmin.layout = (page) => <AuthLayout>{page}</AuthLayout>;
+LoginAdmin.layout = (page) => (
+    <AuthLayout aboutData={page.props.aboutData}>
+        {page}
+    </AuthLayout>
+);
 
 export default LoginAdmin;

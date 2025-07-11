@@ -10,10 +10,13 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use App\Models\Notification;
+use App\Models\About;
 class PeminjamanController extends Controller
 {
     public function index()
     {
+        $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
+
         $peminjamans = Peminjaman::with('book')
             ->where('user_id', Auth::id())
             ->latest()
@@ -38,6 +41,7 @@ class PeminjamanController extends Controller
 
         return Inertia::render('PeminjamanPage', [
             'peminjamans' => $peminjamans,
+            'aboutData' => $aboutData,
         ]);
     }
 
@@ -127,8 +131,6 @@ class PeminjamanController extends Controller
         return redirect()->back()->with('success', 'Pengembalian sedang menunggu persetujuan admin.');
     }
 
-
-
     public function perpanjang($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
@@ -143,43 +145,48 @@ class PeminjamanController extends Controller
 
    // Halaman transaksi admin
    public function adminTransaksi(Request $request)
-   {
-       // Ambil input search (jika ada)
-       $search = $request->input('search', '');
+    {
+        // Ambil data terbaru dari tabel about
+        $aboutData = About::latest()->first();
 
-       // Ambil semua peminjaman yang status peminjamannya pending dengan search dan pagination
-       $peminjamans = Peminjaman::with('book')
-           ->where('status_peminjaman', 'pending')
-           ->when($search, function ($query, $search) {
-               return $query->where('nama', 'like', "%{$search}%")
-                            ->orWhereHas('book', function($q) use ($search) {
+        // Ambil input pencarian (jika ada)
+        $search = $request->input('search', '');
+
+        // Ambil semua data peminjaman dengan status "pending", dengan relasi ke buku, filter pencarian, dan pagination
+        $peminjamans = Peminjaman::with('book')
+            ->where('status_peminjaman', 'pending')
+            ->when($search, function ($query, $search) {
+                return $query->where('nama', 'like', "%{$search}%")
+                            ->orWhereHas('book', function ($q) use ($search) {
                                 $q->where('title', 'like', "%{$search}%");
                             });
-           })
-           ->paginate(10);  // Menggunakan pagination, 10 item per halaman
+            })
+            ->paginate(10);
 
-       // Ambil semua pengembalian yang status pengembaliannya pending dengan search dan pagination
-       $pengembalians = Peminjaman::with('book')
-           ->whereNotNull('tanggal_kembali')
-           ->where('status_pengembalian', 'pending')
-           ->when($search, function ($query, $search) {
-               return $query->where('nama', 'like', "%{$search}%")
-                            ->orWhereHas('book', function($q) use ($search) {
+        // Ambil semua data pengembalian yang sudah dikembalikan tapi status pengembaliannya masih "pending"
+        $pengembalians = Peminjaman::with('book')
+            ->whereNotNull('tanggal_kembali')
+            ->where('status_pengembalian', 'pending')
+            ->when($search, function ($query, $search) {
+                return $query->where('nama', 'like', "%{$search}%")
+                            ->orWhereHas('book', function ($q) use ($search) {
                                 $q->where('title', 'like', "%{$search}%");
                             });
-           })
-           ->paginate(10);  // Menggunakan pagination, 10 item per halaman
+            })
+            ->paginate(10);
 
-           $notifications = Notification::where('user_id', 1)->get();
+        // Ambil notifikasi user admin (sementara user_id = 1)
+        $notifications = Notification::where('user_id', 1)->get();
 
-       // Kirim data ke view Inertia
-       return Inertia::render('admin/TransactionAdmin', [
-           'peminjamans' => $peminjamans,  // Kirim data peminjaman dengan pagination
-           'pengembalians' => $pengembalians,  // Kirim data pengembalian dengan pagination
-           'search' => $search,  // Menyertakan query pencarian
-           'notifications' => $notifications, // Kirim data notifikasi
-       ]);
-   }
+        // Kirim data ke komponen Inertia
+        return Inertia::render('admin/TransactionAdmin', [
+            'peminjamans' => $peminjamans,
+            'pengembalians' => $pengembalians,
+            'search' => $search,
+            'notifications' => $notifications,
+            'aboutData' => $aboutData,
+        ]);
+    }
 
     // Menyetujui peminjaman oleh admin
     public function setujuiPeminjaman($id)

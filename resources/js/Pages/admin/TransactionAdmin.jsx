@@ -188,5 +188,10 @@ const TransactionAdmin = () => {
     );
 };
 
-TransactionAdmin.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+TransactionAdmin.layout = (page) => (
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
+);
+
 export default TransactionAdmin;

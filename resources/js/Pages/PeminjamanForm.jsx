@@ -75,6 +75,7 @@ const PeminjamanForm = ({ book, user, books }) => {
                                 Kelas
                             </label>
                             <input
+                                placeholder="Masukkan kelas Anda"
                                 type="text"
                                 name="kelas"
                                 value={data.kelas}

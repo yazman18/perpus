@@ -65,6 +65,10 @@ const NewsIndex = ({ news }) => {
     );
 };
 
-NewsIndex.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+NewsIndex.layout = (page) => (
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
+);
 
 export default NewsIndex;

@@ -41,12 +41,12 @@ const RegisterPage = () => {
                 <div className="flex items-center gap-4">
                     <Image
                         src="/images/logo.png"
-                        alt="SMAN 2 BANDUNG"
+                        alt="SMAN 1 Baleendah"
                         w={120}
                         h={120}
                     />
                     <h1 className="text-3xl font-bold text-[#1E1B4B] text-left">
-                        SMAN 2 Bandung <br /> E-Library
+                        SMAN 1 Baleendah <br /> E-Library
                     </h1>
                 </div>
             </div>

@@ -141,5 +141,10 @@ const ReportAdmin = () => {
     );
 };
 
-ReportAdmin.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+ReportAdmin.layout = (page) => (
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
+);
+
 export default ReportAdmin;

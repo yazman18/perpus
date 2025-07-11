@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import AdminLayout from "../../Layouts/AdminLayout";
-import { Bar } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
-    BarElement,
+    LineElement,
+    PointElement,
     CategoryScale,
     LinearScale,
     Tooltip,
@@ -11,7 +12,14 @@ import {
 } from "chart.js";
 import ReactPaginate from "react-paginate";
 
-ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
+ChartJS.register(
+    LineElement,
+    PointElement,
+    CategoryScale,
+    LinearScale,
+    Tooltip,
+    Legend
+);
 
 const HomeAdmin = ({
     stats = {},
@@ -32,7 +40,9 @@ const HomeAdmin = ({
             {
                 label: "Average Book Loan",
                 data: chartData.data,
-                backgroundColor: "#7f1d1d",
+                borderColor: "#7f1d1d",
+                backgroundColor: "rgba(127, 29, 29, 0.2)", // transparan untuk area bawah garis
+                fill: true, // jika ingin ada area terisi di bawah garis
             },
         ],
     };
@@ -82,9 +92,15 @@ const HomeAdmin = ({
                     Average Book Loan Graph
                 </h3>
                 <div className="h-72">
-                    <Bar
+                    <Line
                         data={barData}
-                        options={{ maintainAspectRatio: false }}
+                        options={{
+                            maintainAspectRatio: false,
+                            tension: 0.4, // optional, buat garis melengkung
+                            pointRadius: 4,
+                            borderWidth: 2,
+                            responsive: true,
+                        }}
                     />
                 </div>
             </div>
@@ -202,5 +218,10 @@ const Pagination = ({ pageCount, onPageChange }) => (
     />
 );
 
-HomeAdmin.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+HomeAdmin.layout = (page) => (
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
+);
+
 export default HomeAdmin;

@@ -5,6 +5,7 @@ import MainLayout from "../Layouts/MainLayout";
 import TopPicksCarousel from "../components/TopPicksCarousel";
 
 const KatalogPage = () => {
+
     const { books } = usePage().props;
     const [search, setSearch] = useState(""); // State untuk pencarian
     const [booksData, setBooksData] = useState([]); // Buku yang ditampilkan
@@ -50,9 +51,11 @@ const KatalogPage = () => {
                     <span className="text-gray-800 font-medium">Katalog</span>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl mb-2 font-inter">
+                <h1 className="text-3xl md:text-4xl mb-2 font-semibold font-inter">
                     Katalog Perpustakaan{" "}
-                    <span className="font-bold font-inter">SMAN 2 Bandung</span>
+                    <span className="font-bold font-inter">
+                        SMAN 1 Baleendah
+                    </span>
                 </h1>
                 <p className="italic font-semibold text-lg mb-2 font-kalam">
                     Temukan buku favoritmu dengan mudah.
@@ -68,7 +71,7 @@ const KatalogPage = () => {
                 </div>
 
                 {/* 🔍 Search Bar */}
-                <div className="flex gap-4 mb-10">
+                <div className="bg-white flex gap-4 mb-10">
                     <input
                         type="text"
                         placeholder="Search here..."
@@ -99,7 +102,7 @@ const KatalogPage = () => {
                                 h={240}
                                 className="max-w-full h-[240px] object-cover mb-3 rounded-lg"
                             />
-                            <h4 className="text-sm font-semibold text-center text-gray-800 mb-2">
+                            <h4 className="text-sm font-bold text-center text-gray-800 mb-2">
                                 {book.title}
                             </h4>
                             <p className="text-xs text-center text-gray-600">
@@ -109,6 +112,20 @@ const KatalogPage = () => {
                             <p className="text-xs text-center text-gray-500 mt-2">
                                 ISBN: {book.isbn} <br /> {book.pages} pages
                             </p>
+                            {book.description && (
+                                <p className="text-xs text-gray-600 mt-2 text-justify">
+                                    {book.description.length > 100
+                                        ? book.description.substring(0, 85) +
+                                          "..."
+                                        : book.description}
+                                </p>
+                            )}
+                            <Link
+                                href={`/books/${book.id}`}
+                                className="mt-3 inline-block text-xs text-green-600 font-semibold hover:underline"
+                            >
+                                Lihat Detail
+                            </Link>
                         </Link>
                     ))}
                 </div>
@@ -137,6 +154,10 @@ const KatalogPage = () => {
     );
 };
 
-KatalogPage.layout = (page) => <MainLayout>{page}</MainLayout>;
+KatalogPage.layout = (page) => (
+    <MainLayout aboutData={page.props.aboutData}>
+        {page}
+    </MainLayout>
+);
 
 export default KatalogPage;

@@ -4,13 +4,13 @@ import AdminLayout from "../../Layouts/AdminLayout";
 
 const Addbook = () => {
     const [books, setBooks] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1); // Menyimpan halaman aktif
-    const [totalPages, setTotalPages] = useState(1); // Menyimpan total halaman
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
     const [showModal, setShowModal] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
-    const [search, setSearch] = useState(""); // State untuk pencarian
+    const [search, setSearch] = useState("");
 
     const { flash } = usePage().props;
 
@@ -28,32 +28,27 @@ const Addbook = () => {
         image: null,
     });
 
-    // Fungsi untuk mengambil data buku dengan pagination dan pencarian
     const fetchBooks = async (page = 1, search = "") => {
         const res = await fetch(`/books?page=${page}&search=${search}`);
         const data = await res.json();
-
-        // Memeriksa apakah data.books adalah array dan menyimpannya
         if (data?.data && Array.isArray(data.data)) {
-            setBooks(data.data); // Menyimpan data buku
-            setTotalPages(data.last_page); // Mengupdate total halaman
+            setBooks(data.data);
+            setTotalPages(data.last_page);
         } else {
             console.error("Data books bukan array", data);
-            setBooks([]); // Menangani jika data bukan array
+            setBooks([]);
         }
     };
 
     useEffect(() => {
-        fetchBooks(currentPage, search); // Ambil data buku ketika halaman pertama dimuat atau pencarian berubah
+        fetchBooks(currentPage, search);
     }, [currentPage, search]);
 
     useEffect(() => {
         if (flash?.book) {
             const updatedBook = flash.book;
             setBooks((prevBooks) =>
-                prevBooks.map((b) =>
-                    b.id === updatedBook.id ? updatedBook : b
-                )
+                prevBooks.map((b) => (b.id === updatedBook.id ? updatedBook : b))
             );
             setShowModal(false);
             setIsEditing(false);
@@ -108,7 +103,7 @@ const Addbook = () => {
         const options = {
             forceFormData: true,
             onSuccess: () => {
-                fetchBooks(currentPage, search); // Ambil data buku setelah submit
+                fetchBooks(currentPage, search);
                 setShowModal(false);
                 setIsEditing(false);
                 setEditId(null);
@@ -131,13 +126,13 @@ const Addbook = () => {
                 <input
                     type="text"
                     value={search}
-                    onChange={(e) => setSearch(e.target.value)} // Update pencarian
+                    onChange={(e) => setSearch(e.target.value)}
                     className="p-2 border rounded"
                     placeholder="Cari Buku..."
                 />
                 <button
                     className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                    onClick={() => fetchBooks(currentPage, search)} // Fetch buku berdasarkan pencarian
+                    onClick={() => fetchBooks(currentPage, search)}
                 >
                     Cari
                 </button>
@@ -183,9 +178,7 @@ const Addbook = () => {
                                         </button>
                                         <button
                                             className="px-2 py-1 text-white bg-red-600 rounded hover:bg-red-700"
-                                            onClick={() =>
-                                                handleDelete(book.id)
-                                            }
+                                            onClick={() => handleDelete(book.id)}
                                         >
                                             Hapus
                                         </button>
@@ -203,12 +196,9 @@ const Addbook = () => {
                 </table>
             </div>
 
-            {/* Pagination */}
             <div className="mt-4 flex justify-center">
                 <button
-                    onClick={() =>
-                        setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}
                     className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
                 >
@@ -216,9 +206,7 @@ const Addbook = () => {
                 </button>
                 <span className="px-4">{`Page ${currentPage} of ${totalPages}`}</span>
                 <button
-                    onClick={() =>
-                        setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                     disabled={currentPage === totalPages}
                     className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
                 >
@@ -226,7 +214,6 @@ const Addbook = () => {
                 </button>
             </div>
 
-            {/* Modal untuk tambah/edit buku */}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
                     <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 relative">
@@ -245,129 +232,102 @@ const Addbook = () => {
                             {isEditing ? "Edit Buku" : "Tambah Buku"}
                         </h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            {/* INPUT LABEL SECTIONS */}
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        Judul Buku
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-600">Judul Buku</label>
                                     <input
                                         name="title"
                                         value={data.title}
-                                        onChange={(e) =>
-                                            setData("title", e.target.value)
-                                        }
+                                        onChange={(e) => setData("title", e.target.value)}
                                         className="p-2 border rounded w-full"
+                                        placeholder="Masukkan judul buku"
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        Penulis
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-600">Penulis</label>
                                     <input
                                         name="author"
                                         value={data.author}
-                                        onChange={(e) =>
-                                            setData("author", e.target.value)
-                                        }
+                                        onChange={(e) => setData("author", e.target.value)}
                                         className="p-2 border rounded w-full"
+                                        placeholder="Masukkan nama penulis"
                                     />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        Penerbit
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-600">Penerbit</label>
                                     <input
                                         name="publisher"
                                         value={data.publisher}
-                                        onChange={(e) =>
-                                            setData("publisher", e.target.value)
-                                        }
+                                        onChange={(e) => setData("publisher", e.target.value)}
                                         className="p-2 border rounded w-full"
+                                        placeholder="Masukkan nama penerbit"
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        Tahun
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-600">Tahun</label>
                                     <input
                                         type="number"
                                         name="year"
                                         value={data.year}
-                                        onChange={(e) =>
-                                            setData("year", e.target.value)
-                                        }
+                                        onChange={(e) => setData("year", e.target.value)}
                                         className="p-2 border rounded w-full"
+                                        placeholder="Masukkan tahun terbit"
                                     />
                                 </div>
                             </div>
 
                             <div className="grid grid-cols-3 gap-4">
                                 <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        Jumlah Halaman
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-600">Jumlah Halaman</label>
                                     <input
                                         type="number"
                                         name="pages"
                                         value={data.pages}
-                                        onChange={(e) =>
-                                            setData("pages", e.target.value)
-                                        }
+                                        onChange={(e) => setData("pages", e.target.value)}
                                         className="p-2 border rounded w-full"
+                                        placeholder="Masukkan jumlah halaman"
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        Stok
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-600">Stok</label>
                                     <input
                                         type="number"
                                         name="stock"
                                         value={data.stock}
-                                        onChange={(e) =>
-                                            setData("stock", e.target.value)
-                                        }
+                                        onChange={(e) => setData("stock", e.target.value)}
                                         className="p-2 border rounded w-full"
+                                        placeholder="Masukkan jumlah stok"
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-sm font-medium text-gray-600">
-                                        ISBN
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-600">ISBN</label>
                                     <input
                                         name="isbn"
                                         value={data.isbn}
-                                        onChange={(e) =>
-                                            setData("isbn", e.target.value)
-                                        }
+                                        onChange={(e) => setData("isbn", e.target.value)}
                                         className="p-2 border rounded w-full"
+                                        placeholder="Masukkan nomor ISBN"
                                     />
                                 </div>
                             </div>
 
                             <div>
-                                <label className="text-sm font-medium text-gray-600">
-                                    Deskripsi
-                                </label>
+                                <label className="text-sm font-medium text-gray-600">Deskripsi</label>
                                 <textarea
                                     name="description"
                                     value={data.description}
-                                    onChange={(e) =>
-                                        setData("description", e.target.value)
-                                    }
+                                    onChange={(e) => setData("description", e.target.value)}
                                     rows="3"
                                     className="w-full p-2 border rounded"
+                                    placeholder="Masukkan deskripsi buku"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-600 mb-2">
-                                    Cover Buku
-                                </label>
+                                <label className="block text-sm font-medium text-gray-600 mb-2">Cover Buku</label>
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -411,5 +371,10 @@ const Addbook = () => {
     );
 };
 
-Addbook.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+Addbook.layout = (page) => (
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
+);
+
 export default Addbook;

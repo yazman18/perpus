@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\About;
 use Inertia\Inertia;
 
 class BookController extends Controller
@@ -86,8 +87,10 @@ class BookController extends Controller
     public function katalog()
     {
         $books = Book::latest()->get();
+        $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
         return Inertia::render('KatalogPage', [
             'books' => $books,
+            'aboutData' => $aboutData,
         ]);
     }
 
@@ -99,19 +102,19 @@ class BookController extends Controller
     }
 
     public function adminIndex(Request $request)
-{
-    // Ambil query pencarian dari input
-    $search = $request->query('search');
+    {
+        // Ambil query pencarian dari input
+        $search = $request->query('search');
 
-    // Query untuk mencari buku dengan pagination
-    $books = Book::query()
-        ->when($search, function ($query, $search) {
-            return $query->where('title', 'like', "%{$search}%")
-                         ->orWhere('author', 'like', "%{$search}%")
-                         ->orWhere('isbn', 'like', "%{$search}%");
-        })
-        ->paginate(10); // Pagination, 10 buku per halaman
+        // Query untuk mencari buku dengan pagination
+        $books = Book::query()
+            ->when($search, function ($query, $search) {
+                return $query->where('title', 'like', "%{$search}%")
+                            ->orWhere('author', 'like', "%{$search}%")
+                            ->orWhere('isbn', 'like', "%{$search}%");
+            })
+            ->paginate(10); // Pagination, 10 buku per halaman
 
-    return response()->json($books); // Mengembalikan data buku dengan pagination
-}
+        return response()->json($books); // Mengembalikan data buku dengan pagination
+    }
 }

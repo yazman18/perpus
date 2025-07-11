@@ -6,6 +6,7 @@ use App\Models\News;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
+use App\Models\About;
 
 class NewsController extends Controller
 {
@@ -51,25 +52,30 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::latest()->get();
+        $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
         return Inertia::render('News', [
             'newsList' => $news,
+            'aboutData' => $aboutData,
         ]);
     }
 
     public function indexHome()
     {
         $news = News::latest()->take(4)->get();
+        $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
         return Inertia::render('HomePage', [
             'news' => $news,
+            'aboutData' => $aboutData,
         ]);
     }
 
     public function indexAdmin()
     {
         $news = News::latest()->get();
-
+        $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
         return Inertia::render('admin/NewsIndex', [
             'news' => $news,
+            'aboutData' => $aboutData,
         ]);
     }
 

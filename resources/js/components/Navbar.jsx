@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
 import Image from "./Image";
 
-const Navbar = () => {
+const Navbar = ({ aboutData }) => {
     const [open, setOpen] = useState(false);
     const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
     const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
@@ -37,19 +37,18 @@ const Navbar = () => {
     }, []);
 
     return (
-        <nav className="bg-[#A8ACC2] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 relative z-50">
+        <nav className="sticky top-0 bg-[#A8ACC2] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-50">
             {/* LOGO */}
             <Link
                 href="/"
-                className="flex items-center gap-3 text-lg md:text-2xl font-bold"
+                className="flex items-center gap-3 text-lg md:text-xl font-bold"
             >
-                <Image
-                    src="/images/logo.png"
-                    alt="SMAN 2 BANDUNG"
-                    w={32}
-                    h={32}
+                <img
+                    src={`/storage/${aboutData?.logo_sekolah ?? "images/logo.png"}`}
+                    alt="Logo SMAN 1 Baleendah"
+                    style={{ maxWidth: "32px", height: "32px" }}
                 />
-                <span>SMAN 2 Bandung</span>
+                <span>{aboutData?.nama_sekolah ?? "Nama sekolah belum ada"}</span>
             </Link>
 
             {/* Hamburger Icon */}
@@ -84,7 +83,7 @@ const Navbar = () => {
 
             {/* Mobile Menu */}
             <div
-                className={`md:hidden fixed top-16 left-0 w-full bg-[#A8ACC2] transition-all duration-300 ${
+                className={`md:hidden fixed top-16 left-0 w-full bg-[#A8ACC2] font-bold text-underline transition-all duration-300 ${
                     open ? "max-h-screen py-8" : "max-h-0 overflow-hidden"
                 }`}
             >
@@ -106,7 +105,7 @@ const Navbar = () => {
                             Service ▾
                         </button>
                         {mobileDropdownOpen && (
-                            <div className="mt-2 flex flex-col items-start gap-2 text-sm">
+                            <div className="mt-2 flex flex-col items-start gap-2 text-xs">
                                 <Link href="/katalog" onClick={closeMobileMenu}>
                                     Katalog
                                 </Link>
@@ -172,7 +171,7 @@ const Navbar = () => {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-8 font-medium relative">
+            <div className="hidden md:flex items-center gap-8 font-bold relative">
                 <Link href="/">Home</Link>
                 <Link href="/about">About</Link>
 

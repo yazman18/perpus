@@ -8,11 +8,13 @@ import {
     FaNewspaper,
     FaRegNewspaper,
     FaCapsules,
+    FaSchool,
 } from "react-icons/fa";
 import Image from "../components/Image";
 import { Link, usePage } from "@inertiajs/react";
+import AdminLayout from "../Layouts/AdminLayout";
 
-const Sidebar = () => {
+const Sidebar = ({ aboutData }) => {
     const { url } = usePage();
     const currentPath = url;
 
@@ -39,22 +41,22 @@ const Sidebar = () => {
             icon: <FaBookOpen size={18} />,
             label: "Transaction",
         },
+        { to: "/aboutadmin", icon: <FaSchool size={18} />, label: "Data Sekolah" },
     ];
 
     return (
-        <div className="h-screen w-64 bg-[#111827] text-white flex flex-col justify-between">
+        <div className="hidden md:flex md:w-64 flex-col h-screen bg-[#111827] text-white justify-between">
             {/* Top Section */}
             <div>
                 <div className="bg-[#1F2937] p-4 text-center">
                     <div className="flex items-center justify-center gap-2 mb-2">
-                        <Image
-                            src="/images/logo.png"
-                            alt="SMAN 2 BANDUNG"
-                            w={32}
-                            h={32}
+                        <img
+                            src={`/storage/${aboutData?.logo_sekolah ?? "images/logo.png"}`}
+                            alt="Logo SMAN 1 Baleendah"
+                            style={{ maxWidth: "32px", height: "32px" }}
                         />
                         <h1 className="text-sm font-semibold text-gray-300">
-                            SMAN 2 Bandung
+                            {aboutData?.nama_sekolah ?? "Nama sekolah belum ada"}
                         </h1>
                     </div>
                     <p className="text-xs text-gray-400 mt-2">

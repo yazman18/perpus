@@ -2,12 +2,17 @@ import { useState } from "react";
 import Image from "../components/Image";
 import MainLayout from "../Layouts/MainLayout";
 import { Link } from "@inertiajs/react";
+import { usePage } from '@inertiajs/react';
 
 const Homepage = ({ news }) => {
+    
     const [offset, setOffset] = useState(0);
     const cardsToShow = 4;
     const cardWidth = 280;
     const gap = 20;
+
+    const { props } = usePage();
+    const aboutData = props.aboutData;
 
     const newsData = news || []; // Ensure news is always an array
 
@@ -25,49 +30,37 @@ const Homepage = ({ news }) => {
 
     return (
         <div className="w-full min-h-screen p-5 md:p-10 bg-gray-100 font-sans">
-            <h1 className="text-3xl md:text-5xl font-bold text-center mb-4 text-blue-900 font-montserrat">
-                Membaca, Menjelajah, Menginspirasi
+            <h1 className="text-3xl md:text-5xl italic font-bold text-center mb-4 text-blue-900 font-montserrat">
+                {aboutData?.judul ?? "Judul belum tersedia"}
             </h1>
 
-            <p className="text-sm md:text-md italic text-center mb-10 text-gray-700 font-montserrat">
-                Welcome! This is an official library website of SMAN 2 Bandung
+            <p className="text-sm md:text-md italic font-bold text-center mb-10 text-gray-700 font-montserrat">
+                {aboutData?.sub_judul ?? "Welcome! This is an official library website of SMAN 1 Baleendah"}
             </p>
 
             <div className="mb-8 mt-20">
                 <div className="flex flex-col md:flex-row md:gap-28 items-center">
-                    <div className="md:w-1/2 px-8 ml-20">
-                        <h2 className="text-xl md:text-2xl font-semibold mb-4 text-gray-800 font-plusjakarta">
+                    <div className="md:w-1/2 ml-10">
+                        <h2 className="text-xl md:text-3xl font-bold mb-4 text-gray-800 font-plusjakarta">
                             About Us
                         </h2>
-                        <p className="text-gray-700 leading-relaxed text-justify font-plusjakarta">
-                            Perpustakaan SMA Negeri 2 Bandung adalah pusat
-                            literasi dan sumber belajar yang mendukung
-                            pengembangan akademik serta budaya baca di
-                            lingkungan sekolah. Terletak di lantai atas dekat
-                            laboratorium kimia, perpustakaan ini menawarkan
-                            suasana yang nyaman, luas, dan kondusif untuk
-                            belajar. Dilengkapi dengan koleksi buku yang beragam
-                            serta sistem digital untuk peminjaman dan
-                            pengelolaan buku, perpustakaan ini berkomitmen untuk
-                            memberikan akses informasi yang mudah dan modern
-                            bagi seluruh siswa dan tenaga pendidik.
+                        <p className="text-gray-700 leading-relaxed text-justify p-1 font-plusjakarta">
+                            {aboutData?.about ?? "Deskripsi perpustakaan belum tersedia."}
                         </p>
                     </div>
-                    <div className="w-full md:max-w-[600px] aspect-w-4 aspect-h-3">
-                        <Image
-                            src="/images/about-us.png"
-                            alt="About Us"
-                            className="object-contain rounded-lg shadow-md w-full h-full"
-                            w="800"
+                    <img
+                        src={`/storage/${aboutData?.gambar ?? "images/default.png"}`}
+                        alt="About Us"
+                        className="rounded-lg shadow-md mx-auto"
+                        style={{ maxWidth: "600px", height: "300px" }}
                         />
-                    </div>
                 </div>
             </div>
 
             <hr className="border-t-2 border-gray-300 my-12" />
 
             <div className="relative w-full">
-                <h2 className="text-2xl font-semibold mb-6 text-gray-800">
+                <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">
                     News
                 </h2>
                 <div className="relative overflow-hidden">
@@ -163,6 +156,11 @@ const Homepage = ({ news }) => {
     );
 };
 
-Homepage.layout = (page) => <MainLayout>{page}</MainLayout>;
+
+Homepage.layout = (page) => (
+    <MainLayout aboutData={page.props.aboutData}>
+        {page}
+    </MainLayout>
+);
 
 export default Homepage;

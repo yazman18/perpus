@@ -221,5 +221,9 @@ const PeminjamanPage = ({ peminjamans }) => {
     );
 };
 
-PeminjamanPage.layout = (page) => <MainLayout>{page}</MainLayout>;
+PeminjamanPage.layout = (page) => (
+    <MainLayout aboutData={page.props.aboutData}>
+        {page}
+    </MainLayout>
+);
 export default PeminjamanPage;

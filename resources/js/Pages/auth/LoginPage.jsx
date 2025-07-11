@@ -5,7 +5,7 @@ import AuthLayout from "../../Layouts/AuthLayout";
 
 const LoginPage = () => {
     const [role, setRole] = useState(null);
-    const { flash } = usePage().props;
+    const { flash, aboutData } = usePage().props;
 
     const { data, setData, post, processing, errors } = useForm({
         identifier: "",
@@ -33,14 +33,13 @@ const LoginPage = () => {
             {/* KIRI */}
             <div className="w-full lg:w-1/2 flex justify-center items-center p-8 relative z-10">
                 <div className="flex items-center gap-4">
-                    <Image
-                        src="/images/logo.png"
-                        alt="SMAN 2 BANDUNG"
-                        w={100}
-                        h={100}
+                    <img
+                        src={`/storage/${aboutData?.logo_sekolah ?? "images/logo.png"}`}
+                        alt="Logo SMAN 1 Baleendah"
+                        style={{ maxWidth: "100px", height: "100px" }}
                     />
                     <h1 className="text-2xl md:text-3xl font-bold text-[#1E1B4B] text-left leading-tight">
-                        SMAN 2 Bandung <br /> E-Library
+                        {aboutData?.nama_sekolah ?? "Nama sekolah belum ada"} <br /> E-Library
                     </h1>
                 </div>
             </div>
@@ -173,6 +172,11 @@ const LoginPage = () => {
     );
 };
 
-LoginPage.layout = (page) => <AuthLayout>{page}</AuthLayout>;
+
+LoginPage.layout = (page) => (
+    <AuthLayout aboutData={page.props.aboutData}>
+        {page}
+    </AuthLayout>
+);
 
 export default LoginPage;

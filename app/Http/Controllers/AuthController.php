@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Models\About;
 use Inertia\Inertia;
 use Illuminate\Validation\Rules\Password;
 
@@ -43,45 +44,47 @@ class AuthController extends Controller
 
     public function showLoginForm()
     {
-        return inertia('auth/LoginPage');
+        $aboutData = About::latest()->first();
+        return Inertia::render('auth/LoginPage', [
+            'aboutData' => $aboutData,
+        ]);
     }
 
     public function login(Request $request)
-{
-    $credentials = $request->validate([
-        'identifier' => ['required', 'string'],
-        'password'   => ['required', 'string'],
-        'role'       => ['required', 'in:siswa,guru'],
-    ]);
-
-    // Coba cari user berdasarkan email atau id_number
-    $user = User::where(function ($query) use ($credentials) {
-        $query->where('email', $credentials['identifier'])
-              ->orWhere('id_number', $credentials['identifier']);
-    })->where('role', $credentials['role'])->first();
-
-    // ✅ Jika user tidak ditemukan
-    if (!$user) {
-        return back()->withErrors([
-            'message' => 'Pengguna tidak ditemukan.',
+    {
+        $credentials = $request->validate([
+            'identifier' => ['required', 'string'],
+            'password'   => ['required', 'string'],
+            'role'       => ['required', 'in:siswa,guru'],
         ]);
+
+        // Coba cari user berdasarkan email atau id_number
+        $user = User::where(function ($query) use ($credentials) {
+            $query->where('email', $credentials['identifier'])
+                ->orWhere('id_number', $credentials['identifier']);
+        })->where('role', $credentials['role'])->first();
+
+        // ✅ Jika user tidak ditemukan
+        if (!$user) {
+            return back()->withErrors([
+                'message' => 'Pengguna tidak ditemukan.',
+            ]);
+        }
+
+        // ✅ Jika password salah
+        if (!Hash::check($credentials['password'], $user->password)) {
+            return back()->withErrors([
+                'message' => 'Password salah.',
+            ]);
+        }
+
+        // ✅ Jika valid, login
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->intended('/')->with('success', 'Berhasil login. Selamat datang!');
+
     }
-
-    // ✅ Jika password salah
-    if (!Hash::check($credentials['password'], $user->password)) {
-        return back()->withErrors([
-            'message' => 'Password salah.',
-        ]);
-    }
-
-    // ✅ Jika valid, login
-    Auth::login($user);
-    $request->session()->regenerate();
-
-    return redirect()->intended('/')->with('success', 'Berhasil login. Selamat datang!');
-
-}
-
 
     public function logout(Request $request)
     {
@@ -93,43 +96,45 @@ class AuthController extends Controller
     }
 
     public function showLoginFormAdmin()
-{
-    return Inertia::render('admin/LoginAdmin'); // ← sesuai path di Pages/Admin/LoginAdmin.jsx
-}
-
-public function loginAdmin(Request $request)
-{
-    $credentials = $request->validate([
-        'identifier' => ['required', 'string'],
-        'password'   => ['required', 'string'],
-        'role'       => ['required', 'in:admin'],
-    ]);
-
-    $user = \App\Models\User::where('email', $credentials['identifier'])
-                ->where('role', 'admin')
-                ->first();
-
-    if (!$user) {
-        return back()->withErrors(['message' => 'Akun admin tidak ditemukan.']);
+    {
+        $aboutData = About::latest()->first();
+        return Inertia::render('admin/LoginAdmin', [
+            'aboutData' => $aboutData,
+        ]);
     }
 
-    if (!Hash::check($credentials['password'], $user->password)) {
-        return back()->withErrors(['message' => 'Password salah.']);
+    public function loginAdmin(Request $request)
+    {
+        $credentials = $request->validate([
+            'identifier' => ['required', 'string'],
+            'password'   => ['required', 'string'],
+            'role'       => ['required', 'in:admin'],
+        ]);
+
+        $user = \App\Models\User::where('email', $credentials['identifier'])
+                    ->where('role', 'admin')
+                    ->first();
+
+        if (!$user) {
+            return back()->withErrors(['message' => 'Akun admin tidak ditemukan.']);
+        }
+
+        if (!Hash::check($credentials['password'], $user->password)) {
+            return back()->withErrors(['message' => 'Password salah.']);
+        }
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        return redirect()->intended('/admin')->with('success', 'Berhasil login sebagai admin.');
     }
 
-    Auth::login($user);
-    $request->session()->regenerate();
+    public function logoutAdmin(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    return redirect()->intended('/admin')->with('success', 'Berhasil login sebagai admin.');
-}
-
-public function logoutAdmin(Request $request)
-{
-    Auth::logout();
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-
-    return redirect()->route('login-admin');
-}
-
+        return redirect()->route('login-admin');
+    }
 }
