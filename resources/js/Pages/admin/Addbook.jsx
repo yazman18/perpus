@@ -35,22 +35,6 @@ const Addbook = () => {
         if (data?.data && Array.isArray(data.data)) {
             setBooks(data.data);
             setTotalPages(data.last_page);
-
-            // Ambil data peminjaman
-            const resLoan = await fetch('/peminjaman-list'); // Ganti sesuai endpoint Anda
-            const loanData = await resLoan.json();
-
-            // Hitung stok dipinjam per book_id
-            const loanCount = {};
-            if (Array.isArray(loanData)) {
-                loanData.forEach((loan) => {
-                    // Hitung jika status_pengembalian belum 'disetujui'
-                    if (loan.status_pengembalian !== 'disetujui') {
-                        loanCount[loan.book_id] = (loanCount[loan.book_id] || 0) + 1;
-                    }
-                });
-            }
-            setBooksOnLoan(loanCount);
         } else {
             console.error("Data books bukan array", data);
             setBooks([]);
@@ -190,7 +174,7 @@ const Addbook = () => {
                                     <td className="p-2">{book.year}</td>
                                     <td className="p-2">{book.stock}</td>
                                     <td className="p-2">
-                                        {booksOnLoan[book.id] || 0}
+                                        {book.stock_inLoan}
                                     </td>
                                     <td className="p-2 space-x-2">
                                         <button

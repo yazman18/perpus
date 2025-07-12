@@ -7,6 +7,15 @@ const [showModal, setShowModal] = useState(false);
 const { props } = usePage();
 const aboutData = props.aboutData || []; // fallback jika kosong
 const [previewStruktur, setPreviewStruktur] = useState(null);
+const [showPreviewStruktur, setShowPreviewStruktur] = useState(false);
+const [previewLogo, setPreviewLogo] = useState(null);
+const [showPreviewLogo, setShowPreviewLogo] = useState(false);
+const [previewGambar, setPreviewGambar] = useState(null);
+const [showPreviewGambar, setShowPreviewGambar] = useState(false);
+const [previewBarcode, setPreviewBarcode] = useState(null);
+const [showPreviewBarcode, setShowPreviewBarcode] = useState(false);
+const [isEditing, setIsEditing] = useState(false);
+const [editId, setEditId] = useState(null);
 
 
 const { data, setData, post, processing, reset } = useForm({
@@ -30,43 +39,96 @@ const { data, setData, post, processing, reset } = useForm({
     barcode: null,
 });
 useEffect(() => {
-  if (data.gambar_struktur && typeof data.gambar_struktur !== "string") {
-    // preview file baru
-    const fileReader = new FileReader();
-    fileReader.onload = (e) => {
-      setPreviewStruktur(e.target.result);
-    };
-    fileReader.readAsDataURL(data.gambar_struktur);
-  } else {
-    // tampilkan gambar lama dari server
-    setPreviewStruktur(`/storage/${aboutData.gambar_struktur}`);
-  }
-}, [data.gambar_struktur, aboutData.gambar_struktur]);
+    if (!isEditing) {
+        setPreviewStruktur(null);
+        setShowPreviewStruktur(false);
+        setPreviewBarcode(null);
+        setShowPreviewBarcode(false);
+        setPreviewGambar(null);
+        setShowPreviewGambar(false);
+    }
+    // Saat edit, preview gambar lama dari server
+    else if (isEditing && aboutData.gambar_struktur) {
+        setPreviewStruktur(`/storage/${aboutData.gambar_struktur}`);
+        setShowPreviewStruktur(false);
+    }
+    else if (isEditing && aboutData.gambar) {
+        setPreviewGambar(`/storage/${aboutData.gambar}`);
+        setShowPreviewGambar(false);
+    }else if (isEditing && aboutData.logo_sekolah) {
+        setPreviewLogo(`/storage/${aboutData.logo_sekolah}`);
+        setShowPreviewLogo(false);
+    }
+    }, [isEditing, aboutData.gambar_struktur, aboutData.gambar, aboutData.logo_sekolah]);
 
-const [isEditing, setIsEditing] = useState(false);
-const [editId, setEditId] = useState(null);
+    const handlePreviewLogo = () => {
+        if (data.logo_sekolah && typeof data.logo_sekolah !== "string") {
+            const fileReader = new FileReader();
+            fileReader.onload = (e) => setPreviewLogo(e.target.result);
+            fileReader.readAsDataURL(data.logo_sekolah);
+            setShowPreviewLogo(true);
+        } else if (isEditing && aboutData.logo_sekolah) {
+            setPreviewLogo(`/storage/${aboutData.logo_sekolah}`);
+            setShowPreviewLogo(true);
+        } else {
+            setPreviewLogo(null);
+            setShowPreviewLogo(false);
+        }
+    };
+
+    // Fungsi preview gambar profil sekolah
+    const handlePreviewGambar = () => {
+        if (data.gambar && typeof data.gambar !== "string") {
+            const fileReader = new FileReader();
+            fileReader.onload = (e) => setPreviewGambar(e.target.result);
+            fileReader.readAsDataURL(data.gambar);
+            setShowPreviewGambar(true);
+        } else if (isEditing && aboutData.gambar) {
+            setPreviewGambar(`/storage/${aboutData.gambar}`);
+            setShowPreviewGambar(true);
+        } else {
+            setPreviewGambar(null);
+            setShowPreviewGambar(false);
+        }
+    };
+
+    // Fungsi preview barcode
+    const handlePreviewBarcode = () => {
+        if (data.barcode && typeof data.barcode !== "string") {
+            const fileReader = new FileReader();
+            fileReader.onload = (e) => setPreviewBarcode(e.target.result);
+            fileReader.readAsDataURL(data.barcode);
+            setShowPreviewBarcode(true);
+        } else if (isEditing && aboutData.barcode) {
+            setPreviewBarcode(`/storage/${aboutData.barcode}`);
+            setShowPreviewBarcode(true);
+        } else {
+            setPreviewBarcode(null);
+            setShowPreviewBarcode(false);
+        }
+    };
 
 const handleEdit = (item) => {
-    setData({
-        nama_sekolah: item.nama_sekolah || "",
-        judul: item.judul || "",
-        sub_judul: item.sub_judul || "",
-        about: item.about || "",
-        deskripsi: item.deskripsi || "",
-        alamat: item.alamat || "",
-        no_hp: item.no_hp || "",
-        website: item.website || "",
-        email: item.email || "",
-        instagram: item.instagram || "",
-        jam_operasional_1: item.jam_operasional_1 || "",
-        jam_operasional_2: item.jam_operasional_2 || "",
-        maps: item.maps || "",
-        copyright: item.copyright || "",
-        logo: null,
-        gambar: null,
-        gambar_struktur: null,
-        barcode: null,
-    });
+setData({
+    nama_sekolah: item.nama_sekolah || "",
+    judul: item.judul || "",
+    sub_judul: item.sub_judul || "",
+    about: item.about || "",
+    deskripsi: item.deskripsi || "",
+    alamat: item.alamat || "",
+    no_hp: item.no_hp || "",
+    website: item.website || "",
+    email: item.email || "",
+    instagram: item.instagram || "",
+    jam_operasional_1: item.jam_operasional_1 || "",
+    jam_operasional_2: item.jam_operasional_2 || "",
+    maps: item.maps || "",
+    copyright: item.copyright || "",
+    logo: null,
+    gambar: null,
+    gambar_struktur: null,
+    barcode: null,
+});
     setEditId(item.id);
     setIsEditing(true);
     setShowModal(true);
@@ -74,38 +136,38 @@ const handleEdit = (item) => {
 
 const handleDelete = (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-    router.delete(`/admin/about/${id}`, {
-    onSuccess: () => {
-    alert("✅ Data berhasil dihapus");
-    },
-    onError: () => {
-    alert("❌ Gagal menghapus data");
-    },
-    });
+        router.delete(`/admin/about/${id}`, {
+            onSuccess: () => {
+                alert("✅ Data berhasil dihapus");
+            },
+            onError: () => {
+                alert("❌ Gagal menghapus data");
+            },
+        });
     }
 };
 
 // Fungsi ketika tombol Simpan ditekan
 const handleSubmit = (e) => {
-e.preventDefault();
+    e.preventDefault();
 
-const options = {
-    forceFormData: true,
-    onSuccess: () => {
-    reset();
-    setShowModal(false);
-    setEditId(null);
-    setIsEditing(false);
-    alert("✅ Data berhasil disimpan");
+    const options = {
+        forceFormData: true,
+        onSuccess: () => {
+        reset();
+        setShowModal(false);
+        setEditId(null);
+        setIsEditing(false);
+        alert("✅ Data berhasil disimpan");
     },
     onError: () => alert("❌ Gagal menyimpan data."),
 };
 
-if (isEditing) {
-router.post(`/admin/about/${editId}`, data, options); // untuk update
-} else {
-post("/admin/about", options); // untuk create
-}
+    if (isEditing) {
+        router.post(`/admin/about/${editId}`, data, options); // untuk update
+    } else {
+        post("/admin/about", options); // untuk create
+    }
 };
 
 return (
@@ -121,10 +183,18 @@ return (
             setEditId(null);
             setIsEditing(false);
             setShowModal(true);
+            setPreviewLogo(null);
+            setShowPreviewLogo(false);
+            setPreviewGambar(null);
+            setShowPreviewGambar(false);
+            setPreviewBarcode(null);    
+            setShowPreviewBarcode(false);
+            setPreviewStruktur(null);
+            setShowPreviewStruktur(false);
             }}
             className={`px-5 py-2 rounded-md transition ${
             aboutData.length >= 1
-            ? "bg-gray-400 cursor-not-allowed text-white"
+            ? "bg-blue-500 hover:bg-blue-600 text-white" 
             : "hidden"
 
             }`}
@@ -206,12 +276,13 @@ return (
                         <th className="px-4 py-2 border">Jam Operasional 2</th>
                         <td className="border px-2 py-1">{aboutData.jam_operasional_2}</td>
                     </tr>
-                    <tr>
+                    <tr className="border">
                         <th className="px-4 py-2 border">Maps</th>
-                        <td className="border px-2 py-1">
+                        <td className=" px-2 py-1 flex justify-center">
                             {aboutData.maps ? (
-                            <iframe src={aboutData.maps} width="150" height="150" style={{ border: 0 }}
-                                allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                            <iframe src={aboutData.maps} width="150" height="150" className="w-100 h-60"
+                                allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade
+                                "></iframe>
                             ) : (
                             <span className="text-gray-500 italic">Tidak ada Maps</span>
                             )}
@@ -221,27 +292,27 @@ return (
                         <th className="px-4 py-2 border">Logo Sekolah</th>
                         <td className="border px-2 py-1">
                             <img src={`/storage/${aboutData.logo_sekolah}`} alt="Logo Sekolah"
-                                className="w-12 h-12 mx-auto" />
+                                className="size-fit mx-auto" />
                         </td>
                     </tr>
                     <tr>
                         <th className="px-4 py-2 border">Profil Sekolah</th>
                         <td className="border px-2 py-1">
                             <img src={`/storage/${aboutData.gambar}`} alt="Profil Sekolah"
-                                className="w-100 h-12 mx-auto" />
+                                className="w-100 h-60 mx-auto" />
                         </td>
                     </tr>
                     <tr>
                         <th className="px-4 py-2 border">Gambar Struktur</th>
                         <td className="border px-2 py-1">
-                            <img src={`/storage/${aboutData.gambar_struktur}`}  alt="Gambar Struktur"
-                                className="w-100 h-100 mx-auto" />
+                            <img src={`/storage/${aboutData.gambar_struktur}`} alt="Gambar Struktur"
+                                className="w-100 h-60 mx-auto" />
                         </td>
                     </tr>
                     <tr>
                         <th className="px-4 py-2 border">Barcode</th>
                         <td className="border px-2 py-1">
-                            <img src={`/storage/${aboutData.barcode}`} alt="Barcode" className="w-12 h-12 mx-auto" />
+                            <img src={`/storage/${aboutData.barcode}`} alt="Barcode" className="size-fit mx-auto" />
                         </td>
                     </tr>
                     <tr>
@@ -393,43 +464,83 @@ return (
 
                 <div>
                     <label className="block font-medium">Logo Sekolah</label>
-                    <input type="file" accept="image/*" onChange={(e)=> setData("logo_sekolah", e.target.files[0])}
-                    className="w-full border px-4 py-2 rounded-md"
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            setData("logo", e.target.files[0]);
+                            setShowPreviewLogo(false);
+                        }}
+                        className="w-full border px-4 py-2 rounded-md"
                     />
+                    <button
+                        type="button"
+                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        onClick={handlePreviewLogo}
+                        disabled={!data.logo && !(isEditing && aboutData.logo_sekolah)}
+                    >
+                        Preview Logo
+                    </button>
+                    {showPreviewLogo && previewLogo && (
+                        <div className="mb-2">
+                            <p className="text-sm text-gray-600">Preview Logo Sekolah:</p>
+                            <img src={previewLogo} alt="Preview Logo" className="size-1/6 rounded border" />
+                        </div>
+                    )}
                 </div>
 
                 <div>
                     <label className="block font-medium">Profil Sekolah</label>
-                    <input type="file" accept="image/*" onChange={(e)=> setData("gambar", e.target.files[0])}
-                    className="w-full border px-4 py-2 rounded-md"
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            setData("gambar", e.target.files[0]);
+                            setShowPreviewGambar(false);
+                        }}
+                        className="w-full border px-4 py-2 rounded-md"
                     />
+                    <button
+                        type="button"
+                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        onClick={handlePreviewGambar}
+                        disabled={!data.gambar && !(isEditing && aboutData.gambar)}
+                    >
+                        Preview Gambar
+                    </button>
+                    {showPreviewGambar && previewGambar && (
+                        <div className="mb-2">
+                            <p className="text-sm text-gray-600">Preview Profil Sekolah:</p>
+                            <img src={previewGambar} alt="Preview Gambar" className="size-1/6 rounded border" />
+                        </div>
+                    )}
                 </div>
-
-               <div>
-  <label className="block font-medium">Gambar Struktur</label>
-
-  {/* Tampilkan preview jika ada */}
-
-  <input
-    type="file"
-    accept="image/*"
-    onChange={(e) => setData("gambar_struktur", e.target.files[0])}
-    className="w-full border px-4 py-2 rounded-md"
-    />
-    {previewStruktur && (
-      <div className="mb-2">
-        <p className="text-sm text-gray-600">Preview Gambar Struktur:</p>
-        <img src={previewStruktur} alt="Preview" className="size-1/6 rounded border" />
-      </div>
-    )}
-</div>
-
 
                 <div>
                     <label className="block font-medium">Barcode</label>
-                    <input type="file" accept="image/*" onChange={(e)=> setData("barcode", e.target.files[0])}
-                    className="w-full border px-4 py-2 rounded-md"
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            setData("barcode", e.target.files[0]);
+                            setShowPreviewBarcode(false);
+                        }}
+                        className="w-full border px-4 py-2 rounded-md"
                     />
+                    <button
+                        type="button"
+                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        onClick={handlePreviewBarcode}
+                        disabled={!data.barcode && !(isEditing && aboutData.barcode)}
+                    >
+                        Preview Barcode
+                    </button>
+                    {showPreviewBarcode && previewBarcode && (
+                        <div className="mb-2">
+                            <p className="text-sm text-gray-600">Preview Barcode:</p>
+                            <img src={previewBarcode} alt="Preview Barcode" className="size-1/6 rounded border" />
+                        </div>
+                    )}
                 </div>
 
                 <div className="flex justify-end gap-3 pt-4">

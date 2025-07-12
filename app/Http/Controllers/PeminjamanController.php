@@ -80,6 +80,8 @@ class PeminjamanController extends Controller
             return back()->withErrors(['book_id' => 'Stok buku habis']);
         }
         $book->decrement('stock');
+                $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
+
         $tanggalPinjam = new \Carbon\Carbon($validated['tanggal_pinjam']);
         $tanggalKembali = $tanggalPinjam->addDays(7);
 
@@ -208,9 +210,9 @@ class PeminjamanController extends Controller
     {
         $peminjaman = Peminjaman::findOrFail($id);
         $peminjaman->book->increment('stock');
+        $peminjaman->book->decrement('stock_inLoan'); // Decrement stock_inLoan when a book is rejected
         $peminjaman->status_peminjaman = 'ditolak';
         $peminjaman->save();
-
         return redirect()->back()->with('success', 'Peminjaman ditolak. Stok buku dikembalikan.');
     }
 
@@ -231,6 +233,7 @@ class PeminjamanController extends Controller
         // Update stok buku
         $book = $peminjaman->book;
         $book->increment('stock');
+        $book->decrement('stock_inLoan'); // Decrement stock_inLoan when a book is returned
         $book->save();
 
         return redirect()->back()->with('success', 'Pengembalian disetujui dan stok buku diperbarui.');
@@ -243,7 +246,6 @@ class PeminjamanController extends Controller
         $peminjaman->status_pengembalian = 'ditolak';
         $peminjaman->book->increment('stock');
         $peminjaman->save();
-
         return redirect()->back()->with('success', 'Pengembalian ditolak. Stok buku dikembalikan.');
     }
 
@@ -268,6 +270,7 @@ class PeminjamanController extends Controller
         }
 
         $book->decrement('stock');
+        $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
         $tanggalPinjam = new \Carbon\Carbon($validated['tanggal_pinjam']);
         $tanggalKembali = $tanggalPinjam->addDays(7);
 
