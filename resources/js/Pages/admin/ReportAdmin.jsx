@@ -127,7 +127,7 @@ const ReportAdmin = () => {
                         onClick={() => router.visit(link.url)}
                         className={`px-3 py-1 mx-1 rounded border text-sm ${
                             link.active
-                                ? "bg-green-600 text-white font-semibold"
+                                ? "bg-black text-white font-semibold"
                                 : "bg-white text-gray-700 hover:bg-gray-100"
                         }`}
                     >

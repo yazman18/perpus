@@ -93,33 +93,35 @@ const KatalogPage = () => {
                         <Link
                             href={`/books/${book.id}`}
                             key={book.id}
-                            className="bg-white p-4 flex flex-col items-center hover:scale-[1.02] transition duration-300 ease-in-out transform rounded-lg shadow-md"
+                            className="bg-white p-4 flex flex-col items-center  hover:scale-[1.02] transition duration-300 ease-in-out transform rounded-lg shadow-md"
                         >
                             <Image
                                 src={book.image}
                                 alt={book.title}
                                 w={200}
                                 h={240}
-                                className="max-w-full h-[240px] object-cover mb-3 rounded-lg"
+                                className="max-w-full h-[240px] items-center content-center justify-center object-cover mb-3 rounded-lg "
                             />
-                            <h4 className="text-sm font-bold text-center text-gray-800 mb-2">
+                            <h4 className="text-sm font-bold text-center text-gray-800 mb-2 ">
                                 {book.title}
                             </h4>
-                            <p className="text-xs text-center text-gray-600">
-                                {book.author} <br /> {book.publisher} (
-                                {book.year})
-                            </p>
-                            <p className="text-xs text-center text-gray-500 mt-2">
-                                ISBN: {book.isbn} <br /> {book.pages} pages
-                            </p>
-                            {book.description && (
-                                <p className="text-xs text-gray-600 mt-2 text-justify">
-                                    {book.description.length > 100
-                                        ? book.description.substring(0, 85) +
-                                          "..."
-                                        : book.description}
+                            <div className=" w-full">
+                                <p className="text-xs text-left text-gray-600 ">
+                                    {book.author} <br /> {book.publisher} (
+                                    {book.year})
                                 </p>
-                            )}
+                                <p className="text-xs text-left items-center text-gray-500 mt-2">
+                                    ISBN: {book.isbn} <br /> {book.pages} pages
+                                </p>
+                                {book.description && (
+                                    <p className="text-xs text-gray-600 mt-2 text-justify">
+                                        {book.description.length > 100
+                                            ? book.description.substring(0, 85) +
+                                            "..."
+                                            : book.description}
+                                    </p>
+                                )}
+                            </div>
                             <Link
                                 href={`/books/${book.id}`}
                                 className="mt-3 inline-block text-xs text-green-600 font-semibold hover:underline"

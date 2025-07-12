@@ -10,6 +10,7 @@ const PeminjamanForm = ({ book, user, books }) => {
         tanggal_pinjam: "", // Tanggal peminjaman
         tanggal_pengembalian: "", // Tanggal pengembalian otomatis
     });
+    const today = new Date().toISOString().split("T")[0];
 
     // Fungsi untuk menghitung tanggal pengembalian setelah durasi (7 hari)
     const calculateReturnDate = (startDate) => {
@@ -28,6 +29,10 @@ const PeminjamanForm = ({ book, user, books }) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (data.tanggal_pinjam < today) {
+        alert("Tanggal peminjaman tidak boleh sebelum hari ini.");
+        return;
+    }
         post("/peminjaman", {
             onSuccess: () => {
                 reset(); // Reset form setelah berhasil submit
@@ -130,6 +135,7 @@ const PeminjamanForm = ({ book, user, books }) => {
                             type="date"
                             name="tanggal_pinjam"
                             value={data.tanggal_pinjam}
+                            min={today}
                             onChange={(e) =>
                                 setData("tanggal_pinjam", e.target.value)
                             }
