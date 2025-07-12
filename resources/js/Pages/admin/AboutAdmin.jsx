@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from "../../Layouts/AdminLayout";
 
@@ -6,68 +6,83 @@ const AboutAdmin = () => {
 const [showModal, setShowModal] = useState(false);
 const { props } = usePage();
 const aboutData = props.aboutData || []; // fallback jika kosong
+const [previewStruktur, setPreviewStruktur] = useState(null);
+
 
 const { data, setData, post, processing, reset } = useForm({
-nama_sekolah: "",
-judul: "",
-sub_judul: "",
-about: "",
-deskripsi: "",
-alamat: "",
-no_hp: "",
-website: "",
-email: "",
-instagram: "",
-jam_operasional_1: "",
-jam_operasional_2: "",
-maps: "",
-copyright: "",
-logo: null,
-gambar: null,
-gambar_struktur: null,
-barcode: null,
+    nama_sekolah: "",
+    judul: "",
+    sub_judul: "",
+    about: "",
+    deskripsi: "",
+    alamat: "",
+    no_hp: "",
+    website: "",
+    email: "",
+    instagram: "",
+    jam_operasional_1: "",
+    jam_operasional_2: "",
+    maps: "",
+    copyright: "",
+    logo: null,
+    gambar: null,
+    gambar_struktur: null,
+    barcode: null,
 });
+useEffect(() => {
+  if (data.gambar_struktur && typeof data.gambar_struktur !== "string") {
+    // preview file baru
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      setPreviewStruktur(e.target.result);
+    };
+    fileReader.readAsDataURL(data.gambar_struktur);
+  } else {
+    // tampilkan gambar lama dari server
+    setPreviewStruktur(`/storage/${aboutData.gambar_struktur}`);
+  }
+}, [data.gambar_struktur, aboutData.gambar_struktur]);
 
 const [isEditing, setIsEditing] = useState(false);
 const [editId, setEditId] = useState(null);
 
 const handleEdit = (item) => {
-setData({
-nama_sekolah: item.nama_sekolah || "",
-judul: item.judul || "",
-sub_judul: item.sub_judul || "",
-about: item.about || "",
-deskripsi: item.deskripsi || "",
-alamat: item.alamat || "",
-no_hp: item.no_hp || "",
-website: item.website || "",
-email: item.email || "",
-instagram: item.instagram || "",
-jam_operasional_1: item.jam_operasional_1 || "",
-jam_operasional_2: item.jam_operasional_2 || "",
-maps: item.maps || "",
-copyright: item.copyright || "",
-logo: null,
-gambar: null,
-gambar_struktur: null,
-barcode: null,
-});
-setEditId(item.id);
-setIsEditing(true);
-setShowModal(true);
+    setData({
+        nama_sekolah: item.nama_sekolah || "",
+        judul: item.judul || "",
+        sub_judul: item.sub_judul || "",
+        about: item.about || "",
+        deskripsi: item.deskripsi || "",
+        alamat: item.alamat || "",
+        no_hp: item.no_hp || "",
+        website: item.website || "",
+        email: item.email || "",
+        instagram: item.instagram || "",
+        jam_operasional_1: item.jam_operasional_1 || "",
+        jam_operasional_2: item.jam_operasional_2 || "",
+        maps: item.maps || "",
+        copyright: item.copyright || "",
+        logo: null,
+        gambar: null,
+        gambar_struktur: null,
+        barcode: null,
+    });
+    setEditId(item.id);
+    setIsEditing(true);
+    setShowModal(true);
 };
 
 const handleDelete = (id) => {
-if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-router.delete(`/admin/about/${id}`, {
-onSuccess: () => {
-alert("✅ Data berhasil dihapus");
-},
-onError: () => {
-alert("❌ Gagal menghapus data");
-},
-});
-}
+    if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
+    router.delete(`/admin/about/${id}`, {
+    onSuccess: () => {
+    alert("✅ Data berhasil dihapus");
+    },
+    onError: () => {
+    alert("❌ Gagal menghapus data");
+    },
+    });
+    }
 };
 
 // Fungsi ketika tombol Simpan ditekan
@@ -75,15 +90,15 @@ const handleSubmit = (e) => {
 e.preventDefault();
 
 const options = {
-forceFormData: true,
-onSuccess: () => {
-reset();
-setShowModal(false);
-setEditId(null);
-setIsEditing(false);
-alert("✅ Data berhasil disimpan");
-},
-onError: () => alert("❌ Gagal menyimpan data."),
+    forceFormData: true,
+    onSuccess: () => {
+    reset();
+    setShowModal(false);
+    setEditId(null);
+    setIsEditing(false);
+    alert("✅ Data berhasil disimpan");
+    },
+    onError: () => alert("❌ Gagal menyimpan data."),
 };
 
 if (isEditing) {
@@ -111,7 +126,7 @@ return (
             aboutData.length >= 1
             ? "bg-gray-400 cursor-not-allowed text-white"
             : "hidden"
-            
+
             }`}
             disabled={aboutData.length >= 1}
             >
@@ -219,8 +234,8 @@ return (
                     <tr>
                         <th className="px-4 py-2 border">Gambar Struktur</th>
                         <td className="border px-2 py-1">
-                            <img src={`/storage/${aboutData.gambar_struktur}`} alt="Gambar Struktur"
-                                className="w-100 h-12 mx-auto" />
+                            <img src={`/storage/${aboutData.gambar_struktur}`}  alt="Gambar Struktur"
+                                className="w-100 h-100 mx-auto" />
                         </td>
                     </tr>
                     <tr>
@@ -233,23 +248,7 @@ return (
                         <th className="px-4 py-2 border">Copyright</th>
                         <td className="border px-2 py-1">{aboutData.copyright}</td>
                     </tr>
-                    {/* <tr>
-                        <th className="px-4 py-2 border">Action</th>
-                        <td className="border px-2 py-1">
-                            <div className="flex justify-center gap-2">
-                                <button onClick={()=> handleEdit(aboutData)}
-                                    className="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600 text-sm"
-                                    >
-                                    Edit
-                                </button>
-                                <button onClick={()=> handleDelete(aboutData.id)}
-                                    className="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 text-sm"
-                                    >
-                                    Hapus
-                                </button>
-                            </div>
-                        </td>
-                    </tr> */}
+
                 </>
                 ) : (
                 <tr>
@@ -303,7 +302,7 @@ return (
 
                 <div>
                     <label className="block font-medium">About</label>
-                    <input type="text" value={data.about} onChange={(e)=> setData("about", e.target.value)}
+                    <textarea rows="4" value={data.about} onChange={(e)=> setData("about", e.target.value)}
                     className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan About"
                     />
@@ -311,7 +310,7 @@ return (
 
                 <div>
                     <label className="block font-medium">Deskripsi Sekolah</label>
-                    <input type="text" value={data.deskripsi} onChange={(e)=> setData("deskripsi", e.target.value)}
+                    <textarea rows="4"  value={data.deskripsi} onChange={(e)=> setData("deskripsi", e.target.value)}
                     className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Deskripsi"
                     />
@@ -319,7 +318,7 @@ return (
 
                 <div>
                     <label className="block font-medium">Alamat</label>
-                    <input type="text" value={data.alamat} onChange={(e)=> setData("alamat", e.target.value)}
+                    <textarea rows="4" value={data.alamat} onChange={(e)=> setData("alamat", e.target.value)}
                     className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Alamat"
                     />
@@ -327,7 +326,7 @@ return (
 
                 <div>
                     <label className="block font-medium">No. HP</label>
-                    <input type="text" value={data.no_hp} onChange={(e)=> setData("no_hp", e.target.value)}
+                    <input type="text"  value={data.no_hp} onChange={(e)=> setData("no_hp", e.target.value)}
                     className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan No. HP"
                     />
@@ -377,7 +376,7 @@ return (
 
                 <div>
                     <label className="block font-medium">Maps</label>
-                    <input type="text" value={data.maps} onChange={(e)=> setData("maps", e.target.value)}
+                    <textarea rows="5"  type="text" value={data.maps} onChange={(e)=> setData("maps", e.target.value)}
                     className="w-full px-4 py-2 border rounded-md"
                     placeholder="Contoh: https://www.google.com/maps/embed?pb=... (ambil dari atribut src iframe Google
                     Maps)"
@@ -406,12 +405,25 @@ return (
                     />
                 </div>
 
-                <div>
-                    <label className="block font-medium">Gambar Struktur</label>
-                    <input type="file" accept="image/*" onChange={(e)=> setData("gambar_struktur", e.target.files[0])}
-                    className="w-full border px-4 py-2 rounded-md"
-                    />
-                </div>
+               <div>
+  <label className="block font-medium">Gambar Struktur</label>
+
+  {/* Tampilkan preview jika ada */}
+
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => setData("gambar_struktur", e.target.files[0])}
+    className="w-full border px-4 py-2 rounded-md"
+    />
+    {previewStruktur && (
+      <div className="mb-2">
+        <p className="text-sm text-gray-600">Preview Gambar Struktur:</p>
+        <img src={previewStruktur} alt="Preview" className="size-1/6 rounded border" />
+      </div>
+    )}
+</div>
+
 
                 <div>
                     <label className="block font-medium">Barcode</label>
