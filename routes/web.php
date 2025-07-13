@@ -28,7 +28,8 @@ Route::get('/katalog', [BookController::class, 'katalog']);
 Route::get('/books/{book}', [BookController::class, 'show']);
 Route::get('/book/{id}', function ($id) {
     $book = \App\Models\Book::findOrFail($id);
-    return Inertia::render('BookDetail', ['book' => $book]);
+    $aboutData = About::first(); // Ambil data pertama dari tabel about
+    return Inertia::render('BookDetail', ['book' => $book, 'aboutData' => $aboutData,]);
 });
 Route::get('/about', [AboutController::class, 'About']);
 

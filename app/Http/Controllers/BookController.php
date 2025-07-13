@@ -107,8 +107,10 @@ class BookController extends Controller
 
     public function show(Book $book)
     {
+        $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
         return Inertia::render('BookDetail', [
-            'book' => $book
+            'book' => $book,
+            'aboutData' => $aboutData,
         ]);
     }
 

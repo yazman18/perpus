@@ -156,5 +156,10 @@ const BookDetail = ({ book, books }) => {
     );
 };
 
-BookDetail.layout = (page) => <MainLayout>{page}</MainLayout>;
+BookDetail.layout = (page) => (
+    <MainLayout aboutData={page.props.aboutData}>
+        {page}
+    </MainLayout>
+);
+
 export default BookDetail;

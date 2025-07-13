@@ -44,8 +44,10 @@ class NewsController extends Controller
     public function show($id)
     {
         $news = News::findOrFail($id);
+        $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
         return Inertia::render('SinglePostPage', [
             'news' => $news,
+            'aboutData' => $aboutData,
         ]);
     }
 

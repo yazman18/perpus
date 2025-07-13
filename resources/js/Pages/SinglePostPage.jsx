@@ -68,6 +68,10 @@ const SinglePostPage = ({ news }) => {
     );
 };
 
-SinglePostPage.layout = (page) => <MainLayout>{page}</MainLayout>;
+SinglePostPage.layout = (page) => (
+    <MainLayout aboutData={page.props.aboutData}>
+        {page}
+    </MainLayout>
+);
 
 export default SinglePostPage;
