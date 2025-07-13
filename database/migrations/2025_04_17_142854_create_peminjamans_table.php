@@ -17,8 +17,7 @@ return new class extends Migration
             $table->date('tanggal_pinjam');
             $table->date('tanggal_kembali')->nullable();
             $table->date('tanggal_pengembalian')->nullable();
-            $table->integer('durasi')->default(7); // default 7 hari
-            $table->integer('denda')->default(0);
+            $table->integer('durasi')->default(7);
             $table->timestamps();
         });
     }
