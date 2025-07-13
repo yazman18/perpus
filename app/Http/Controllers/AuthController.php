@@ -14,7 +14,10 @@ class AuthController extends Controller
 {
     public function showRegisterForm()
     {
-        return inertia('auth/RegisterPage');
+        $aboutData = About::latest()->first();
+        return Inertia::render('auth/RegisterPage', [
+            'aboutData' => $aboutData,
+        ]);
     }
 
     public function register(Request $request)

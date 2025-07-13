@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { router } from "@inertiajs/react";
+import { useForm, usePage, router } from '@inertiajs/react';
 import Image from "../../components/Image";
 import AuthLayout from "../../Layouts/AuthLayout";
 
 const RegisterPage = () => {
+    const { flash, aboutData } = usePage().props;
+
     const [form, setForm] = useState({
         name: "",
         alamat: "",
@@ -39,14 +41,13 @@ const RegisterPage = () => {
 
             <div className="w-1/2 flex justify-center items-center relative z-10">
                 <div className="flex items-center gap-4">
-                    <Image
-                        src="/images/logo.png"
-                        alt="SMAN 1 Baleendah"
-                        w={120}
-                        h={120}
+                    <img
+                        src={`/storage/${aboutData?.logo_sekolah ?? "images/logo.png"}`}
+                        alt="Logo SMAN 1 Baleendah"
+                        style={{ maxWidth: "120px", height: "120px" }}
                     />
                     <h1 className="text-3xl font-bold text-[#1E1B4B] text-left">
-                        SMAN 1 Baleendah <br /> E-Library
+                        {aboutData?.nama_sekolah ?? "Nama sekolah belum ada"} <br /> E-Library
                     </h1>
                 </div>
             </div>
@@ -178,6 +179,10 @@ const RegisterPage = () => {
     );
 };
 
-RegisterPage.layout = (page) => <AuthLayout>{page}</AuthLayout>;
+RegisterPage.layout = (page) => (
+    <AuthLayout aboutData={page.props.aboutData}>
+        {page}
+    </AuthLayout>
+);
 
 export default RegisterPage;
