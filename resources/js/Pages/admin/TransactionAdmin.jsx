@@ -4,20 +4,20 @@ import { usePage, router } from "@inertiajs/react";
 
 const TransactionAdmin = () => {
 const {
-peminjamans = [],
-pengembalians = [],
-search = "",
-notifications = [],
-} = usePage().props;
-const [activeTab, setActiveTab] = useState("peminjaman");
-const [searchTerm, setSearchTerm] = useState(search);
-const handleSearch = (e) => {
-e.preventDefault();
-router.get(
-"/admin/transaksi",
-{ search: searchTerm },
-{ preserveState: true }
-);
+    peminjamans = [],
+    pengembalians = [],
+    search = "",
+    notifications = [],
+    } = usePage().props;
+    const [activeTab, setActiveTab] = useState("peminjaman");
+    const [searchTerm, setSearchTerm] = useState(search);
+    const handleSearch = (e) => {
+        e.preventDefault();
+        router.get(
+        "/admin/transaksi",
+        { search: searchTerm },
+        { preserveState: true }
+    );
 };
 
 const handleAcc = (id) => router.post(`/transaksi/${id}/peminjaman/acc`);
@@ -143,8 +143,9 @@ return (
                     <th className="px-4 py-2 border">Tanggal Pinjam</th>
                     {activeTab === "pengembalian" && (
                     <th className="px-4 py-2 border">
-                        Tanggal Kembali
+                        Tenggat Kembali 
                     </th>
+                    
                     )}
                     <th className="px-4 py-2 border">Status</th>
                     <th className="px-4 py-2 border">Aksi</th>
@@ -152,10 +153,28 @@ return (
             </thead>
             <tbody>
                 {(activeTab === "peminjaman"
-                ? peminjamans.data
-                : pengembalians.data
-                ).map((item) =>
-                renderTableRow(item, activeTab === "peminjaman")
+                    ? peminjamans.data.length === 0
+                        ? (
+                            <tr className="border">
+                                <td className="p-4 text-center" colSpan={8}>
+                                    Tidak ada data peminjaman.
+                                </td>
+                            </tr>
+                        )
+                        : peminjamans.data.map((item) =>
+                            renderTableRow(item, true)
+                        )
+                    : pengembalians.data.length === 0
+                        ? (
+                            <tr className="border">
+                                <td className="p-4 text-center" colSpan={8}>
+                                    Tidak ada data pengembalian.
+                                </td>
+                            </tr>
+                        )
+                        : pengembalians.data.map((item) =>
+                            renderTableRow(item, false)
+                        )
                 )}
             </tbody>
         </table>

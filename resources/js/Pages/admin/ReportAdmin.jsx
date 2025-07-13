@@ -14,6 +14,25 @@ const ReportAdmin = () => {
 
     const [search, setSearch] = useState(currentSearch || "");
 
+    function hitungDenda(tanggalPinjam, tanggalKembali = Date.now()) {
+        const pinjamDate = new Date(tanggalPinjam);
+        const kembaliDate = new Date(tanggalKembali);
+
+        const diffTime = kembaliDate - pinjamDate;
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        const batasHari = 7;
+        const dendaPerHari = 1000;
+
+        if (diffDays > batasHari) {
+            const telat = diffDays - batasHari;
+            return telat * dendaPerHari;
+        }
+
+        return 0;
+    }
+
+
     const handleSearch = (e) => {
         e.preventDefault();
         router.get("/reports", { search }, { preserveState: true });
@@ -74,15 +93,18 @@ const ReportAdmin = () => {
                             <th className="border p-2">Transaksi</th>
                             <th className="border p-2">Durasi</th>
                             <th className="border p-2">Tanggal Pinjam</th>
+                            <th className="border p-2">Tenggat Kembali</th>
                             <th className="border p-2">Tanggal Kembali</th>
                             <th className="border p-2">Denda</th>
                         </tr>
                     </thead>
                     <tbody>
                         {transactions.length > 0 ? (
+                            
                             transactions.map((item, index) => (
                                 <tr
                                     key={item.id}
+                                    
                                     className={`text-center ${
                                         index % 2 === 0
                                             ? "bg-white"
@@ -94,7 +116,17 @@ const ReportAdmin = () => {
                                     <td className="border p-2">{item.nama}</td>
                                     <td className="border p-2">{item.jenis}</td>
                                     <td className="border p-2">
-                                        {item.durasi} hari
+                                        {(() => {
+                                            const pinjamDate = new Date(item.tanggal_pinjam);
+                                            const kembaliDate = item.tanggal_pengembalian ? new Date(item.tanggal_pengembalian) : new Date();
+                                            const diffTime = Math.abs(kembaliDate - pinjamDate);
+                                            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                                            if (diffDays > 7) {
+                                                return <span className="text-red-500 font-semibold">{diffDays} hari</span>;
+                                            } else {
+                                                return <span className="text-green-500 font-semibold">{diffDays}  hari</span>; // atau bisa return "Tidak telat" jika perlu
+                                            }
+                                        })()    }
                                     </td>
                                     <td className="border p-2">
                                         {item.tanggal_pinjam}
@@ -103,7 +135,15 @@ const ReportAdmin = () => {
                                         {item.tanggal_kembali ?? "-"}
                                     </td>
                                     <td className="border p-2">
-                                        Rp {item.denda.toLocaleString("id-ID")}
+                                        {item.tanggal_pengembalian}
+                                    </td>
+                                    <td className="border p-2">
+                                        {(() => {
+                                                const denda = hitungDenda(item.tanggal_pinjam, item.tanggal_pengembalian);
+                                                return denda > 0
+                                                    ? denda.toLocaleString("id-ID", { style: "currency", currency: "IDR" })
+                                                    : "Rp0,00";
+                                            })()}
                                     </td>
                                 </tr>
                             ))

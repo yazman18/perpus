@@ -31,7 +31,7 @@ const NavbarAdmin = ({ toggleSidebar }) => {
     }, [flash]);
 
     return (
-        <div className="bg-blue-200 h-14 flex items-center justify-between px-4 md:px-6 shadow-md w-full">
+        <div className="bg-blue-200 h-14 flex items-center justify-between p-8 md:px-6 shadow-md w-full">
             {/* Sidebar toggle */}
             <button onClick={toggleSidebar} className="text-gray-800">
                 <FaBars size={20} />

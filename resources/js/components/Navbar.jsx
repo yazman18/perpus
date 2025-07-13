@@ -37,7 +37,7 @@ const Navbar = ({ aboutData }) => {
     }, []);
 
     return (
-        <nav className="sticky top-0 bg-[#A8ACC2] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-50">
+        <nav className="sticky top-0 bg-[#2693CE] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-50 text-white">
             {/* LOGO */}
             <Link
                 href="/"
@@ -83,7 +83,7 @@ const Navbar = ({ aboutData }) => {
 
             {/* Mobile Menu */}
             <div
-                className={`md:hidden fixed top-16 left-0 w-full bg-[#A8ACC2] font-bold text-underline transition-all duration-300 ${
+                className={`md:hidden fixed top-16 left-0 w-full bg-[#2693CE] font-bold text-underline transition-all duration-300 ${
                     open ? "max-h-screen py-8" : "max-h-0 overflow-hidden"
                 }`}
             >
@@ -155,7 +155,7 @@ const Navbar = ({ aboutData }) => {
                                         href="/logout"
                                         method="post"
                                         as="button"
-                                        className="w-full text-left px-4 py-2 text-sm"
+                                        className="w-full items-start px-4 py-2 text-sm"
                                     >
                                         Logout
                                     </Link>
@@ -218,7 +218,7 @@ const Navbar = ({ aboutData }) => {
                             Profile ▾
                         </button>
                         {profileDropdownOpen && (
-                            <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
+                            <div className="absolute bg-white text-black rounded shadow-md mt-2 text-left right-0 min-w-[150px] z-50">
                                 <Link
                                     href="/profile"
                                     className="block px-4 py-2 hover:bg-blue-100"
@@ -229,7 +229,7 @@ const Navbar = ({ aboutData }) => {
                                     href="/logout"
                                     method="post"
                                     as="button"
-                                    className="block w-full px-4 py-2 hover:bg-blue-100"
+                                    className="block w-full text-left px-4 py-2 hover:bg-blue-100"
                                 >
                                     Logout
                                 </Link>

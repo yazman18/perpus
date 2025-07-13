@@ -41,7 +41,11 @@ class BookController extends Controller
         $books = Book::query()
             ->when($search, function ($query, $search) {
                 return $query->where('title', 'like', "%{$search}%")
-                             ->orWhere('author', 'like', "%{$search}%");
+                             ->orWhere('author', 'like', "%{$search}%")
+                            ->orWhere('isbn', 'like', "%{$search}%")
+                            ->orWhere('publisher', 'like', "%{$search}%")
+                            ->orWhere('year', 'like', "%{$search}%")
+;
             })
             ->paginate(10); // Pagination, 10 buku per halaman
 
@@ -111,7 +115,8 @@ class BookController extends Controller
             ->when($search, function ($query, $search) {
                 return $query->where('title', 'like', "%{$search}%")
                             ->orWhere('author', 'like', "%{$search}%")
-                            ->orWhere('isbn', 'like', "%{$search}%");
+                            ->orWhere('isbn', 'like', "%{$search}%")
+                            ->orWhere('publisher', 'like', "%{$search}%");
             })
             ->paginate(10); // Pagination, 10 buku per halaman
 

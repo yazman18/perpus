@@ -63,6 +63,8 @@ class AdminController extends Controller
                 'durasi' => $item->durasi,
                 'tanggal_pinjam' => $item->tanggal_pinjam,
                 'tanggal_kembali' => $item->tanggal_kembali ?? '-',
+                'tanggal_pengembalian' => $item->tanggal_pengembalian ?? '-',
+
                 'denda' => $denda,
             ];
         });
@@ -94,10 +96,10 @@ class AdminController extends Controller
         $totalCatalogs = Book::count();
 
         $totalLateReturns = Peminjaman::whereNotNull('tanggal_kembali')
-            ->whereRaw('DATEDIFF(tanggal_kembali, tanggal_pinjam) > durasi')
+            ->whereRaw('DATEDIFF(tanggal_pengembalian, tanggal_pinjam) > 7')
             ->count();
 
-        $totalReturns = Peminjaman::whereNotNull('tanggal_kembali')->count();
+        $totalReturns = Peminjaman::whereNotNull('tanggal_pengembalian')->count();
         $latePercentage = $totalReturns > 0
             ? round(($totalLateReturns / $totalReturns) * 100)
             : 0;
