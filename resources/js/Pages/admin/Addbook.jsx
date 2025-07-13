@@ -168,7 +168,7 @@ const Addbook = () => {
                             <th className="p-2">Penulis</th>
                             <th className="p-2">Tahun</th>
                             <th className="p-2">Stok</th>
-                            <th className="p-2">Stok Dipinjam</th> {/* Kolom baru */}
+                            <th className="p-2">Jumlah Dipinjam</th>
                             <th className="p-2">Aksi</th>
                         </tr>
                     </thead>

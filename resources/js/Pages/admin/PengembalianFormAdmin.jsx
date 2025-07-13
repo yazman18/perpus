@@ -122,6 +122,10 @@ const PengembalianFormAdmin = () => {
     );
 };
 
-PengembalianFormAdmin.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+PengembalianFormAdmin.layout = (page) => (
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
+);
 
 export default PengembalianFormAdmin;

@@ -336,17 +336,19 @@ class PeminjamanController extends Controller
         ]);
     }
 
-public function adminCreatePengembalianForm()
-{
-    // Exclude rejected borrowings when fetching borrowings for return
-    $peminjamans = Peminjaman::with('book')
-        ->where('status_pengembalian', 'belum melakukan pengembalian')
-        ->where('status_peminjaman', '!=', 'ditolak') // Exclude rejected borrowings
-        ->get();
+    public function adminCreatePengembalianForm()
+    {
+        // Exclude rejected borrowings when fetching borrowings for return
+        $peminjamans = Peminjaman::with('book')
+            ->where('status_pengembalian', 'belum melakukan pengembalian')
+            ->where('status_peminjaman', '!=', 'ditolak') // Exclude rejected borrowings
+            ->get();
+        $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
 
-    return Inertia::render('admin/PengembalianFormAdmin', [
-        'peminjamans' => $peminjamans,
-    ]);
-}
+        return Inertia::render('admin/PengembalianFormAdmin', [
+            'peminjamans' => $peminjamans,
+            'aboutData' => $aboutData,
+        ]);
+    }
 
 }
