@@ -50,6 +50,7 @@ class BookController extends Controller
                             ->orWhere('year', 'like', "%{$search}%")
 ;
             })
+            ->orderBy('uniqueId', 'asc')
             ->paginate(10); // Pagination, 10 buku per halaman
 
         return response()->json($books);
@@ -58,6 +59,7 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         $validated = $request->validate([
+    'uniqueId' => 'required|integer|unique:books,uniqueId,' . $book->id,
             'title' => 'required|string|max:255',
             'author' => 'required|string',
             'publisher' => 'nullable|string',
@@ -67,6 +69,8 @@ class BookController extends Controller
             'stock' => 'nullable|integer',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
+        ], [
+            'uniqueId.unique' => 'ID tersebut sudah digunakan oleh buku lain.',
         ]);
 
         if ($request->hasFile('image')) {

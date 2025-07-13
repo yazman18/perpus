@@ -16,6 +16,7 @@ const Addbook = () => {
     const { flash } = usePage().props;
 
     const { data, setData, post, reset, errors } = useForm({
+        uniqueId : "",
         title: "",
         author: "",
         publisher: "",
@@ -55,13 +56,18 @@ const Addbook = () => {
             setIsEditing(false);
             setEditId(null);
             reset();
-            setImagePreview(null);
+            if (!data.image) {
+                setImagePreview(`/storage/${books.find(b => b.id === editId)?.image}`);
+            } else {
+                setImagePreview(null);
+            }
             alert("Data buku berhasil diperbarui.");
         }
     }, [flash]);
 
     const handleEdit = (book) => {
         setData({
+            uniqueId: book.uniqueId || "",
             title: book.title || "",
             author: book.author || "",
             publisher: book.publisher || "",
@@ -157,6 +163,7 @@ const Addbook = () => {
                 <table className="min-w-full text-sm">
                     <thead className="bg-gray-100 text-left">
                         <tr>
+                            <th className="p-2">Unique Id</th>
                             <th className="p-2">Judul</th>
                             <th className="p-2">Penulis</th>
                             <th className="p-2">Tahun</th>
@@ -169,6 +176,7 @@ const Addbook = () => {
                         {Array.isArray(books) && books.length > 0 ? (
                             books.map((book) => (
                                 <tr key={book.id} className="border-t">
+                                    <td className="p-2">{book.uniqueId}</td>
                                     <td className="p-2">{book.title}</td>
                                     <td className="p-2">{book.author}</td>
                                     <td className="p-2">{book.year}</td>
