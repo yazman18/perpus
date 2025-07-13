@@ -44,16 +44,16 @@ class AdminController extends Controller
 
         // Map the results to add calculated fields like 'denda'
             $transactions = $data->map(function ($item) {
-            $expectedReturn = \Carbon\Carbon::parse($item->tanggal_pinjam)->addDays($item->durasi);
+            $expectedReturn = \Carbon\Carbon::parse($item->tanggal_kembali);
+$actualReturn = $item->tanggal_pengembalian
+    ? \Carbon\Carbon::parse($item->tanggal_pengembalian)
+    : now();
 
-            if ($item->tanggal_kembali) {
-                $actualReturn = \Carbon\Carbon::parse($item->tanggal_kembali);
-            } else {
-                $actualReturn = now(); // If the book hasn't been returned yet, use the current date
-            }
+$selisihHari = $actualReturn->gt($expectedReturn)
+    ? $actualReturn->diffInDays($expectedReturn)
+    : 0;
 
-            $selisihHari = $actualReturn->diffInDays($expectedReturn, false);
-            // $denda = $selisihHari < 0 ? abs((int) $selisihHari) * 1000 : 0;
+$denda = $selisihHari * 1000;
 
             return [
                 'id' => $item->id,
@@ -64,7 +64,7 @@ class AdminController extends Controller
                 'tanggal_pinjam' => $item->tanggal_pinjam,
                 'tanggal_kembali' => $item->tanggal_kembali ?? '-',
                 'tanggal_pengembalian' => $item->tanggal_pengembalian ?? '-',
-                'denda' => $item->denda ?? '-',
+                'denda' => $denda > 0 ? $denda : '-',
             ];
         });
 

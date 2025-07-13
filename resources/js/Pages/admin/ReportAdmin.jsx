@@ -14,23 +14,20 @@ const ReportAdmin = () => {
 
     const [search, setSearch] = useState(currentSearch || "");
 
-    function hitungDenda(tanggalPinjam, tanggalKembali = Date.now()) {
-        const pinjamDate = new Date(tanggalPinjam);
-        const kembaliDate = new Date(tanggalKembali);
+    function hitungDenda(tanggalKembali, tanggalPengembalian) {
+    if (!tanggalKembali || !tanggalPengembalian) return 0;
 
-        const diffTime = kembaliDate - pinjamDate;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const kembali = new Date(tanggalKembali);
+    const pengembalian = new Date(tanggalPengembalian);
 
-        const batasHari = 7;
-        const dendaPerHari = 1000;
+    if (pengembalian <= kembali) return 0;
 
-        if (diffDays > batasHari) {
-            const telat = diffDays - batasHari;
-            return telat * dendaPerHari;
-        }
+    const diffTime = pengembalian - kembali;
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-        return 0;
-    }
+    return diffDays * 1000;
+}
+
 
 
     const handleSearch = (e) => {
@@ -151,7 +148,12 @@ const ReportAdmin = () => {
                                         {item.tanggal_pengembalian}
                                     </td>
                                     <td className="border p-2">
-                                        {item.denda}
+                                        {(() => {
+                                            const denda = hitungDenda(item.tanggal_kembali, item.tanggal_pengembalian);
+                                            return denda > 0
+                                                ? `Rp${denda.toLocaleString("id-ID")}`
+                                                : "-";
+                                        })()}
                                     </td>
                                 </tr>
                             ))

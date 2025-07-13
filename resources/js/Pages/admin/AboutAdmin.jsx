@@ -227,11 +227,6 @@ return (
                 >
                 Edit
             </button>
-            <button onClick={()=> handleDelete(aboutData.id)}
-                className="px-5 py-2 rounded-md transition bg-red-600 text-white hover:bg-red-700 "
-                >
-                Hapus
-            </button>
         </div>
 
     </div>
