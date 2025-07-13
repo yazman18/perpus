@@ -32,7 +32,7 @@ const PeminjamanForm = ({ book, user, books }) => {
         if (data.tanggal_pinjam < today) {
         alert("Tanggal peminjaman tidak boleh sebelum hari ini.");
         return;
-    }
+        }
         post("/peminjaman", {
             onSuccess: () => {
                 reset(); // Reset form setelah berhasil submit
@@ -153,7 +153,7 @@ const PeminjamanForm = ({ book, user, books }) => {
                             htmlFor="tanggal_pengembalian"
                             className="block text-sm font-semibold"
                         >
-                            Tanggal Pengembalian
+                            Tenggat Pengembalian
                         </label>
                         <input
                             type="date"

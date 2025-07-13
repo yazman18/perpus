@@ -46,6 +46,8 @@ useEffect(() => {
         setShowPreviewBarcode(false);
         setPreviewGambar(null);
         setShowPreviewGambar(false);
+        setPreviewLogo(null);
+        setShowPreviewLogo(false);
     }
     // Saat edit, preview gambar lama dari server
     else if (isEditing && aboutData.gambar_struktur) {
@@ -58,8 +60,11 @@ useEffect(() => {
     }else if (isEditing && aboutData.logo_sekolah) {
         setPreviewLogo(`/storage/${aboutData.logo_sekolah}`);
         setShowPreviewLogo(false);
+    }else if (isEditing && aboutData.barcode) {
+        setPreviewBarcode(`/storage/${aboutData.barcode}`);
+        setShowPreviewBarcode(false);
     }
-    }, [isEditing, aboutData.gambar_struktur, aboutData.gambar, aboutData.logo_sekolah]);
+    }, [isEditing, aboutData.gambar_struktur, aboutData.gambar, aboutData.logo_sekolah, aboutData.barcode ]);
 
     const handlePreviewLogo = () => {
         if (data.logo_sekolah && typeof data.logo_sekolah !== "string") {
@@ -93,7 +98,21 @@ useEffect(() => {
     };
 
     // Fungsi preview barcode
-    const handlePreviewBarcode = () => {
+    const handlePreviewStruktur = () => {
+        if (data.gambar_struktur && typeof data.gambar_struktur !== "string") {
+            const fileReader = new FileReader();
+            fileReader.onload = (e) => setPreviewStruktur(e.target.result);
+            fileReader.readAsDataURL(data.gambar_struktur);
+            setShowPreviewStruktur(true);
+        } else if (isEditing && aboutData.gambar_struktur) {
+            setPreviewStruktur(`/storage/${aboutData.gambar_struktur}`);
+            setShowPreviewStruktur(true);
+        } else {
+            setPreviewStruktur(null);
+            setShowPreviewStruktur(false);
+        }
+    };
+      const handlePreviewBarcode = () => {
         if (data.barcode && typeof data.barcode !== "string") {
             const fileReader = new FileReader();
             fileReader.onload = (e) => setPreviewBarcode(e.target.result);
@@ -464,6 +483,7 @@ return (
 
                 <div>
                     <label className="block font-medium">Logo Sekolah</label>
+                   
                     <input
                         type="file"
                         accept="image/*"
@@ -471,7 +491,7 @@ return (
                             setData("logo", e.target.files[0]);
                             setShowPreviewLogo(false);
                         }}
-                        className="w-full border px-4 py-2 rounded-md"
+                        className="block w-full  text-sm text-gray-700 bg-gray-50 border border-black rounded-lg file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-100 file:text-blue-700"
                     />
                     <button
                         type="button"
@@ -484,7 +504,7 @@ return (
                     {showPreviewLogo && previewLogo && (
                         <div className="mb-2">
                             <p className="text-sm text-gray-600">Preview Logo Sekolah:</p>
-                            <img src={previewLogo} alt="Preview Logo" className="size-1/6 rounded border" />
+                            <img src={previewLogo} alt="Preview Logo" className="size-1/6 rounded " />
                         </div>
                     )}
                 </div>
@@ -498,7 +518,7 @@ return (
                             setData("gambar", e.target.files[0]);
                             setShowPreviewGambar(false);
                         }}
-                        className="w-full border px-4 py-2 rounded-md"
+                        className="block w-full  text-sm text-gray-700 bg-gray-50 border border-black rounded-lg file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-100 file:text-blue-700"
                     />
                     <button
                         type="button"
@@ -511,11 +531,36 @@ return (
                     {showPreviewGambar && previewGambar && (
                         <div className="mb-2">
                             <p className="text-sm text-gray-600">Preview Profil Sekolah:</p>
-                            <img src={previewGambar} alt="Preview Gambar" className="size-1/6 rounded border" />
+                            <img src={previewGambar} alt="Preview Gambar" className="size-1/6 rounded " />
                         </div>
                     )}
                 </div>
-
+                 <div>
+                    <label className="block font-medium">Gambar Struktur Sekolah</label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                            setData("gambar_struktur", e.target.files[0]);
+                            setShowPreviewStruktur(false);
+                        }}
+                        className="block w-full  text-sm text-gray-700 bg-gray-50 border border-black rounded-lg file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-100 file:text-blue-700"
+                    />
+                    <button
+                        type="button"
+                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        onClick={handlePreviewStruktur}
+                        disabled={!data.gambar_struktur && !(isEditing && aboutData.gambar_struktur)}
+                    >
+                        Preview Gambar
+                    </button>
+                    {showPreviewStruktur && previewStruktur && (
+                        <div className="mb-2">
+                            <p className="text-sm text-gray-600">Preview Gambar Struktur:</p>
+                            <img src={previewStruktur} alt="Preview Gambar Struktur" className="size-1/6 rounded " />
+                        </div>
+                    )}
+                </div>
                 <div>
                     <label className="block font-medium">Barcode</label>
                     <input
@@ -525,7 +570,7 @@ return (
                             setData("barcode", e.target.files[0]);
                             setShowPreviewBarcode(false);
                         }}
-                        className="w-full border px-4 py-2 rounded-md"
+                        className="block w-full  text-sm text-gray-700 bg-gray-50 border border-black rounded-lg file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-100 file:text-blue-700"
                     />
                     <button
                         type="button"
@@ -538,7 +583,7 @@ return (
                     {showPreviewBarcode && previewBarcode && (
                         <div className="mb-2">
                             <p className="text-sm text-gray-600">Preview Barcode:</p>
-                            <img src={previewBarcode} alt="Preview Barcode" className="size-1/6 rounded border" />
+                            <img src={previewBarcode} alt="Preview Barcode" className="size-1/6 rounded " />
                         </div>
                     )}
                 </div>

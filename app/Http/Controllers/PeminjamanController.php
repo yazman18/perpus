@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Log;
 use App\Models\Notification;
@@ -31,6 +32,7 @@ class PeminjamanController extends Controller
                     'tanggal_kembali' => $p->tanggal_kembali,
                     'status_peminjaman' => $p->status_peminjaman,
                     'status_pengembalian' => $p->status_pengembalian,
+                    'tanggal_pengembalian' => $p->tanggal_pengembalian,
                     'book' => [
                         'title' => $p->book->title,
                         'author' => $p->book->author,
@@ -79,8 +81,8 @@ class PeminjamanController extends Controller
         if ($book->stock <= 0) {
             return back()->withErrors(['book_id' => 'Stok buku habis']);
         }
-        $book->decrement('stock');
-                $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
+        // $book->decrement('stock');
+        // $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
 
         $tanggalPinjam = new \Carbon\Carbon($validated['tanggal_pinjam']);
         $tanggalKembali = $tanggalPinjam->addDays(7);
@@ -122,6 +124,8 @@ class PeminjamanController extends Controller
 
         // Mengubah status pengembalian menjadi pending
         $peminjaman->status_pengembalian = 'pending';
+        $peminjaman->tanggal_pengembalian = Carbon::now()->toDateString();
+
         $peminjaman->save(); // Simpan perubahan status pengembalian
 
         // Menambahkan notifikasi ke session (untuk admin)
@@ -193,12 +197,18 @@ class PeminjamanController extends Controller
     // Menyetujui peminjaman oleh admin
     public function setujuiPeminjaman($id)
     {
+       
         $peminjaman = Peminjaman::findOrFail($id);
+         
+      
         $peminjaman->status_peminjaman = 'disetujui';
 
         if ($peminjaman->status_pengembalian === null) {
             $peminjaman->status_pengembalian = 'belum melakukan pengembalian';
         }
+        $book = $peminjaman->book;
+        $book->decrement('stock');
+        $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
 
         $peminjaman->save();
 
@@ -228,10 +238,12 @@ class PeminjamanController extends Controller
         }
 
         $peminjaman->status_pengembalian = 'disetujui';
+        $peminjaman->tanggal_pengembalian = Carbon::now()->toDateString();
         $peminjaman->save();
 
         // Update stok buku
         $book = $peminjaman->book;
+        
         $book->increment('stock');
         $book->decrement('stock_inLoan'); // Decrement stock_inLoan when a book is returned
         $book->save();

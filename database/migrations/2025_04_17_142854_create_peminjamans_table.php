@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->date('tanggal_pinjam');
             $table->date('tanggal_kembali')->nullable();
+            $table->date('tanggal_pengembalian')->nullable();
             $table->integer('durasi')->default(7); // default 7 hari
             $table->timestamps();
         });

@@ -18,6 +18,7 @@ class Peminjaman extends Model
         'book_id',
         'tanggal_pinjam',
         'tanggal_kembali',
+        'tanggal_pengembalian',
         'durasi',
         'status_admin',
     ];

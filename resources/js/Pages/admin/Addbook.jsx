@@ -339,7 +339,7 @@ const Addbook = () => {
                                     type="file"
                                     accept="image/*"
                                     onChange={handleImageChange}
-                                    className="w-full p-2 border rounded bg-white"
+                                    className="block w-full  text-sm text-gray-700 bg-gray-50 border border-black rounded-lg file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-100 file:text-blue-700"
                                 />
                                 {imagePreview && (
                                     <img
