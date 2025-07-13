@@ -230,10 +230,10 @@ const Addbook = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
-                    <div className="bg-white rounded-md shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-10 relative">
+                <div className="fixed inset-0 flex items-center justify-center bg-black/50  z-50">
+                    <div className="bg-white rounded-lg shadow-lg w-full max-w-4xl p-6 relative max-h-[90vh] overflow-y-auto">
                         <button
-                            className="absolute  right-2 text-gray-600 hover:text-gray-800"
+                            className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
                             onClick={() => {
                                 setShowModal(false);
                                 setIsEditing(false);
@@ -366,7 +366,7 @@ const Addbook = () => {
                                     <img
                                         src={imagePreview}
                                         alt="Preview"
-                                        className="mt-4 w-32 h-40 object-cover rounded shadow"
+                                        className="mt-4 size-64 object-fit rounded shadow"
                                     />
                                 )}
                             </div>

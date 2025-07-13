@@ -351,7 +351,7 @@ return (
 
     {/* Modal */}
     {showModal && (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
         <div className="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 relative max-h-[90vh] overflow-y-auto">
             {/* Close Button */}
             <button onClick={()=> setShowModal(false)}

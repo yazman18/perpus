@@ -20,9 +20,7 @@ const PeminjamanFormAdmin = ({ books, users }) => {
             onSuccess: () => {
                 setSuccessMessage("Data berhasil disimpan!"); // Set success message
                 reset(); // Reset form after submission
-                setTimeout(() => {
-                    setSuccessMessage(""); // Clear success message after 3 seconds
-                }, 3000);
+                handleBack();
             },
         });
     };
