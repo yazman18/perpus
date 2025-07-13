@@ -248,15 +248,15 @@ class PeminjamanController extends Controller
         }
 
         $tanggalPinjam = Carbon::parse($peminjaman->tanggal_pinjam)->startOfDay();
-$tanggalKembali = Carbon::now()->startOfDay();
-$batasPengembalian = $tanggalPinjam->copy()->addDays($peminjaman->durasi)->startOfDay();
+        $tanggalKembali = Carbon::now()->startOfDay();
+        $batasPengembalian = $tanggalPinjam->copy()->addDays($peminjaman->durasi)->startOfDay();
 
-$telat = $tanggalKembali->gt($batasPengembalian)
-    ? $batasPengembalian->diffInDays($tanggalKembali)
-    : 0;
+        $telat = $tanggalKembali->gt($batasPengembalian)
+            ? $batasPengembalian->diffInDays($tanggalKembali)
+            : 0;
 
-$dendaPerHari = 1000;
-$denda = $telat * $dendaPerHari;
+        $dendaPerHari = 1000;
+        $denda = $telat * $dendaPerHari;
 
 
         $peminjaman->status_pengembalian = 'disetujui';
@@ -321,20 +321,20 @@ $denda = $telat * $dendaPerHari;
             'status_pengembalian' => 'belum melakukan pengembalian',  // Status awal pengembalian
         ]);
 
-        return redirect()->route('admin.peminjaman.create')->with('success', 'Peminjaman berhasil dibuat');
+        return redirect()->route('admin.peminjaman.createForm')->with('success', 'Peminjaman berhasil dibuat');
     }
 
 
-public function adminCreateForm()
-{
-    $books = Book::all(); // atau Book::where('stock', '>', 0)->get();
-    $users = User::all(); // atau filter sesuai kebutuhan
+    public function adminCreateForm()
+    {
+        $books = Book::all(); // atau Book::where('stock', '>', 0)->get();
+        $users = User::all(); // atau filter sesuai kebutuhan
 
-    return Inertia::render('admin/PeminjamanFormAdmin', [
-        'books' => $books,
-        'users' => $users,
-    ]);
-}
+        return Inertia::render('admin/PeminjamanFormAdmin', [
+            'books' => $books,
+            'users' => $users,
+        ]);
+    }
 
 public function adminCreatePengembalianForm()
 {
