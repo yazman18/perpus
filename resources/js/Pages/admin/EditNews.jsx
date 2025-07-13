@@ -139,6 +139,10 @@ const EditNews = ({ news }) => {
     );
 };
 
-EditNews.layout = (page) => <AdminLayout>{page}</AdminLayout>;
+EditNews.layout = (page) => (
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
+);
 
 export default EditNews;

@@ -607,9 +607,9 @@ return (
 };
 
 AboutAdmin.layout = (page) => (
-<AdminLayout aboutData={page.props.aboutData}>
-    {page}
-</AdminLayout>
+    <AdminLayout aboutData={page.props.aboutData}>
+        {page}
+    </AdminLayout>
 );
 
 export default AboutAdmin;
