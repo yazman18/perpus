@@ -30,8 +30,8 @@ const PeminjamanForm = ({ book, user, books }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (data.tanggal_pinjam < today) {
-        alert("Tanggal peminjaman tidak boleh sebelum hari ini.");
-        return;
+            alert("Tanggal peminjaman tidak boleh sebelum hari ini.");
+            return;
         }
         post("/peminjaman", {
             onSuccess: () => {

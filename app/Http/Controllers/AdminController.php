@@ -43,7 +43,7 @@ class AdminController extends Controller
         $data = $query->orderBy('created_at', 'desc')->paginate(10)->withQueryString();
 
         // Map the results to add calculated fields like 'denda'
-        $transactions = $data->map(function ($item) {
+            $transactions = $data->map(function ($item) {
             $expectedReturn = \Carbon\Carbon::parse($item->tanggal_pinjam)->addDays($item->durasi);
 
             if ($item->tanggal_kembali) {
@@ -53,7 +53,7 @@ class AdminController extends Controller
             }
 
             $selisihHari = $actualReturn->diffInDays($expectedReturn, false);
-            $denda = $selisihHari < 0 ? abs((int) $selisihHari) * 1000 : 0;
+            // $denda = $selisihHari < 0 ? abs((int) $selisihHari) * 1000 : 0;
 
             return [
                 'id' => $item->id,
@@ -64,8 +64,7 @@ class AdminController extends Controller
                 'tanggal_pinjam' => $item->tanggal_pinjam,
                 'tanggal_kembali' => $item->tanggal_kembali ?? '-',
                 'tanggal_pengembalian' => $item->tanggal_pengembalian ?? '-',
-
-                'denda' => $denda,
+                'denda' => $item->denda ?? '-',
             ];
         });
 

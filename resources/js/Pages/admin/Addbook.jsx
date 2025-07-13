@@ -153,7 +153,7 @@ const Addbook = () => {
                 </button>
             </div>
 
-            <div className="overflow-x-auto border rounded">
+            <div className="overflow-x-auto  border rounded">
                 <table className="min-w-full text-sm">
                     <thead className="bg-gray-100 text-left">
                         <tr>
@@ -222,10 +222,10 @@ const Addbook = () => {
             </div>
 
             {showModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 relative">
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
+                    <div className="bg-white rounded-md shadow-lg w-full max-w-lg max-h-[90vh] overflow-y-auto p-10 relative">
                         <button
-                            className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+                            className="absolute  right-2 text-gray-600 hover:text-gray-800"
                             onClick={() => {
                                 setShowModal(false);
                                 setIsEditing(false);
@@ -239,6 +239,19 @@ const Addbook = () => {
                             {isEditing ? "Edit Buku" : "Tambah Buku"}
                         </h2>
                         <form onSubmit={handleSubmit} className="space-y-4">
+                            <div>
+                                    <label className="text-sm font-medium text-gray-600">Unique ID</label>
+                                    <input
+                                        name="uniqueId"
+                                        value={data.uniqueId}
+                                        onChange={(e) => setData("uniqueId", e.target.value)}
+                                        className="p-2 border rounded w-full"
+                                        placeholder="Masukkan Unique Id"
+                                    />
+                                     {errors.uniqueId && (
+                                        <p className="text-red-500 text-sm mt-1">{errors.uniqueId}</p>
+                                    )}
+                            </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
                                     <label className="text-sm font-medium text-gray-600">Judul Buku</label>

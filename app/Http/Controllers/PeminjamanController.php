@@ -86,7 +86,16 @@ class PeminjamanController extends Controller
 
         $tanggalPinjam = new \Carbon\Carbon($validated['tanggal_pinjam']);
         $tanggalKembali = $tanggalPinjam->addDays(7);
+        // $tanggalPinjam = Carbon::parse($peminjaman->tanggal_pinjam);
+        // $tanggalPengembalian = Carbon::now();
 
+        // $durasiPinjam = $tanggalPinjam->diffInDays($tanggalPengembalian);
+        // $telat = max(0, $durasiPinjam - $peminjaman->durasi);
+        // $dendaPerHari = 1000;
+        // $denda = $telat * $dendaPerHari;
+        // $peminjaman->tanggal_pengembalian = $tanggalPengembalian->toDateString();
+        // $peminjaman->denda = $denda; 
+       
         Peminjaman::create([
             'user_id' => $validated['user_id'],
             'nama' => $validated['nama'],
@@ -97,6 +106,7 @@ class PeminjamanController extends Controller
             'durasi' => 7,
             'status_peminjaman' => 'pending',
             'status_pengembalian' => 'belum melakukan pengembalian',
+            // 'tanggal_pengembalian' => 
         ]);
 
         // Menambahkan notifikasi ke session (untuk admin)
@@ -170,7 +180,7 @@ class PeminjamanController extends Controller
             ->paginate(10);
 
         // Ambil semua data pengembalian yang sudah dikembalikan tapi status pengembaliannya masih "pending"
-        $pengembalians = Peminjaman::with('book')
+            $pengembalians = Peminjaman::with('book')
             ->whereNotNull('tanggal_kembali')
             ->where('status_pengembalian', 'pending')
             ->when($search, function ($query, $search) {
@@ -237,19 +247,32 @@ class PeminjamanController extends Controller
             ]);
         }
 
+        $tanggalPinjam = Carbon::parse($peminjaman->tanggal_pinjam)->startOfDay();
+$tanggalKembali = Carbon::now()->startOfDay();
+$batasPengembalian = $tanggalPinjam->copy()->addDays($peminjaman->durasi)->startOfDay();
+
+$telat = $tanggalKembali->gt($batasPengembalian)
+    ? $batasPengembalian->diffInDays($tanggalKembali)
+    : 0;
+
+$dendaPerHari = 1000;
+$denda = $telat * $dendaPerHari;
+
+
         $peminjaman->status_pengembalian = 'disetujui';
-        $peminjaman->tanggal_pengembalian = Carbon::now()->toDateString();
+        $peminjaman->tanggal_pengembalian = $tanggalKembali->toDateString();
+        $peminjaman->denda = $denda; // simpan denda di DB
         $peminjaman->save();
 
         // Update stok buku
         $book = $peminjaman->book;
-        
         $book->increment('stock');
-        $book->decrement('stock_inLoan'); // Decrement stock_inLoan when a book is returned
+        $book->decrement('stock_inLoan');
         $book->save();
 
         return redirect()->back()->with('success', 'Pengembalian disetujui dan stok buku diperbarui.');
     }
+
 
     // Menolak pengembalian buku oleh admin
     public function tolakPengembalian($id)

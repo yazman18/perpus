@@ -20,6 +20,7 @@ class Peminjaman extends Model
         'tanggal_kembali',
         'tanggal_pengembalian',
         'durasi',
+        'denda',
         'status_admin',
     ];
 

@@ -12,6 +12,7 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
+            'uniqueId' => 'required|integer|unique:books,uniqueId',
             'title' => 'required|string|max:255',
             'author' => 'required|string',
             'publisher' => 'nullable|string',
@@ -21,12 +22,14 @@ class BookController extends Controller
             'stock' => 'nullable|integer',
             'description' => 'nullable|string',
             'image' => 'nullable|image|max:2048',
+        ], [
+            'uniqueId.unique' => 'ID tersebut sudah digunakan oleh buku lain.',
         ]);
 
         if ($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('books', 'public');
         }
-
+       
         Book::create($validated);
 
         return redirect()->back()->with('success', 'Buku berhasil disimpan!');

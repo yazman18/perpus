@@ -117,16 +117,29 @@ const ReportAdmin = () => {
                                     <td className="border p-2">{item.jenis}</td>
                                     <td className="border p-2">
                                         {(() => {
+                                            if (!item.tanggal_pinjam) {
+                                                return "-";
+                                            }
+
                                             const pinjamDate = new Date(item.tanggal_pinjam);
-                                            const kembaliDate = item.tanggal_pengembalian ? new Date(item.tanggal_pengembalian) : new Date();
-                                            const diffTime = Math.abs(kembaliDate - pinjamDate);
+                                            const kembaliDate = item.tanggal_pengembalian 
+                                                ? new Date(item.tanggal_pengembalian) 
+                                                : new Date();
+
+                                            const diffTime = kembaliDate - pinjamDate;
+                                            if (isNaN(diffTime)) {
+                                                // return diffTime = new Date(item.tanggal_pinjam) - Date.now ;
+                                                return <span className="text-green-500 font-semibold">{item.durasi} hari</span>;
+
+                                            }
+
                                             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                                             if (diffDays > 7) {
                                                 return <span className="text-red-500 font-semibold">{diffDays} hari</span>;
                                             } else {
-                                                return <span className="text-green-500 font-semibold">{diffDays}  hari</span>; // atau bisa return "Tidak telat" jika perlu
+                                                return <span className="text-green-500 font-semibold">{item.durasi} hari</span>;
                                             }
-                                        })()    }
+                                        })()}
                                     </td>
                                     <td className="border p-2">
                                         {item.tanggal_pinjam}
@@ -138,12 +151,7 @@ const ReportAdmin = () => {
                                         {item.tanggal_pengembalian}
                                     </td>
                                     <td className="border p-2">
-                                        {(() => {
-                                                const denda = hitungDenda(item.tanggal_pinjam, item.tanggal_pengembalian);
-                                                return denda > 0
-                                                    ? denda.toLocaleString("id-ID", { style: "currency", currency: "IDR" })
-                                                    : "Rp0,00";
-                                            })()}
+                                        {item.denda}
                                     </td>
                                 </tr>
                             ))
