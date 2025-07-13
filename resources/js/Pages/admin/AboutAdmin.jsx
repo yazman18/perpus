@@ -212,7 +212,7 @@ return (
             setShowPreviewStruktur(false);
             }}
             className={`px-5 py-2 rounded-md transition ${
-            aboutData.length >= 1
+            aboutData.length < 1
             ? "bg-blue-500 hover:bg-blue-600 text-white" 
             : "hidden"
 
@@ -481,14 +481,13 @@ return (
                     />
                 </div>
 
-                <div>
+              <div>
                     <label className="block font-medium">Logo Sekolah</label>
-                   
                     <input
                         type="file"
                         accept="image/*"
                         onChange={(e) => {
-                            setData("logo", e.target.files[0]);
+                            setData("logo_sekolah", e.target.files[0]);
                             setShowPreviewLogo(false);
                         }}
                         className="block w-full  text-sm text-gray-700 bg-gray-50 border border-black rounded-lg file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-100 file:text-blue-700"
@@ -497,14 +496,14 @@ return (
                         type="button"
                         className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                         onClick={handlePreviewLogo}
-                        disabled={!data.logo && !(isEditing && aboutData.logo_sekolah)}
+                        disabled={!data.logo_sekolah && !(isEditing && aboutData.logo_sekolah)}
                     >
                         Preview Logo
                     </button>
                     {showPreviewLogo && previewLogo && (
                         <div className="mb-2">
-                            <p className="text-sm text-gray-600">Preview Logo Sekolah:</p>
-                            <img src={previewLogo} alt="Preview Logo" className="size-1/6 rounded " />
+                            <p className="text-sm text-gray-600">Preview Profil Sekolah:</p>
+                            <img src={previewLogo} alt="Preview Gambar" className="size-1/6 rounded " />
                         </div>
                     )}
                 </div>
