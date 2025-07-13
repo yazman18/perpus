@@ -2,7 +2,7 @@ import Image from "./Image";
 
 const Footer = ({ aboutData }) => {
     return (
-        <footer className="bg-[#2693CE]  md:px-16 py-10 text-sm text-white rounded-md">
+        <footer className="bg-[#2693CE]  md:px-16 py-10 text-sm text-white   rounded-md">
             <div className="max-w-screen-xl mx-auto flex flex-wrap justify-between gap-x-10 gap-y-8">
                 {/* KIRI: Logo & Info */}
                 <div className="flex-1 min-w-[280px] break-words">

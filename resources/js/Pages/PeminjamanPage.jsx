@@ -6,7 +6,6 @@ const PeminjamanPage = ({ peminjamans }) => {
     const { flash } = usePage().props;
     const [selectedReturnId, setSelectedReturnId] = useState(null);
 
-    const dendaPerHari = 1000;
 
     const calculateSisaDurasi = (tanggalPinjam, durasi) => {
         const pinjamDate = new Date(tanggalPinjam);
@@ -66,9 +65,12 @@ const PeminjamanPage = ({ peminjamans }) => {
                                 item.durasi
                             );
                             const terlambat = sisaDurasi < 0;
-                            const denda = terlambat
-                                ? Math.abs(sisaDurasi) * dendaPerHari
-                                : 0;
+                            const denda = item.denda || sisaDurasi * -10000;
+                            console.log("Tanggal Pinjam:", item.tanggal_pinjam);
+                            console.log("Durasi:", item.durasi);
+                            console.log("Tanggal Kembali:", item.tanggal_kembali);
+                            console.log("Sisa Durasi:", sisaDurasi);
+                            console.log("Denda:", denda);
 
                             const isReturnPending =
                                 item.status_pengembalian === "pending";
@@ -103,7 +105,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                                     {/* Tanggal Pengembalian */}
                                     {item.tanggal_kembali && (
                                         <p>
-                                            Tanggal Pengembalian:{" "}
+                                            Tenggat Kembali:{" "}
                                             {new Date(
                                                 item.tanggal_kembali
                                             ).toLocaleDateString()}
@@ -116,34 +118,33 @@ const PeminjamanPage = ({ peminjamans }) => {
                                             Peminjaman Ditolak
                                         </p>
                                     )}
+                                    {isReturned &&(
+                                        <p>Tanggal Pengembalian:{" "}
+                                            {new Date(
+                                                item.tanggal_pengembalian
+                                            ).toLocaleDateString()}</p>
+                                    )
 
-                                    {/* Menyembunyikan sisa durasi dan denda jika buku sudah dikembalikan atau ditolak */}
-                                    {!isRejected && !isReturned && (
-                                        <p>
-                                            Sisa Durasi:{" "}
-                                            <span
-                                                className={
-                                                    terlambat
-                                                        ? "text-red-600"
-                                                        : "text-green-600"
-                                                }
-                                            >
-                                                {terlambat
-                                                    ? `Terlambat ${Math.abs(
-                                                          sisaDurasi
-                                                      )} hari`
-                                                    : `${sisaDurasi} hari`}
-                                            </span>
-                                        </p>
+                                    }
+
+                                    
+                                   {!isRejected && !isReturned && (
+                                        <>
+                                            <p>
+                                                Sisa Durasi:{" "}
+                                                <span className={terlambat ? "text-red-600" : "text-green-600"}>
+                                                    {terlambat
+                                                        ? `Terlambat ${Math.abs(sisaDurasi)} hari`
+                                                        : `${sisaDurasi} hari`}
+                                                </span>
+                                            </p>
+                                            <p className={sisaDurasi > 0 ? "hidden" : "text-black"}>
+                                                
+                                                Denda: Rp {denda.toLocaleString("id-ID")}
+                                            </p>
+                                        </>
                                     )}
 
-                                    {/* Hide denda if the borrowing is rejected */}
-                                    {!isRejected && (
-                                        <p>
-                                            Denda: Rp{" "}
-                                            {denda.toLocaleString("id-ID")}
-                                        </p>
-                                    )}
 
                                     {/* STATUS */}
                                     {item.status_peminjaman !== "disetujui" ? (
@@ -151,7 +152,9 @@ const PeminjamanPage = ({ peminjamans }) => {
                                             <p className="font-semibold text-yellow-600 mt-2">
                                                 Menunggu Konfirmasi Admin
                                             </p>
+                                            
                                         )
+                        
                                     ) : isReturned ? (
                                         <p className="font-semibold text-green-600 mt-2">
                                             Buku telah dikembalikan
