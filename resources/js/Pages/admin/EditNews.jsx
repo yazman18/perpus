@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm } from "@inertiajs/react";
 import AdminLayout from "../../Layouts/AdminLayout";
+import Swal from 'sweetalert2';
+
 
 const EditNews = ({ news }) => {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -15,8 +17,17 @@ const EditNews = ({ news }) => {
         e.preventDefault();
         post(`/news/${news.id}`, {
             forceFormData: true,
-            onSuccess: () => reset(),
+            onSuccess: () => {
+                reset();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berita berhasil diperbarui!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            }
         });
+
     };
 
     return (

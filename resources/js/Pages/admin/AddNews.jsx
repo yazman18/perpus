@@ -2,6 +2,8 @@ import "react-quill-new/dist/quill.snow.css";
 import ReactQuill from "react-quill-new";
 import { useForm } from "@inertiajs/react";
 import AdminLayout from "../../Layouts/AdminLayout";
+import Swal from 'sweetalert2';
+
 
 const AddNews = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
@@ -14,9 +16,18 @@ const AddNews = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        post("/news", {
-            forceFormData: true,
-            onSuccess: () => reset(),
+        post(`/news`, {
+                forceFormData: true,
+                onSuccess: () => {
+                    reset();
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berita berhasil dibuat!',
+                        showConfirmButton: false,
+                        timer: 1500
+                });
+                
+            }
         });
     };
 

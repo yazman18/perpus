@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import AdminLayout from "../../Layouts/AdminLayout";
 import { usePage, router } from "@inertiajs/react";
+import Swal from 'sweetalert2';
+
 
 const TransactionAdmin = () => {
 const {
@@ -20,9 +22,39 @@ const {
     );
 };
 
-const handleAcc = (id) => router.post(`/transaksi/${id}/peminjaman/acc`);
-const handleReject = (id) =>
-router.post(`/transaksi/${id}/peminjaman/tolak`);
+const handleAcc = (id) => {
+    router.post(`/transaksi/${id}/peminjaman/acc`, {
+        onSuccess: () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Peminjaman disetujui!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        },
+        onError: (errors) => {
+            console.error('Error:', errors);
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Menyetujui!',
+                text: 'Terjadi kesalahan, coba lagi.',
+            });
+        }
+    });
+};
+
+const handleReject = (id) => {
+    router.post(`/transaksi/${id}/peminjaman/tolak`, {
+        onSuccess: () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Peminjaman ditolak!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    });
+};
 const handleKembaliAcc = (id) =>
 router.post(`/transaksi/${id}/pengembalian/acc`);
 const handleKembaliReject = (id) =>

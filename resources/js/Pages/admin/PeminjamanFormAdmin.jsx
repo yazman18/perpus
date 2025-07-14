@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm, usePage, router } from "@inertiajs/react"; // Inertia hooks to manage form data and routing
+import Swal from 'sweetalert2';
 
 const PeminjamanFormAdmin = ({ books, users }) => {
     const { data, setData, post, reset, errors } = useForm({
@@ -18,7 +19,12 @@ const PeminjamanFormAdmin = ({ books, users }) => {
         // Submit the form via Inertia's post method
         post("/admin/peminjaman", {
             onSuccess: () => {
-                setSuccessMessage("Data berhasil disimpan!"); // Set success message
+               Swal.fire({
+                                       icon: 'success',
+                                       title: 'Peminjaman berhasil ditambah!',
+                                       showConfirmButton: false,
+                                       timer: 1500
+                               }); // Set success message
                 reset(); // Reset form after submission
                 handleBack();
             },
@@ -30,7 +36,7 @@ const PeminjamanFormAdmin = ({ books, users }) => {
         router.get("/transaction");
     };
         const today = new Date().toISOString().split("T")[0];
-     const calculateReturnDate = (startDate) => {
+        const calculateReturnDate = (startDate) => {
             const date = new Date(startDate);
             date.setDate(date.getDate() + 7); // Menambahkan 7 hari
             return date.toISOString().split("T")[0]; // Format YYYY-MM-DD

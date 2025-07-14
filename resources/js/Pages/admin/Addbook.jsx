@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useForm, router, usePage } from "@inertiajs/react";
 import AdminLayout from "../../Layouts/AdminLayout";
+import Swal from 'sweetalert2';
+
 
 const Addbook = () => {
     const [books, setBooks] = useState([]);
@@ -85,11 +87,29 @@ const Addbook = () => {
     };
 
     const handleDelete = (id) => {
-        router.delete(`/books/${id}`, {
-            onSuccess: () => {
-                setBooks((prev) => prev.filter((b) => b.id !== id));
-                alert("Buku berhasil dihapus.");
-            },
+         Swal.fire({
+            title: 'Yakin ingin menghapus buku ini?',
+            text: "Tindakan ini tidak bisa dibatalkan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                router.delete(`/books/${id}`, {
+                    onSuccess: () => {
+                        setBooks((prev) => prev.filter((b) => b.id !== id));
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Buku berhasil dihapus!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    }
+                });
+            }
         });
     };
 
@@ -116,7 +136,13 @@ const Addbook = () => {
                 setEditId(null);
                 reset();
                 setImagePreview(null);
-                if (!isEditing) alert("Buku berhasil ditambahkan.");
+                Swal.fire({
+                    icon: 'success',
+                    title: isEditing ? 'Buku berhasil diperbarui!' : 'Buku berhasil ditambahkan!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+
             },
         };
         if (isEditing) {

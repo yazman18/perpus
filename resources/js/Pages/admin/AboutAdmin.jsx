@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from "../../Layouts/AdminLayout";
+import Swal from 'sweetalert2';
+
 
 const AboutAdmin = () => {
 const [showModal, setShowModal] = useState(false);
@@ -154,33 +156,55 @@ setData({
 };
 
 const handleDelete = (id) => {
-    if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-        router.delete(`/admin/about/${id}`, {
-            onSuccess: () => {
-                alert("✅ Data berhasil dihapus");
-            },
-            onError: () => {
-                alert("❌ Gagal menghapus data");
-            },
-        });
-    }
+      Swal.fire({
+                title: 'Yakin ingin menghapus buku ini?',
+                text: "Tindakan ini tidak bisa dibatalkan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.delete(`/admin/about/${id}`, {
+                        onSuccess: () => {
+                            setBooks((prev) => prev.filter((b) => b.id !== id));
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Buku berhasil dihapus!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    });
+                }
+            });
+   
 };
 
 // Fungsi ketika tombol Simpan ditekan
 const handleSubmit = (e) => {
     e.preventDefault();
 
-    const options = {
-        forceFormData: true,
-        onSuccess: () => {
+   const options = {
+    forceFormData: true,
+    onSuccess: () => {
         reset();
+        Swal.fire({
+            icon: 'success',
+            title: isEditing ? 'Data berhasil diperbarui!' : 'Data berhasil ditambahkan!',
+            showConfirmButton: false,
+            timer: 1500
+        });
+
         setShowModal(false);
         setEditId(null);
         setIsEditing(false);
-        alert("✅ Data berhasil disimpan");
     },
     onError: () => alert("❌ Gagal menyimpan data."),
 };
+
 
     if (isEditing) {
         router.post(`/admin/about/${editId}`, data, options); // untuk update
