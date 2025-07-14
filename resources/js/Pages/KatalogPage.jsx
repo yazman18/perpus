@@ -77,11 +77,11 @@ const KatalogPage = () => {
                         placeholder="Search here..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="flex-grow px-4 py-3 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="flex-grow px-4 py-3 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-green-600"
                     />
                     <button
                         onClick={handleSearch}
-                        className="px-8 py-3 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="px-8 py-3 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600"
                     >
                         Search
                     </button>

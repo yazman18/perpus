@@ -111,28 +111,28 @@ const HomeAdmin = ({
                     <h3 className="text-xl font-semibold mb-4 text-gray-800">
                         Students
                     </h3>
-                    <div className="overflow-x-auto rounded-lg shadow">
-                        <table className="min-w-full text-sm bg-white border">
-                            <thead className="bg-gray-100 text-left text-gray-700">
-                                <tr>
-                                    <th className="px-4 py-2 border">NISN</th>
-                                    <th className="px-4 py-2 border">Name</th>
-                                    <th className="px-4 py-2 border">Email</th>
+                    <div className="overflow-x-auto rounded-lg border shadow">
+                        <table className="min-w-full text-sm ">
+                            <thead className=" text-left text-gray-700">
+                                <tr className="border-b bg-[#1B3C53] text-white">
+                                    <th className="px-4 py-2 ">NISN</th>
+                                    <th className="px-4 py-2 ">Name</th>
+                                    <th className="px-4 py-2 ">Email</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {students.data.map((student, i) => (
                                     <tr
                                         key={student.id}
-                                        className={i % 2 ? "bg-gray-50" : ""}
+                                        className={i % 2 ? "bg-gray-50 " : ""}
                                     >
-                                        <td className="px-4 py-2 border">
+                                        <td className="px-4 py-2 ">
                                             {student.id_number}
                                         </td>
-                                        <td className="px-4 py-2 border">
+                                        <td className="px-4 py-2 ">
                                             {student.name}
                                         </td>
-                                        <td className="px-4 py-2 border">
+                                        <td className="px-4 py-2 ">
                                             {student.email}
                                         </td>
                                     </tr>
@@ -153,28 +153,28 @@ const HomeAdmin = ({
                     <h3 className="text-xl font-semibold mb-4 text-gray-800">
                         Lecturers
                     </h3>
-                    <div className="overflow-x-auto rounded-lg shadow">
-                        <table className="min-w-full text-sm bg-white border">
-                            <thead className="bg-gray-100 text-left text-gray-700">
-                                <tr>
-                                    <th className="px-4 py-2 border">NIP</th>
-                                    <th className="px-4 py-2 border">Name</th>
-                                    <th className="px-4 py-2 border">Email</th>
+                    <div className="overflow-x-auto border rounded-lg shadow">
+                        <table className="min-w-full text-sm ">
+                            <thead className=" text-left text-gray-700">
+                                <tr className="border-b bg-[#1B3C53] text-white">
+                                    <th className="px-4 py-2 ">NIP</th>
+                                    <th className="px-4 py-2 ">Name</th>
+                                    <th className="px-4 py-2 ">Email</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {lecturers.data.map((lecturer, i) => (
                                     <tr
                                         key={lecturer.id}
-                                        className={i % 2 ? "bg-gray-50" : ""}
+                                        className={i % 2 ? "bg-gray-50 border" : ""}
                                     >
-                                        <td className="px-4 py-2 border">
+                                        <td className="px-4 py-2   ">
                                             {lecturer.id_number}
                                         </td>
-                                        <td className="px-4 py-2 border">
+                                        <td className="px-4 py-2 ">
                                             {lecturer.name}
                                         </td>
-                                        <td className="px-4 py-2 border">
+                                        <td className="px-4 py-2 ">
                                             {lecturer.email}
                                         </td>
                                     </tr>
@@ -211,8 +211,8 @@ const Pagination = ({ pageCount, onPageChange }) => (
         pageCount={pageCount}
         onPageChange={onPageChange}
         containerClassName="flex justify-center mt-4 space-x-2"
-        pageClassName="px-3 py-1 border rounded-md text-sm text-gray-700 hover:bg-blue-100 cursor-pointer"
-        activeClassName="bg-blue-600 text-white"
+        pageClassName="px-3 py-1 border rounded-md text-sm text-gray-700 hover:bg-[#4E799D] cursor-pointer"
+        activeClassName="bg-[#1B3C53] text-white"
         previousClassName="px-3 py-1 border rounded-md text-sm hover:bg-gray-100 cursor-pointer"
         nextClassName="px-3 py-1 border rounded-md text-sm hover:bg-gray-100 cursor-pointer"
     />

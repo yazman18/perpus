@@ -12,6 +12,7 @@ class Peminjaman extends Model
     protected $table = 'peminjamans'; // ✅ WAJIB agar tidak fallback ke `peminjamen`
 
     protected $fillable = [
+        
         'user_id',
         'nama',
         'kelas',

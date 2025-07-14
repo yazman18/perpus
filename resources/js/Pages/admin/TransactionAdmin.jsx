@@ -30,18 +30,18 @@ router.post(`/transaksi/${id}/pengembalian/tolak`);
 
 const renderTableRow = (item, isPeminjaman = true) => (
 <tr key={item.id} className="text-center even:bg-gray-50">
-    <td className="border px-4 py-2">{item.nama}</td>
-    <td className="border px-4 py-2">{item.book?.title}</td>
-    <td className="border px-4 py-2">{item.tanggal_pinjam}</td>
+    <td className=" px-4 py-2">{item.nama}</td>
+    <td className=" px-4 py-2">{item.book?.title}</td>
+    <td className=" px-4 py-2">{item.tanggal_pinjam}</td>
     {!isPeminjaman && (
-    <td className="border px-4 py-2">{item.tanggal_kembali}</td>
+    <td className=" px-4 py-2">{item.tanggal_kembali}</td>
     )}
-    <td className="border px-4 py-2 capitalize">
+    <td className=" px-4 py-2 capitalize">
         {isPeminjaman
         ? item.status_peminjaman
         : item.status_pengembalian}
     </td>
-    <td className="border px-4 py-2 space-x-2">
+    <td className=" px-4 py-2 space-x-2">
         {(isPeminjaman
         ? item.status_peminjaman
         : item.status_pengembalian) === "pending" && (
@@ -51,7 +51,7 @@ const renderTableRow = (item, isPeminjaman = true) => (
                 ? handleAcc(item.id)
                 : handleKembaliAcc(item.id)
                 }
-                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
                 >
                 Setujui
             </button>
@@ -76,7 +76,7 @@ const renderPagination = (links) => (
     <button key={index} disabled={!link.url} onClick={()=> link.url && router.visit(link.url)}
         className={`px-4 py-2 rounded shadow-sm border text-sm ${
         link.active
-        ? "bg-blue-500 text-white"
+        ? "bg-[#1B3C53] text-white font-bold"
         : "bg-white text-gray-700 hover:bg-gray-100"
         }`}
         dangerouslySetInnerHTML={{ __html: link.label }}
@@ -97,7 +97,7 @@ return (
         placeholder="Cari transaksi..."
         className="flex-1 px-4 py-2 border rounded-md shadow-sm"
         />
-        <button type="submit" className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
+        <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
         Cari
         </button>
     </form>
@@ -134,28 +134,28 @@ return (
     </div>
 
     {/* Tables */}
-    <div className="overflow-x-auto">
-        <table className="w-full text-sm border border-gray-200 shadow-sm">
-            <thead className="bg-gray-100 text-center text-gray-700">
-                <tr>
-                    <th className="px-4 py-2 border">Nama</th>
-                    <th className="px-4 py-2 border">Buku</th>
-                    <th className="px-4 py-2 border">Tanggal Pinjam</th>
+    <div className="overflow-x-auto  rounded-lg border">
+        <table className="w-full text-sm shadow-sm ">
+            <thead className="text-center text-gray-700">
+                <tr className="bg-[#1B3C53] text-white">
+                    <th className="px-4 py-2 ">Nama</th>
+                    <th className="px-4 py-2 ">Buku</th>
+                    <th className="px-4 py-2 ">Tanggal Pinjam</th>
                     {activeTab === "pengembalian" && (
-                    <th className="px-4 py-2 border">
+                    <th className="px-4 py-2 ">
                         Tenggat Kembali 
                     </th>
                     
                     )}
-                    <th className="px-4 py-2 border">Status</th>
-                    <th className="px-4 py-2 border">Aksi</th>
+                    <th className="px-4 py-2 ">Status</th>
+                    <th className="px-4 py-2 ">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 {(activeTab === "peminjaman"
                     ? peminjamans.data.length === 0
                         ? (
-                            <tr className="border">
+                            <tr className="">
                                 <td className="p-4 text-center" colSpan={8}>
                                     Tidak ada data peminjaman.
                                 </td>
@@ -166,7 +166,7 @@ return (
                         )
                     : pengembalians.data.length === 0
                         ? (
-                            <tr className="border">
+                            <tr className="">
                                 <td className="p-4 text-center" colSpan={8}>
                                     Tidak ada data pengembalian.
                                 </td>
@@ -179,13 +179,13 @@ return (
             </tbody>
         </table>
 
+    </div>
         {/* Pagination */}
         {renderPagination(
         activeTab === "peminjaman"
         ? peminjamans.links
         : pengembalians.links
         )}
-    </div>
 </div>
 );
 };

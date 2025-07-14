@@ -44,18 +44,19 @@ class AdminController extends Controller
 
         // Map the results to add calculated fields like 'denda'
             $transactions = $data->map(function ($item) {
-            $expectedReturn = \Carbon\Carbon::parse($item->tanggal_kembali);
-$actualReturn = $item->tanggal_pengembalian
-    ? \Carbon\Carbon::parse($item->tanggal_pengembalian)
-    : now();
+                $expectedReturn = \Carbon\Carbon::parse($item->tanggal_kembali);
+                $actualReturn = $item->tanggal_pengembalian
+                    ? \Carbon\Carbon::parse($item->tanggal_pengembalian)
+                    : now();
 
-$selisihHari = $actualReturn->gt($expectedReturn)
-    ? $actualReturn->diffInDays($expectedReturn)
-    : 0;
+                $selisihHari = $actualReturn->gt($expectedReturn)
+                    ? $actualReturn->diffInDays($expectedReturn)
+                    : 0;
 
-$denda = $selisihHari * 1000;
+                $denda = $selisihHari * 1000;
 
             return [
+                'uniqueId'=>$item->book->uniqueId,
                 'id' => $item->id,
                 'nama' => $item->nama,
                 'buku' => $item->book->title,

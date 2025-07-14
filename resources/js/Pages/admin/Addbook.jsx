@@ -138,7 +138,7 @@ const Addbook = () => {
                     placeholder="Cari Buku..."
                 />
                 <button
-                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
                     onClick={() => fetchBooks(currentPage, search)}
                 >
                     Cari
@@ -159,32 +159,32 @@ const Addbook = () => {
                 </button>
             </div>
 
-            <div className="overflow-x-auto  border rounded">
+            <div className="overflow-x-auto  border rounded-lg">
                 <table className="min-w-full text-sm">
-                    <thead className="bg-gray-100 text-left">
-                        <tr>
-                            <th className="p-2">Unique Id</th>
-                            <th className="p-2">Judul</th>
-                            <th className="p-2">Penulis</th>
-                            <th className="p-2">Tahun</th>
-                            <th className="p-2">Stok</th>
-                            <th className="p-2">Jumlah Dipinjam</th>
-                            <th className="p-2">Aksi</th>
+                    <thead className="bg-gray-100">
+                        <tr className="bg-[#1B3C53] text-center text-white">
+                            <th className="px-4 py-2">Unique Id</th>
+                            <th className="px-4 py-2">Judul</th>
+                            <th className="px-4 py-2">Penulis</th>
+                            <th className="px-4 py-2">Tahun</th>
+                            <th className="px-4 py-2">Stok</th>
+                            <th className="px-4 py-2">Jumlah Dipinjam</th>
+                            <th className=" ">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         {Array.isArray(books) && books.length > 0 ? (
                             books.map((book) => (
-                                <tr key={book.id} className="border-t">
-                                    <td className="p-2">{book.uniqueId}</td>
-                                    <td className="p-2">{book.title}</td>
-                                    <td className="p-2">{book.author}</td>
-                                    <td className="p-2">{book.year}</td>
-                                    <td className="p-2">{book.stock}</td>
-                                    <td className="p-2">
+                                <tr key={book.id} className="border-t text-center ">
+                                    <td className="px-4 py-2">{book.uniqueId}</td>
+                                    <td className="px-4 py-2">{book.title}</td>
+                                    <td className="px-4 py-2">{book.author}</td>
+                                    <td className="px-4 py-2">{book.year}</td>
+                                    <td className="px-4 py-2">{book.stock}</td>
+                                    <td className="px-4 py-2">
                                         {book.stock_inLoan}
                                     </td>
-                                    <td className="p-2 space-x-2">
+                                    <td className=" space-x-2  ">
                                         <button
                                             className="px-2 py-1 text-white bg-yellow-500 rounded hover:bg-yellow-700"
                                             onClick={() => handleEdit(book)}
@@ -211,7 +211,7 @@ const Addbook = () => {
                 </table>
             </div>
 
-            <div className="mt-4 flex justify-center">
+            <div className="mt-4 flex justify-center items-center">
                 <button
                     onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                     disabled={currentPage === 1}

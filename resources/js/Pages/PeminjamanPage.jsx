@@ -47,7 +47,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                         </p>
                         <Link
                             href="/katalog"
-                            className="px-4 py-2 bg-blue-600 text-white rounded"
+                            className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
                         >
                             Pinjam Buku
                         </Link>
@@ -187,7 +187,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                                                                     item.id
                                                                 )
                                                             }
-                                                            className="bg-blue-600 text-white px-4 py-2 rounded"
+                                                            className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                                                         >
                                                             Perpanjang
                                                         </button>
@@ -214,7 +214,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                 <div className="mt-6 text-center">
                     <Link
                         href="/katalog"
-                        className="px-4 py-2 bg-blue-600 text-white rounded"
+                        className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
                     >
                         Pinjam Buku
                     </Link>
