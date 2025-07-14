@@ -30,7 +30,7 @@ const Homepage = ({ news }) => {
 
     return (
         <div className="w-full min-h-screen p-5 md:p-10 bg-gray-100 font-sans">
-            <h1 className="text-3xl md:text-5xl italic font-bold text-center mb-4 text-blue-900 font-montserrat">
+            <h1 className="text-3xl md:text-5xl font-extrabold italic font-header text-center mb-4 text-[#1B3C53] font-montserrat transition-all duration-500 ease-in-out">
                 {aboutData?.judul ?? "Judul belum tersedia"}
             </h1>
 
@@ -40,11 +40,11 @@ const Homepage = ({ news }) => {
 
             <div className="mb-8 mt-20">
                 <div className="flex flex-col md:flex-row md:gap-28 items-center">
-                    <div className="md:w-1/2 ml-10">
+                    <div className="md:w-1/2 ml-10 text-left">
                         <h2 className="text-xl md:text-3xl font-bold mb-4 text-gray-800 font-plusjakarta">
                             About Us
                         </h2>
-                        <p className="text-gray-700 leading-relaxed text-justify p-1 font-plusjakarta">
+                        <p className="text-gray-700 leading-relaxed text-justify font-plusjakarta">
                             {aboutData?.about ?? "Deskripsi perpustakaan belum tersedia."}
                         </p>
                     </div>

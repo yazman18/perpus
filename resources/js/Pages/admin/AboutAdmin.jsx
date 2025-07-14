@@ -223,7 +223,7 @@ return (
         </button>
         <div className="flex flex-row gap-2">
             <button onClick={()=> handleEdit(aboutData)}
-                className="px-5 py-2 rounded-md transition bg-yellow-500 text-white hover:bg-yellow-600 "
+                className="px-5 py-2 rounded-md transition bg-yellow-500 text-white hover:bg-yellow-700 "
                 >
                 Edit
             </button>

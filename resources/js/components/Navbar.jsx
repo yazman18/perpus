@@ -37,7 +37,7 @@ const Navbar = ({ aboutData }) => {
     }, []);
 
     return (
-        <nav className="sticky top-0 bg-[#2693CE] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-50 text-white">
+        <nav className="sticky top-0 bg-[#1B3C53] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-50 text-white font-sans">
             {/* LOGO */}
             <Link
                 href="/"
@@ -57,7 +57,7 @@ const Navbar = ({ aboutData }) => {
                 className="md:hidden focus:outline-none z-50"
             >
                 <svg
-                    className="w-6 h-6 text-black"
+                    className="w-6 h-6 text-white"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -83,11 +83,11 @@ const Navbar = ({ aboutData }) => {
 
             {/* Mobile Menu */}
             <div
-                className={`md:hidden fixed top-16 left-0 w-full bg-[#2693CE] font-bold text-underline transition-all duration-300 ${
+                className={`md:hidden fixed top-16 left-0 w-full bg-[#1B3C53] transition-all duration-300 ${
                     open ? "max-h-screen py-8" : "max-h-0 overflow-hidden"
                 }`}
             >
-                <div className="flex flex-col items-center gap-4 font-medium text-lg">
+                <div className="flex flex-col items-center gap-4 text-lg font-semibold">
                     <Link href="/" onClick={closeMobileMenu}>
                         Home
                     </Link>
@@ -100,12 +100,12 @@ const Navbar = ({ aboutData }) => {
                             onClick={() =>
                                 setMobileDropdownOpen(!mobileDropdownOpen)
                             }
-                            className="focus:outline-none"
+                            className="focus:outline-none font-semibold"
                         >
                             Service ▾
                         </button>
                         {mobileDropdownOpen && (
-                            <div className="mt-2 flex flex-col items-start gap-2 text-xs">
+                            <div className="mt-2 flex flex-col items-center gap-2 text-base">
                                 <Link href="/katalog" onClick={closeMobileMenu}>
                                     Katalog
                                 </Link>
@@ -133,12 +133,12 @@ const Navbar = ({ aboutData }) => {
                         <div className="text-center">
                             <button
                                 onClick={toggleProfileDropdown}
-                                className="focus:outline-none"
+                                className="focus:outline-none font-semibold"
                             >
                                 Profile ▾
                             </button>
                             {profileDropdownOpen && (
-                                <div className="mt-2 flex flex-col items-start gap-2 text-sm">
+                                <div className="mt-2 flex flex-col items-center gap-2 text-base">
                                     <Link
                                         href="/profile"
                                         onClick={closeMobileMenu}
@@ -155,7 +155,7 @@ const Navbar = ({ aboutData }) => {
                                         href="/logout"
                                         method="post"
                                         as="button"
-                                        className="w-full items-start px-4 py-2 text-sm"
+                                        className="px-4 py-2"
                                     >
                                         Logout
                                     </Link>
@@ -171,7 +171,7 @@ const Navbar = ({ aboutData }) => {
             </div>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-8 font-bold relative">
+            <div className="hidden md:flex items-center gap-8 font-semibold text-lg relative">
                 <Link href="/">Home</Link>
                 <Link href="/about">About</Link>
 
@@ -186,19 +186,19 @@ const Navbar = ({ aboutData }) => {
                         <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
                             <Link
                                 href="/katalog"
-                                className="block px-4 py-2 hover:bg-blue-100"
+                                className="block px-4 py-2 hover:bg-blue-100 text-base"
                             >
                                 Katalog
                             </Link>
                             <Link
                                 href="/peminjaman"
-                                className="block px-4 py-2 hover:bg-blue-100"
+                                className="block px-4 py-2 hover:bg-blue-100 text-base"
                             >
                                 Peminjaman
                             </Link>
                             {/* <Link
                                 href="/pengembalian"
-                                className="block px-4 py-2 hover:bg-blue-100"
+                                className="block px-4 py-2 hover:bg-blue-100 text-base"
                             >
                                 Pengembalian
                             </Link> */}
@@ -221,7 +221,7 @@ const Navbar = ({ aboutData }) => {
                             <div className="absolute bg-white text-black rounded shadow-md mt-2 text-left right-0 min-w-[150px] z-50">
                                 <Link
                                     href="/profile"
-                                    className="block px-4 py-2 hover:bg-blue-100"
+                                    className="block px-4 py-2 hover:bg-blue-100 text-base"
                                 >
                                     Profile
                                 </Link>
@@ -229,7 +229,7 @@ const Navbar = ({ aboutData }) => {
                                     href="/logout"
                                     method="post"
                                     as="button"
-                                    className="block w-full text-left px-4 py-2 hover:bg-blue-100"
+                                    className="block w-full text-left px-4 py-2 hover:bg-blue-100 focus:outline-none appearance-none bg-transparent text-base"
                                 >
                                     Logout
                                 </Link>
@@ -237,9 +237,7 @@ const Navbar = ({ aboutData }) => {
                         )}
                     </div>
                 ) : (
-                    <Link href="/login" className="text-sm">
-                        Login
-                    </Link>
+                    <Link href="/login">Login</Link>
                 )}
             </div>
         </nav>

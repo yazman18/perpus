@@ -44,7 +44,7 @@ const NewsIndex = ({ news }) => {
                             {/* Edit Button */}
                             <Link
                                 href={`/news/edit/${item.id}`}
-                                className="bg-blue-600 text-white px-4 py-2 rounded"
+                                className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                             >
                                 Edit
                             </Link>
@@ -52,7 +52,7 @@ const NewsIndex = ({ news }) => {
                             {/* Delete Button */}
                             <button
                                 onClick={() => handleDelete(item.id)}
-                                className="bg-red-600 text-white px-4 py-2 rounded"
+                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                                 disabled={loading} // Disable delete button while loading
                             >
                                 {loading ? "Menghapus..." : "Hapus"}

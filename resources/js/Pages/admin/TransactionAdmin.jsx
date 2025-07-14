@@ -51,7 +51,7 @@ const renderTableRow = (item, isPeminjaman = true) => (
                 ? handleAcc(item.id)
                 : handleKembaliAcc(item.id)
                 }
-                className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition"
+                className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-700 transition"
                 >
                 Setujui
             </button>
@@ -76,7 +76,7 @@ const renderPagination = (links) => (
     <button key={index} disabled={!link.url} onClick={()=> link.url && router.visit(link.url)}
         className={`px-4 py-2 rounded shadow-sm border text-sm ${
         link.active
-        ? "bg-blue-600 text-white"
+        ? "bg-blue-500 text-white"
         : "bg-white text-gray-700 hover:bg-gray-100"
         }`}
         dangerouslySetInnerHTML={{ __html: link.label }}
@@ -97,7 +97,7 @@ return (
         placeholder="Cari transaksi..."
         className="flex-1 px-4 py-2 border rounded-md shadow-sm"
         />
-        <button type="submit" className="bg-green-600 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
+        <button type="submit" className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-700 transition">
         Cari
         </button>
     </form>
@@ -108,7 +108,7 @@ return (
         <button key={tab} onClick={()=> setActiveTab(tab)}
             className={`px-5 py-2 rounded-md font-medium ${
             activeTab === tab
-            ? "bg-blue-600 text-white"
+            ? "bg-blue-500 hover:bg-blue-700 text-white"
             : "bg-gray-200 text-gray-800 hover:bg-gray-300"
             }`}
             >
@@ -126,7 +126,7 @@ return (
             : "/admin/pengembalian/create"
             )
             }
-            className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
+            className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
             >
             Tambah{" "}
             {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}

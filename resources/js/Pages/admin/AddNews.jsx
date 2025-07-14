@@ -131,7 +131,7 @@ const AddNews = () => {
                     <button
                         type="submit"
                         disabled={processing}
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition duration-200"
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded transition duration-200"
                     >
                         {processing ? "Menyimpan..." : "Publikasikan"}
                     </button>

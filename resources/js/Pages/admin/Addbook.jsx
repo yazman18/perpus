@@ -138,7 +138,7 @@ const Addbook = () => {
                     placeholder="Cari Buku..."
                 />
                 <button
-                    className="px-4 py-2 bg-green-600 text-white rounded hover:bg-blue-700"
+                    className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
                     onClick={() => fetchBooks(currentPage, search)}
                 >
                     Cari
@@ -146,7 +146,7 @@ const Addbook = () => {
             </div>
             <div>
                 <button
-                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-green-700 mb-5"
+                    className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 mb-5"
                     onClick={() => {
                         reset();
                         setImagePreview(null);
@@ -374,7 +374,7 @@ const Addbook = () => {
                             <div className="space-x-2">
                                 <button
                                     type="submit"
-                                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700"
                                 >
                                     {isEditing ? "Update" : "Simpan"}
                                 </button>
