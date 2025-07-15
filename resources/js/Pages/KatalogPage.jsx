@@ -88,7 +88,7 @@ const KatalogPage = () => {
                 </div>
 
                 {/* 📚 Catalog List */}
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 bg-gray-200 p-6 rounded-md">
+                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 gap-8 bg-gray-200 p-6 rounded-md">
                     {booksData?.map((book) => (
                         <Link
                             href={`/books/${book.id}`}
