@@ -402,7 +402,7 @@ return (
                 </div>
 
                 <div>
-                    <label className="block font-medium">Judul 2</label>
+                    <label className="block font-medium">Sub Judul</label>
                     <input type="text" value={data.sub_judul} onChange={(e)=> setData("sub_judul", e.target.value)}
                     className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Judul 2"
