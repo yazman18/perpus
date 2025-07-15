@@ -38,11 +38,11 @@ const BookDetail = ({ book, books }) => {
                     {/* Book Info */}
                     <div className="w-full md:w-2/3 flex flex-col">
                         {/* Judul + Button */}
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                        <div className="flex flex-col md:flex-row items-start md:items-center gap-4  justify-end">
                            
 
                             {/* Button & Status */}
-                            <div className="text-right">
+                            <div className="text-right ">
                                 <Link
                                     href={`/peminjaman/${book.id}`}
                                     disabled={!isAvailable}

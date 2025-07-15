@@ -16,10 +16,15 @@ import Image from "./Image";
 
     const toggleDesktopDropdown = () => {
         setDesktopDropdownOpen((prev) => !prev);
+        
     };
 
     const toggleProfileDropdown = () => {
         setProfileDropdownOpen((prev) => !prev);
+    };
+    const closeDesktopDropdown = () => {
+        setOpen(false);
+        setDesktopDropdownOpen(false);
     };
 
     const closeMobileMenu = () => {
@@ -102,9 +107,9 @@ import Image from "./Image";
                             <Link href="/peminjaman" onClick={closeMobileMenu}>
                             Peminjaman
                             </Link>
-                            <Link href="/pengembalian" onClick={closeMobileMenu}>
+                            {/* <Link href="/pengembalian" onClick={closeMobileMenu}>
                             Pengembalian
-                            </Link>
+                            </Link> */}
                         </div>
                         )}
                     </div>
@@ -151,10 +156,10 @@ import Image from "./Image";
                     </button>
                     {desktopDropdownOpen && (
                     <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
-                        <Link href="/katalog" className="block px-4 py-2 hover:bg-blue-100 text-base">
+                        <Link href="/katalog" className="block px-4 py-2 hover:bg-blue-100 text-base" onClick={closeDesktopDropdown}>
                         Katalog
                         </Link>
-                        <Link href="/peminjaman" className="block px-4 py-2 hover:bg-blue-100 text-base">
+                        <Link href="/peminjaman" className="block px-4 py-2 hover:bg-blue-100 text-base" onClick={closeDesktopDropdown}>
                         Peminjaman
                         </Link>
                         {/*
