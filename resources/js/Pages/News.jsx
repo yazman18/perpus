@@ -20,7 +20,7 @@ const News = ({ newsList }) => {
 
             {/* Header */}
             <div className="text-center md:text-left">
-                <h1 className="text-gray-900 text-3xl md:text-2xl lg:text-4xl font-bold leading-tight italic">
+                <h1 className="text-gray-700 font-montserrat text-3xl md:text-2xl lg:text-4xl font-bold leading-tight italic">
                     Tetap Terinformasi dengan Berita Terbaru Kami!
                 </h1>
                 <p className="mt-6 text-gray-700 text-base md:text-lg max-w-3xl">
@@ -36,7 +36,7 @@ const News = ({ newsList }) => {
 
             {/* Recent Posts */}
             <div>
-                <h2 className="text-2xl md:text-3xl font-semibold text-gray-800 mb-6">
+                <h2 className="text-2xl md:text-3xl font-semibold text-gray-700 font-montserrat mb-6">
                     Postingan Terbaru
                 </h2>
                 <PostList newsList={newsList} />

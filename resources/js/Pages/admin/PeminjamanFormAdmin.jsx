@@ -20,11 +20,11 @@ const PeminjamanFormAdmin = ({ books, users }) => {
         post("/admin/peminjaman", {
             onSuccess: () => {
                Swal.fire({
-                                       icon: 'success',
-                                       title: 'Peminjaman berhasil ditambah!',
-                                       showConfirmButton: false,
-                                       timer: 1500
-                               }); // Set success message
+                    icon: 'success',
+                    title: 'Peminjaman berhasil ditambah!',
+                    showConfirmButton: false,
+                    timer: 1500
+                }); // Set success message
                 reset(); // Reset form after submission
                 handleBack();
             },

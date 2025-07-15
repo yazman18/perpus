@@ -71,13 +71,13 @@ const TopPicksCarousel = () => {
                                     className="flex-shrink-0 bg-white rounded-lg shadow-md overflow-hidden transform hover:scale-105 transition-transform duration-300"
                                 >
                                     {/* Flexbox Layout untuk Gambar dan Teks */}
-                                    <div className="flex w-full items-center">
+                                    <div className="flex w-full h-full items-center">
                                         {/* Gambar di Kiri */}
-                                        <div className="w-1/3">
+                                        <div className="w-1/3 h-full">
                                             <Image
                                                 src={book.image}
                                                 alt={book.title}
-                                                className="w-full h-full object-cover rounded-t-lg"
+                                                className="w-full h-full object-fill rounded-t-lg"
                                             />
                                         </div>
 

@@ -22,7 +22,7 @@ const About = () => {
 
             {/* Header */}
             <header className="text-center md:text-center">
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold italic text-blue-800">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold  font-montserrat text-[#1B3C53] text">
                     Struktur Organisasi
                 </h1>
                 <p className="mt-10 text-gray-700">
