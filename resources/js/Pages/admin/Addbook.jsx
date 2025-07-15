@@ -127,8 +127,13 @@ const Addbook = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const formData = { ...data };
+        if (!formData.image) {
+            delete formData.image; // Jangan kirim image jika tidak ada
+        }
         const options = {
-            forceFormData: true,
+            
+            
             onSuccess: () => {
                 fetchBooks(currentPage, search);
                 setShowModal(false);
@@ -146,7 +151,7 @@ const Addbook = () => {
             },
         };
         if (isEditing) {
-            router.post(`/books/${editId}`, data, options);
+            router.post(`/books/${editId}`, formData, options);
         } else {
             post("/books", options);
         }

@@ -102,12 +102,12 @@ const KatalogPage = () => {
                                 h={240}
                                 className="w-full h-[200px] items-center content-center justify-center object-fill mb-3 rounded-lg "
                             />
-                            <h4 className="text-sm font-bold text-center text-[#165BAA]">
+                            <h4 className="text-sm font-bold text-center text-[#165BAA]  mb-1">
                                 {book.title}
                                 
                             </h4>
                             <div className=" w-full">
-                                <p className="text-xs text-left text-[#1E81B0]">
+                                <p className="text-xs text-left text-[#1E81B0] ">
                                   by  {book.author} 
                                 </p>
                                 {book.description && (
