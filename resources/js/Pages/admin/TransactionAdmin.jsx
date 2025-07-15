@@ -64,8 +64,8 @@ const renderTableRow = (item, isPeminjaman = true, index) => (
 <tr key={item.id} className="text-center even:bg-gray-50">
     <td>{index}</td>
     <td className=" px-4 py-2">{item.nama}</td>
-    <td className=" px-4 py-2">{item.book?.title}</td>
     <td className=" px-4 py-2">{item.book?.uniqueId}</td>
+    <td className=" px-4 py-2">{item.book?.title}</td>
     <td className=" px-4 py-2">{item.tanggal_pinjam}</td>
     {!isPeminjaman && (
     <td className=" px-4 py-2">{item.tanggal_kembali}</td>
@@ -208,8 +208,8 @@ return (
                                 </td>
                             </tr>
                         )
-                        : pengembalians.data.map((item) =>
-                            renderTableRow(item, false)
+                        : pengembalians.data.map((item, index) =>
+                            renderTableRow(item, false, index+1)
                         )
                 )}
             </tbody>
