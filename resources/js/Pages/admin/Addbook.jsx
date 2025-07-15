@@ -194,6 +194,7 @@ const Addbook = () => {
                 <table className="min-w-full text-sm">
                     <thead className="bg-gray-100">
                         <tr className="bg-[#1B3C53] text-center text-white">
+                            <th className="px-4 py-2">No.</th>
                             <th className="px-4 py-2">Unique Id</th>
                             <th className="px-4 py-2">Judul</th>
                             <th className="px-4 py-2">Penulis</th>
@@ -205,8 +206,9 @@ const Addbook = () => {
                     </thead>
                     <tbody>
                         {Array.isArray(books) && books.length > 0 ? (
-                            books.map((book) => (
+                            books.map((book, index) => (
                                 <tr key={book.id} className="border-t text-center ">
+                                    <td className="px-4 py-2">{index+1}</td>
                                     <td className="px-4 py-2">{book.uniqueId}</td>
                                     <td className="px-4 py-2">{book.title}</td>
                                     <td className="px-4 py-2">{book.author}</td>

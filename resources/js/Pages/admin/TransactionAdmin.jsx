@@ -60,10 +60,12 @@ router.post(`/transaksi/${id}/pengembalian/acc`);
 const handleKembaliReject = (id) =>
 router.post(`/transaksi/${id}/pengembalian/tolak`);
 
-const renderTableRow = (item, isPeminjaman = true) => (
+const renderTableRow = (item, isPeminjaman = true, index) => (
 <tr key={item.id} className="text-center even:bg-gray-50">
+    <td>{index}</td>
     <td className=" px-4 py-2">{item.nama}</td>
     <td className=" px-4 py-2">{item.book?.title}</td>
+    <td className=" px-4 py-2">{item.book?.uniqueId}</td>
     <td className=" px-4 py-2">{item.tanggal_pinjam}</td>
     {!isPeminjaman && (
     <td className=" px-4 py-2">{item.tanggal_kembali}</td>
@@ -170,7 +172,9 @@ return (
         <table className="w-full text-sm shadow-sm ">
             <thead className="text-center text-gray-700">
                 <tr className="bg-[#1B3C53] text-white">
+                    <th className="px-4 py-2 ">No.</th>
                     <th className="px-4 py-2 ">Nama</th>
+                    <th className="px-4 py-2 ">Unique Id</th>
                     <th className="px-4 py-2 ">Buku</th>
                     <th className="px-4 py-2 ">Tanggal Pinjam</th>
                     {activeTab === "pengembalian" && (
@@ -193,8 +197,8 @@ return (
                                 </td>
                             </tr>
                         )
-                        : peminjamans.data.map((item) =>
-                            renderTableRow(item, true)
+                        : peminjamans.data.map((item, index) =>
+                            renderTableRow(item, true, index+1)
                         )
                     : pengembalians.data.length === 0
                         ? (
