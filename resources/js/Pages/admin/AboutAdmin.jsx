@@ -245,7 +245,7 @@ return (
             >
             Tambah Sekolah
         </button>
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row gap-2 w-full justify-end">
             <button onClick={()=> handleEdit(aboutData)}
                 className="px-5 py-2 rounded-md transition bg-yellow-500 text-white hover:bg-yellow-700 "
                 >
