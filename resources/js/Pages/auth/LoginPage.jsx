@@ -67,7 +67,7 @@ return (
 
             <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Username */}
-                <div>
+                <div className="text-left">
                     <label className="block text-gray-700 text-sm mb-1">
                         Username
                     </label>
@@ -89,7 +89,7 @@ return (
                 </div>
 
                 {/* Password */}
-                <div>
+                <div  className="text-left">
                     <label className="block text-gray-700 text-sm mb-1">
                         Password
                     </label>

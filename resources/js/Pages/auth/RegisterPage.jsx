@@ -59,7 +59,7 @@ const RegisterPage = () => {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div>
+                        <div  className="text-left">
                             <label className="block text-gray-700 text-sm mb-1">Nama</label>
                             <input
                                 type="text"
@@ -71,7 +71,7 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                        <div>
+                        <div  className="text-left">
                             <label className="block text-gray-700 text-sm mb-1">Alamat</label>
                             <input
                                 type="text"
@@ -83,7 +83,7 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                        <div>
+                        <div  className="text-left">
                             <label className="block text-gray-700 text-sm mb-1">Tanggal Lahir</label>
                             <input
                                 type="date"
@@ -95,7 +95,7 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                        <div>
+                        <div  className="text-left">
                             <label className="block text-gray-700 text-sm mb-1">Email</label>
                             <input
                                 type="email"
@@ -107,7 +107,7 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                        <div>
+                        <div  className="text-left">
                             <label className="block text-gray-700 text-sm mb-1">Password</label>
                             <input
                                 type="password"
@@ -144,7 +144,7 @@ const RegisterPage = () => {
                             </button>
                         </div>
 
-                        <div>
+                        <div  className="text-left">
                             <label className="block text-gray-700 text-sm mb-1">
                                 {data.role === "guru" ? "NIP" : "NISN"}
                             </label>
