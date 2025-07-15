@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import AdminLayout from "../../Layouts/AdminLayout";
 import { usePage, router } from "@inertiajs/react";
+import Swal from 'sweetalert2';
+
 
 const TransactionAdmin = () => {
 const {
@@ -20,9 +22,39 @@ const {
     );
 };
 
-const handleAcc = (id) => router.post(`/transaksi/${id}/peminjaman/acc`);
-const handleReject = (id) =>
-router.post(`/transaksi/${id}/peminjaman/tolak`);
+const handleAcc = (id) => {
+    router.post(`/transaksi/${id}/peminjaman/acc`, {
+        onSuccess: () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Peminjaman disetujui!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        },
+        onError: (errors) => {
+            console.error('Error:', errors);
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal Menyetujui!',
+                text: 'Terjadi kesalahan, coba lagi.',
+            });
+        }
+    });
+};
+
+const handleReject = (id) => {
+    router.post(`/transaksi/${id}/peminjaman/tolak`, {
+        onSuccess: () => {
+            Swal.fire({
+                icon: 'success',
+                title: 'Peminjaman ditolak!',
+                showConfirmButton: false,
+                timer: 1500
+            });
+        }
+    });
+};
 const handleKembaliAcc = (id) =>
 router.post(`/transaksi/${id}/pengembalian/acc`);
 const handleKembaliReject = (id) =>
@@ -30,18 +62,18 @@ router.post(`/transaksi/${id}/pengembalian/tolak`);
 
 const renderTableRow = (item, isPeminjaman = true) => (
 <tr key={item.id} className="text-center even:bg-gray-50">
-    <td className="border px-4 py-2">{item.nama}</td>
-    <td className="border px-4 py-2">{item.book?.title}</td>
-    <td className="border px-4 py-2">{item.tanggal_pinjam}</td>
+    <td className=" px-4 py-2">{item.nama}</td>
+    <td className=" px-4 py-2">{item.book?.title}</td>
+    <td className=" px-4 py-2">{item.tanggal_pinjam}</td>
     {!isPeminjaman && (
-    <td className="border px-4 py-2">{item.tanggal_kembali}</td>
+    <td className=" px-4 py-2">{item.tanggal_kembali}</td>
     )}
-    <td className="border px-4 py-2 capitalize">
+    <td className=" px-4 py-2 capitalize">
         {isPeminjaman
         ? item.status_peminjaman
         : item.status_pengembalian}
     </td>
-    <td className="border px-4 py-2 space-x-2">
+    <td className=" px-4 py-2 space-x-2">
         {(isPeminjaman
         ? item.status_peminjaman
         : item.status_pengembalian) === "pending" && (
@@ -76,7 +108,7 @@ const renderPagination = (links) => (
     <button key={index} disabled={!link.url} onClick={()=> link.url && router.visit(link.url)}
         className={`px-4 py-2 rounded shadow-sm border text-sm ${
         link.active
-        ? "bg-blue-600 text-white"
+        ? "bg-[#1B3C53] text-white font-bold"
         : "bg-white text-gray-700 hover:bg-gray-100"
         }`}
         dangerouslySetInnerHTML={{ __html: link.label }}
@@ -108,7 +140,7 @@ return (
         <button key={tab} onClick={()=> setActiveTab(tab)}
             className={`px-5 py-2 rounded-md font-medium ${
             activeTab === tab
-            ? "bg-blue-600 text-white"
+            ? "bg-blue-500 hover:bg-blue-700 text-white"
             : "bg-gray-200 text-gray-800 hover:bg-gray-300"
             }`}
             >
@@ -126,7 +158,7 @@ return (
             : "/admin/pengembalian/create"
             )
             }
-            className="bg-blue-600 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
+            className="bg-blue-500 text-white px-5 py-2 rounded-md hover:bg-blue-700 transition"
             >
             Tambah{" "}
             {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
@@ -134,28 +166,28 @@ return (
     </div>
 
     {/* Tables */}
-    <div className="overflow-x-auto">
-        <table className="w-full text-sm border border-gray-200 shadow-sm">
-            <thead className="bg-gray-100 text-center text-gray-700">
-                <tr>
-                    <th className="px-4 py-2 border">Nama</th>
-                    <th className="px-4 py-2 border">Buku</th>
-                    <th className="px-4 py-2 border">Tanggal Pinjam</th>
+    <div className="overflow-x-auto  rounded-lg border">
+        <table className="w-full text-sm shadow-sm ">
+            <thead className="text-center text-gray-700">
+                <tr className="bg-[#1B3C53] text-white">
+                    <th className="px-4 py-2 ">Nama</th>
+                    <th className="px-4 py-2 ">Buku</th>
+                    <th className="px-4 py-2 ">Tanggal Pinjam</th>
                     {activeTab === "pengembalian" && (
-                    <th className="px-4 py-2 border">
+                    <th className="px-4 py-2 ">
                         Tenggat Kembali 
                     </th>
                     
                     )}
-                    <th className="px-4 py-2 border">Status</th>
-                    <th className="px-4 py-2 border">Aksi</th>
+                    <th className="px-4 py-2 ">Status</th>
+                    <th className="px-4 py-2 ">Aksi</th>
                 </tr>
             </thead>
             <tbody>
                 {(activeTab === "peminjaman"
                     ? peminjamans.data.length === 0
                         ? (
-                            <tr className="border">
+                            <tr className="">
                                 <td className="p-4 text-center" colSpan={8}>
                                     Tidak ada data peminjaman.
                                 </td>
@@ -166,7 +198,7 @@ return (
                         )
                     : pengembalians.data.length === 0
                         ? (
-                            <tr className="border">
+                            <tr className="">
                                 <td className="p-4 text-center" colSpan={8}>
                                     Tidak ada data pengembalian.
                                 </td>
@@ -179,13 +211,13 @@ return (
             </tbody>
         </table>
 
+    </div>
         {/* Pagination */}
         {renderPagination(
         activeTab === "peminjaman"
         ? peminjamans.links
         : pengembalians.links
         )}
-    </div>
 </div>
 );
 };

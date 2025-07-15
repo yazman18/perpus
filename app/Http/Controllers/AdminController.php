@@ -44,18 +44,19 @@ class AdminController extends Controller
 
         // Map the results to add calculated fields like 'denda'
             $transactions = $data->map(function ($item) {
-            $expectedReturn = \Carbon\Carbon::parse($item->tanggal_kembali);
-$actualReturn = $item->tanggal_pengembalian
-    ? \Carbon\Carbon::parse($item->tanggal_pengembalian)
-    : now();
+                $expectedReturn = \Carbon\Carbon::parse($item->tanggal_kembali);
+                $actualReturn = $item->tanggal_pengembalian
+                    ? \Carbon\Carbon::parse($item->tanggal_pengembalian)
+                    : now();
 
-$selisihHari = $actualReturn->gt($expectedReturn)
-    ? $actualReturn->diffInDays($expectedReturn)
-    : 0;
+                $selisihHari = $actualReturn->gt($expectedReturn)
+                    ? $actualReturn->diffInDays($expectedReturn)
+                    : 0;
 
-$denda = $selisihHari * 1000;
+                $denda = $selisihHari * 1000;
 
             return [
+                'uniqueId'=>$item->book->uniqueId,
                 'id' => $item->id,
                 'nama' => $item->nama,
                 'buku' => $item->book->title,
@@ -129,4 +130,52 @@ $denda = $selisihHari * 1000;
             'aboutData' => $aboutData,
         ]);
     }
+    public function chartData($timeframe)
+{
+    switch ($timeframe) {
+        case 'weekly':
+            $startOfWeek = Carbon::now()->startOfWeek();
+            $data = Peminjaman::selectRaw('DAYNAME(tanggal_pinjam) as day, COUNT(*) as total')
+                ->where('tanggal_pinjam', '>=', $startOfWeek)
+                ->groupBy('day')
+                ->get();
+
+            $labels = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+            $counts = collect($labels)->map(function ($day) use ($data) {
+                return $data->firstWhere('day', $day)?->total ?? 0;
+            });
+            break;
+
+        case 'monthly':
+            $data = Peminjaman::selectRaw('MONTH(tanggal_pinjam) as month, COUNT(*) as total')
+                ->whereYear('tanggal_pinjam', Carbon::now()->year)
+                ->groupBy('month')
+                ->get();
+
+            $labels = collect(range(1, 12))->map(fn($m) => Carbon::create()->month($m)->format('M'));
+            $counts = $labels->map(function ($label, $index) use ($data) {
+                return $data->firstWhere('month', $index + 1)?->total ?? 0;
+            });
+            break;
+
+        case 'yearly':
+            $data = Peminjaman::selectRaw('YEAR(tanggal_pinjam) as year, COUNT(*) as total')
+                ->groupBy('year')
+                ->orderBy('year')
+                ->get();
+
+            $labels = $data->pluck('year');
+            $counts = $data->pluck('total');
+            break;
+
+        default:
+            return response()->json(['labels' => [], 'data' => []]);
+    }
+
+    return response()->json([
+        'labels' => $labels,
+        'data' => $counts,
+    ]);
+}
+
 }

@@ -73,26 +73,27 @@ const ReportAdmin = () => {
                 />
                 <button
                     type="submit"
-                    className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-r-md transition"
+                    className="bg-green-600 hover:bg-green-700 text-white h-11 px-4 py-2 rounded-r-md transition"
                 >
                     Cari
                 </button>
             </form>
 
             {/* Table */}
-            <div className="overflow-x-auto rounded shadow">
-                <table className="w-full text-sm border">
-                    <thead className="bg-gray-100 text-center">
-                        <tr>
-                            <th className="border p-2">No</th>
-                            <th className="border p-2">Judul</th>
-                            <th className="border p-2">Nama</th>
-                            <th className="border p-2">Transaksi</th>
-                            <th className="border p-2">Durasi</th>
-                            <th className="border p-2">Tanggal Pinjam</th>
-                            <th className="border p-2">Tenggat Kembali</th>
-                            <th className="border p-2">Tanggal Kembali</th>
-                            <th className="border p-2">Denda</th>
+            <div className="overflow-x-auto rounded-lg border shadow">
+                <table className="w-full text-sm  ">
+                    <thead className=" text-center">
+                        <tr className="bg-[#1B3C53] text-white">
+                            <th className="p-2">No</th>
+                            <th className="p-2">Nama</th>
+                            <th className="p-2">Unique Id</th>
+                            <th className="p-2">Judul</th>
+                            <th className="p-2">Transaksi</th>
+                            <th className="p-2">Durasi</th>
+                            <th className="p-2">Tanggal Pinjam</th>
+                            <th className="p-2">Tenggat Kembali</th>
+                            <th className="p-2">Tanggal Kembali</th>
+                            <th className="p-2">Denda</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -102,17 +103,14 @@ const ReportAdmin = () => {
                                 <tr
                                     key={item.id}
                                     
-                                    className={`text-center ${
-                                        index % 2 === 0
-                                            ? "bg-white"
-                                            : "bg-gray-50"
-                                    } hover:bg-gray-100 transition`}
+                                    className={`text-center rounded-lg `}
                                 >
-                                    <td className="border p-2">{index + 1}</td>
-                                    <td className="border p-2">{item.buku}</td>
-                                    <td className="border p-2">{item.nama}</td>
-                                    <td className="border p-2">{item.jenis}</td>
-                                    <td className="border p-2">
+                                    <td className=" p-2">{index + 1}</td>
+                                    <td className=" p-2">{item.nama}</td>
+                                    <td className=" p-2">{item.uniqueId}</td>
+                                    <td className=" p-2">{item.buku}</td>
+                                    <td className=" p-2">{item.jenis}</td>
+                                    <td className=" p-2">
                                         {(() => {
                                             if (!item.tanggal_pinjam) {
                                                 return "-";
@@ -138,16 +136,16 @@ const ReportAdmin = () => {
                                             }
                                         })()}
                                     </td>
-                                    <td className="border p-2">
+                                    <td className=" p-2">
                                         {item.tanggal_pinjam}
                                     </td>
-                                    <td className="border p-2">
+                                    <td className=" p-2">
                                         {item.tanggal_kembali ?? "-"}
                                     </td>
-                                    <td className="border p-2">
+                                    <td className=" p-2">
                                         {item.tanggal_pengembalian}
                                     </td>
-                                    <td className="border p-2">
+                                    <td className=" p-2">
                                         {(() => {
                                             const denda = hitungDenda(item.tanggal_kembali, item.tanggal_pengembalian);
                                             return denda > 0
@@ -177,7 +175,7 @@ const ReportAdmin = () => {
                         onClick={() => router.visit(link.url)}
                         className={`px-3 py-1 mx-1 rounded border text-sm ${
                             link.active
-                                ? "bg-black text-white font-semibold"
+                                ? "bg-[#1B3C53] text-white font-semibold"
                                 : "bg-white text-gray-700 hover:bg-gray-100"
                         }`}
                     >

@@ -1,249 +1,210 @@
 import { useState, useEffect } from "react";
 import { Link, usePage } from "@inertiajs/react";
+import { Inertia } from '@inertiajs/inertia';
+
+
+
 import Image from "./Image";
 
 const Navbar = ({ aboutData }) => {
-    const [open, setOpen] = useState(false);
-    const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
-    const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
-    const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
+const [loading, setLoading] = useState(false);
 
-    const { auth } = usePage().props;
-    const isLoggedIn = !!auth?.user;
+const [open, setOpen] = useState(false);
+const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
+const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
+const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
 
-    const toggleDesktopDropdown = () => {
-        setDesktopDropdownOpen((prev) => !prev);
-    };
+const { auth } = usePage().props;
+const isLoggedIn = !!auth?.user;
 
-    const toggleProfileDropdown = () => {
-        setProfileDropdownOpen((prev) => !prev);
-    };
+const toggleDesktopDropdown = () => {
+setDesktopDropdownOpen((prev) => !prev);
+};
 
-    const closeMobileMenu = () => {
-        setOpen(false);
-        setMobileDropdownOpen(false);
-        setProfileDropdownOpen(false);
-    };
+const toggleProfileDropdown = () => {
+setProfileDropdownOpen((prev) => !prev);
+};
 
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 768) {
-                setOpen(false);
-                setMobileDropdownOpen(false);
-            }
-        };
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+const closeMobileMenu = () => {
+setOpen(false);
+setMobileDropdownOpen(false);
+setProfileDropdownOpen(false);
+};
 
-    return (
-        <nav className="sticky top-0 bg-[#2693CE] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-50 text-white">
-            {/* LOGO */}
-            <Link
-                href="/"
-                className="flex items-center gap-3 text-lg md:text-xl font-bold"
+useEffect(() => {
+const handleResize = () => {
+if (window.innerWidth >= 768) {
+setOpen(false);
+setMobileDropdownOpen(false);
+}
+};
+window.addEventListener("resize", handleResize);
+return () => window.removeEventListener("resize", handleResize);
+}, []);
+useEffect(() => {
+const start = () => setLoading(true);
+const finish = () => setLoading(false);
+
+Inertia.on('start', start);
+Inertia.on('finish', finish);
+
+return () => {
+Inertia.off('start', start);
+Inertia.off('finish', finish);
+};
+}, []);
+return (
+<>
+    <nav
+        className="sticky top-0 bg-[#1B3C53] w-full h-16 md:h-20 flex items-center justify-between px-4 md:px-8 z-50 text-white font-sans">
+        {/* LOGO */}
+        <Link href="/" className="flex items-center gap-3 text-lg md:text-xl font-bold">
+        <img src={`/storage/${aboutData?.logo_sekolah ?? "images/logo.png" }`} alt="Logo SMAN 1 Baleendah"
+            style={{ maxWidth: "32px", height: "32px" }} />
+        <span>{aboutData?.nama_sekolah ?? "Nama sekolah belum ada"}</span>
+        </Link>
+
+        {/* Hamburger Icon */}
+        <button onClick={()=> setOpen(!open)}
+            className="md:hidden focus:outline-none z-50"
             >
-                <img
-                    src={`/storage/${aboutData?.logo_sekolah ?? "images/logo.png"}`}
-                    alt="Logo SMAN 1 Baleendah"
-                    style={{ maxWidth: "32px", height: "32px" }}
-                />
-                <span>{aboutData?.nama_sekolah ?? "Nama sekolah belum ada"}</span>
-            </Link>
+            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                {open ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                )}
+            </svg>
+        </button>
 
-            {/* Hamburger Icon */}
-            <button
-                onClick={() => setOpen(!open)}
-                className="md:hidden focus:outline-none z-50"
-            >
-                <svg
-                    className="w-6 h-6 text-black"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
-                >
-                    {open ? (
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M6 18L18 6M6 6l12 12"
-                        />
-                    ) : (
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M4 6h16M4 12h16M4 18h16"
-                        />
-                    )}
-                </svg>
-            </button>
+        {/* Mobile Menu */}
+        <div className={`md:hidden fixed top-16 left-0 w-full bg-[#1B3C53] transition-all duration-300 ${ open
+            ? "max-h-screen py-8" : "max-h-0 overflow-hidden" }`}>
+            <div className="flex flex-col items-center gap-4 text-lg font-semibold">
+                <Link href="/" onClick={closeMobileMenu}>
+                Home
+                </Link>
+                <Link href="/about" onClick={closeMobileMenu}>
+                About
+                </Link>
 
-            {/* Mobile Menu */}
-            <div
-                className={`md:hidden fixed top-16 left-0 w-full bg-[#2693CE] font-bold text-underline transition-all duration-300 ${
-                    open ? "max-h-screen py-8" : "max-h-0 overflow-hidden"
-                }`}
-            >
-                <div className="flex flex-col items-center gap-4 font-medium text-lg">
-                    <Link href="/" onClick={closeMobileMenu}>
-                        Home
-                    </Link>
-                    <Link href="/about" onClick={closeMobileMenu}>
-                        About
-                    </Link>
-
-                    <div className="text-center">
-                        <button
-                            onClick={() =>
-                                setMobileDropdownOpen(!mobileDropdownOpen)
-                            }
-                            className="focus:outline-none"
+                <div className="text-center">
+                    <button onClick={()=>
+                        setMobileDropdownOpen(!mobileDropdownOpen)
+                        }
+                        className="focus:outline-none font-semibold"
                         >
-                            Service ▾
-                        </button>
-                        {mobileDropdownOpen && (
-                            <div className="mt-2 flex flex-col items-start gap-2 text-xs">
-                                <Link href="/katalog" onClick={closeMobileMenu}>
-                                    Katalog
-                                </Link>
-                                <Link
-                                    href="/peminjaman"
-                                    onClick={closeMobileMenu}
-                                >
-                                    Peminjaman
-                                </Link>
-                                <Link
-                                    href="/pengembalian"
-                                    onClick={closeMobileMenu}
-                                >
-                                    Pengembalian
-                                </Link>
-                            </div>
-                        )}
-                    </div>
-
-                    <Link href="/news" onClick={closeMobileMenu}>
-                        News
-                    </Link>
-
-                    {isLoggedIn ? (
-                        <div className="text-center">
-                            <button
-                                onClick={toggleProfileDropdown}
-                                className="focus:outline-none"
-                            >
-                                Profile ▾
-                            </button>
-                            {profileDropdownOpen && (
-                                <div className="mt-2 flex flex-col items-start gap-2 text-sm">
-                                    <Link
-                                        href="/profile"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        Profile
-                                    </Link>
-                                    <Link
-                                        href="/manage-account"
-                                        onClick={closeMobileMenu}
-                                    >
-                                        Manage Account
-                                    </Link>
-                                    <Link
-                                        href="/logout"
-                                        method="post"
-                                        as="button"
-                                        className="w-full items-start px-4 py-2 text-sm"
-                                    >
-                                        Logout
-                                    </Link>
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <Link href="/login" onClick={closeMobileMenu}>
-                            Login
-                        </Link>
-                    )}
-                </div>
-            </div>
-
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center gap-8 font-bold relative">
-                <Link href="/">Home</Link>
-                <Link href="/about">About</Link>
-
-                <div className="relative hidden md:block">
-                    <button
-                        onClick={toggleDesktopDropdown}
-                        className="focus:outline-none"
-                    >
                         Service ▾
                     </button>
-                    {desktopDropdownOpen && (
-                        <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
-                            <Link
-                                href="/katalog"
-                                className="block px-4 py-2 hover:bg-blue-100"
-                            >
-                                Katalog
-                            </Link>
-                            <Link
-                                href="/peminjaman"
-                                className="block px-4 py-2 hover:bg-blue-100"
-                            >
-                                Peminjaman
-                            </Link>
-                            {/* <Link
-                                href="/pengembalian"
-                                className="block px-4 py-2 hover:bg-blue-100"
-                            >
-                                Pengembalian
-                            </Link> */}
-                        </div>
+                    {mobileDropdownOpen && (
+                    <div className="mt-2 flex flex-col items-center gap-2 text-base">
+                        <Link href="/katalog" onClick={closeMobileMenu}>
+                        Katalog
+                        </Link>
+                        <Link href="/peminjaman" onClick={closeMobileMenu}>
+                        Peminjaman
+                        </Link>
+                        <Link href="/pengembalian" onClick={closeMobileMenu}>
+                        Pengembalian
+                        </Link>
+                    </div>
                     )}
                 </div>
 
-                <Link href="/news">News</Link>
+                <Link href="/news" onClick={closeMobileMenu}>
+                News
+                </Link>
 
-                {/* Login/Profile toggle */}
                 {isLoggedIn ? (
-                    <div className="relative">
-                        <button
-                            onClick={toggleProfileDropdown}
-                            className="focus:outline-none"
-                        >
-                            Profile ▾
-                        </button>
-                        {profileDropdownOpen && (
-                            <div className="absolute bg-white text-black rounded shadow-md mt-2 text-left right-0 min-w-[150px] z-50">
-                                <Link
-                                    href="/profile"
-                                    className="block px-4 py-2 hover:bg-blue-100"
-                                >
-                                    Profile
-                                </Link>
-                                <Link
-                                    href="/logout"
-                                    method="post"
-                                    as="button"
-                                    className="block w-full text-left px-4 py-2 hover:bg-blue-100"
-                                >
-                                    Logout
-                                </Link>
-                            </div>
-                        )}
+                <div className="text-center">
+                    <button onClick={toggleProfileDropdown} className="focus:outline-none font-semibold">
+                        Profile ▾
+                    </button>
+                    {profileDropdownOpen && (
+                    <div className="mt-2 flex flex-col items-center gap-2 text-base">
+                        <Link href="/profile" onClick={closeMobileMenu}>
+                        Profile
+                        </Link>
+                        <Link href="/manage-account" onClick={closeMobileMenu}>
+                        Manage Account
+                        </Link>
+                        <Link href="/logout" method="post" as="button" className="px-4 py-2">
+                        Logout
+                        </Link>
                     </div>
+                    )}
+                </div>
                 ) : (
-                    <Link href="/login" className="text-sm">
-                        Login
-                    </Link>
+                <Link href="/login" onClick={closeMobileMenu}>
+                Login
+                </Link>
                 )}
             </div>
-        </nav>
-    );
+        </div>
+
+        {/* Desktop Menu */}
+        <div className="hidden md:flex items-center gap-8 font-semibold text-lg relative">
+            <Link href="/">Home</Link>
+            <Link href="/about">About</Link>
+
+            <div className="relative hidden md:block">
+                <button onClick={toggleDesktopDropdown} className="focus:outline-none">
+                    Service ▾
+                </button>
+                {desktopDropdownOpen && (
+                <div className="absolute bg-white text-black rounded shadow-md mt-2 right-0 min-w-[150px] z-50">
+                    <Link href="/katalog" className="block px-4 py-2 hover:bg-blue-100 text-base">
+                    Katalog
+                    </Link>
+                    <Link href="/peminjaman" className="block px-4 py-2 hover:bg-blue-100 text-base">
+                    Peminjaman
+                    </Link>
+                    {/*
+                    <Link href="/pengembalian" className="block px-4 py-2 hover:bg-blue-100 text-base">
+                    Pengembalian
+                    </Link> */}
+                </div>
+                )}
+            </div>
+
+            <Link href="/news">News</Link>
+
+            {/* Login/Profile toggle */}
+            {isLoggedIn ? (
+            <div className="relative">
+                <button onClick={toggleProfileDropdown} className="focus:outline-none">
+                    Profile ▾
+                </button>
+                {profileDropdownOpen && (
+                <div
+                    className="absolute bg-white text-black rounded shadow-md mt-2 text-left right-0 min-w-[150px] z-50">
+                    <Link href="/profile" className="block px-4 py-2 hover:bg-blue-100 text-base">
+                    Profile
+                    </Link>
+                    <Link href="/logout" method="post" as="button"
+                        className="block w-full text-left px-4 py-2 hover:bg-blue-100 focus:outline-none appearance-none bg-transparent text-base">
+                    Logout
+                    </Link>
+                </div>
+                )}
+            </div>
+            ) : (
+            <Link href="/login">Login</Link>
+            )}
+        </div>
+    </nav>
+    {loading && (
+    <div className="fixed top-0 left-0 w-full h-full bg-black/30 flex items-center justify-center z-[9999]">
+        <div className="loader"></div>
+    </div>
+    )}
+</>
+
+
+
+);
+
 };
 
 export default Navbar;

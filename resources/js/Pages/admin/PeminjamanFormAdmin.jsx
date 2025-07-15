@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, usePage, router } from "@inertiajs/react"; // Inertia hooks to manage form data and routing
+import Swal from 'sweetalert2';
 
 const PeminjamanFormAdmin = ({ books, users }) => {
     const { data, setData, post, reset, errors } = useForm({
@@ -11,14 +12,19 @@ const PeminjamanFormAdmin = ({ books, users }) => {
     });
 
     const [successMessage, setSuccessMessage] = useState(""); // State for success message
-
+    
     const handleSubmit = (e) => {
         e.preventDefault();
 
         // Submit the form via Inertia's post method
         post("/admin/peminjaman", {
             onSuccess: () => {
-                setSuccessMessage("Data berhasil disimpan!"); // Set success message
+               Swal.fire({
+                    icon: 'success',
+                    title: 'Peminjaman berhasil ditambah!',
+                    showConfirmButton: false,
+                    timer: 1500
+                }); // Set success message
                 reset(); // Reset form after submission
                 handleBack();
             },
@@ -29,7 +35,20 @@ const PeminjamanFormAdmin = ({ books, users }) => {
         // Inertia navigation to '/transaction' page
         router.get("/transaction");
     };
-
+        const today = new Date().toISOString().split("T")[0];
+        const calculateReturnDate = (startDate) => {
+            const date = new Date(startDate);
+            date.setDate(date.getDate() + 7); // Menambahkan 7 hari
+            return date.toISOString().split("T")[0]; // Format YYYY-MM-DD
+        };
+    
+        // Mengupdate tanggal_pengembalian ketika tanggal_pinjam berubah
+        useEffect(() => {
+            if (data.tanggal_pinjam) {
+                const returnDate = calculateReturnDate(data.tanggal_pinjam);
+                setData("tanggal_pengembalian", returnDate);
+            }
+        }, [data.tanggal_pinjam, setData]);
     return (
         <div className="min-h-screen bg-gray-100 px-6 py-10">
             <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-md">
@@ -144,6 +163,7 @@ const PeminjamanFormAdmin = ({ books, users }) => {
                         <input
                             type="date"
                             name="tanggal_pinjam"
+                            min={today}
                             value={data.tanggal_pinjam}
                             onChange={(e) =>
                                 setData("tanggal_pinjam", e.target.value)
@@ -156,11 +176,30 @@ const PeminjamanFormAdmin = ({ books, users }) => {
                             </p>
                         )}
                     </div>
-
+                    <div>
+                        <label
+                            htmlFor="tanggal_pengembalian"
+                            className="block text-sm font-semibold"
+                        >
+                            Tenggat Pengembalian
+                        </label>
+                        <input
+                            type="date"
+                            name="tanggal_pengembalian"
+                            value={data.tanggal_pengembalian}
+                            disabled // Tidak bisa diubah karena otomatis terisi
+                            className="w-full p-2 border rounded"
+                        />
+                        {errors.tanggal_pengembalian && (
+                            <p className="text-red-500 text-sm">
+                                {errors.tanggal_pengembalian}
+                            </p>
+                        )}
+                    </div>
                     {/* Submit Button */}
                     <button
                         type="submit"
-                        className="px-4 py-2 bg-green-600 text-white rounded"
+                        className="px-4 py-2 bg-green-600 hover:bg-green-700 cursor-pointer text-white rounded"
                     >
                         Pinjam Buku
                     </button>
@@ -169,7 +208,7 @@ const PeminjamanFormAdmin = ({ books, users }) => {
                     <button
                         type="button"
                         onClick={handleBack}
-                        className="ml-4 px-4 py-2 bg-gray-600 text-white rounded"
+                        className="ml-4 px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded"
                     >
                         Kembali
                     </button>

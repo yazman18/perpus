@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useForm, usePage, router } from '@inertiajs/react';
 import AdminLayout from "../../Layouts/AdminLayout";
+import Swal from 'sweetalert2';
+
 
 const AboutAdmin = () => {
 const [showModal, setShowModal] = useState(false);
@@ -154,33 +156,55 @@ setData({
 };
 
 const handleDelete = (id) => {
-    if (confirm("Apakah Anda yakin ingin menghapus data ini?")) {
-        router.delete(`/admin/about/${id}`, {
-            onSuccess: () => {
-                alert("✅ Data berhasil dihapus");
-            },
-            onError: () => {
-                alert("❌ Gagal menghapus data");
-            },
-        });
-    }
+      Swal.fire({
+                title: 'Yakin ingin menghapus buku ini?',
+                text: "Tindakan ini tidak bisa dibatalkan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    router.delete(`/admin/about/${id}`, {
+                        onSuccess: () => {
+                            setBooks((prev) => prev.filter((b) => b.id !== id));
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Buku berhasil dihapus!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                        }
+                    });
+                }
+            });
+   
 };
 
 // Fungsi ketika tombol Simpan ditekan
 const handleSubmit = (e) => {
     e.preventDefault();
 
-    const options = {
-        forceFormData: true,
-        onSuccess: () => {
+   const options = {
+    forceFormData: true,
+    onSuccess: () => {
         reset();
+        Swal.fire({
+            icon: 'success',
+            title: isEditing ? 'Data berhasil diperbarui!' : 'Data berhasil ditambahkan!',
+            showConfirmButton: false,
+            timer: 1500
+        });
+
         setShowModal(false);
         setEditId(null);
         setIsEditing(false);
-        alert("✅ Data berhasil disimpan");
     },
     onError: () => alert("❌ Gagal menyimpan data."),
 };
+
 
     if (isEditing) {
         router.post(`/admin/about/${editId}`, data, options); // untuk update
@@ -191,7 +215,7 @@ const handleSubmit = (e) => {
 
 return (
 <div className="p-6">
-    <h1 className="text-3xl font-bold mb-6 text-gray-800">
+    <h1 className="text-3xl  mb-6 text-gray-800 font-bold">
         🏫 Tentang Sekolah
     </h1>
 
@@ -213,7 +237,7 @@ return (
             }}
             className={`px-5 py-2 rounded-md transition ${
             aboutData.length < 1
-            ? "bg-blue-500 hover:bg-blue-600 text-white" 
+            ? "bg-blue-500 hover:bg-blue-700 text-white" 
             : "hidden"
 
             }`}
@@ -223,7 +247,7 @@ return (
         </button>
         <div className="flex flex-row gap-2">
             <button onClick={()=> handleEdit(aboutData)}
-                className="px-5 py-2 rounded-md transition bg-yellow-500 text-white hover:bg-yellow-600 "
+                className="px-5 py-2 rounded-md transition bg-yellow-500 text-white hover:bg-yellow-700 "
                 >
                 Edit
             </button>
@@ -232,42 +256,42 @@ return (
     </div>
 
     {/* Tabel Konten */}
-    <div className="w-full overflow-x-auto">
-        <table className="min-w-6/6 w-fit text-sm border border-gray-200 shadow-sm">
-            <tbody className="bg-gray-100 text-left text-gray-700">
+    <div className="w-full overflow-x-auto rounded-lg border ">
+        <table className="min-w-6/6 w-fit text-sm  shadow-sm">
+            <tbody className=" text-left text-gray-700">
                 {aboutData && Object.keys(aboutData).length > 0 ? (
                 <>
                     <tr>
-                        <th className="px-4 py-2 border">Nama Sekolah</th>
-                        <td className="border px-2 py-1 max-w-[200px] truncate">{aboutData.nama_sekolah}</td>
+                        <th className="px-4 py-2 border-b  border-r">Nama Sekolah</th>
+                        <td className="  px-2 py-1 max-w-[200px] truncate">{aboutData.nama_sekolah}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Judul</th>
-                        <td className="border px-2 py-1 max-w-[200px] truncate">{aboutData.judul}</td>
+                        <th className="px-4 py-2 border-b border-r">Judul</th>
+                        <td className=" border-t px-2 py-1 max-w-[200px] truncate">{aboutData.judul}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Sub Judul</th>
-                        <td className="border px-2 py-1 max-w-[200px] truncate">{aboutData.sub_judul}</td>
+                        <th className="px-4 py-2 border-b border-r">Sub Judul</th>
+                        <td className=" border-t px-2 py-1 max-w-[200px] truncate">{aboutData.sub_judul}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">About</th>
-                        <td className="border px-2 py-1 max-w-[200px] truncate">{aboutData.about}</td>
+                        <th className="px-4 py-2 border-b border-r">About</th>
+                        <td className="border-l border-t px-2 py-1 max-w-[200px] truncate">{aboutData.about}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Deskripsi</th>
-                        <td className="border px-2 py-1 max-w-[200px] truncate">{aboutData.deskripsi}</td>
+                        <th className="px-4 py-2 border-b border-r">Deskripsi</th>
+                        <td className="border-l border-t px-2 py-1 max-w-[200px] truncate">{aboutData.deskripsi}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Alamat</th>
-                        <td className="border px-2 py-1 max-w-[200px] truncate">{aboutData.alamat}</td>
+                        <th className="px-4 py-2 border-b border-r">Alamat</th>
+                        <td className="border-l border-t px-2 py-1 max-w-[200px] truncate">{aboutData.alamat}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">No. HP</th>
-                        <td className="border px-2 py-1">{aboutData.no_hp}</td>
+                        <th className="px-4 py-2 border-b border-r">No. HP</th>
+                        <td className="border-l border-t px-2 py-1">{aboutData.no_hp}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Website</th>
-                        <td className="border px-2 py-1">
+                        <th className="px-4 py-2 border-b border-r">Website</th>
+                        <td className="border-l border-t px-2 py-1">
                             <a href={aboutData.website} target="_blank" rel="noopener noreferrer"
                                 className="text-blue-600 underline">
                                 {aboutData.website}
@@ -275,24 +299,24 @@ return (
                         </td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Email</th>
-                        <td className="border px-2 py-1">{aboutData.email}</td>
+                        <th className="px-4 py-2 border-b border-r">Email</th>
+                        <td className="border-l border-t px-2 py-1">{aboutData.email}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Instagram</th>
-                        <td className="border px-2 py-1">{aboutData.instagram}</td>
+                        <th className="px-4 py-2 border-b border-r">Instagram</th>
+                        <td className="border-l border-t px-2 py-1">{aboutData.instagram}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Jam Operasional 1</th>
-                        <td className="border px-2 py-1">{aboutData.jam_operasional_1}</td>
+                        <th className="px-4 py-2 border-b border-r">Jam Operasional 1</th>
+                        <td className="border-l border-t px-2 py-1">{aboutData.jam_operasional_1}</td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Jam Operasional 2</th>
-                        <td className="border px-2 py-1">{aboutData.jam_operasional_2}</td>
+                        <th className="px-4 py-2 border-b border-r">Jam Operasional 2</th>
+                        <td className="border-l border-t px-2 py-1">{aboutData.jam_operasional_2}</td>
                     </tr>
-                    <tr className="border">
-                        <th className="px-4 py-2 border">Maps</th>
-                        <td className=" px-2 py-1 flex justify-center">
+                    <tr className="">
+                        <th className="px-4 py-2 border-b border-r ">Maps</th>
+                        <td className=" px-2 py-1 flex justify-center  border-t">
                             {aboutData.maps ? (
                             <iframe src={aboutData.maps} width="150" height="150" className="w-100 h-60"
                                 allowFullScreen="" loading="lazy" referrerPolicy="no-referrer-when-downgrade
@@ -303,35 +327,35 @@ return (
                         </td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Logo Sekolah</th>
-                        <td className="border px-2 py-1">
+                        <th className="px-4 py-2 border-b border-r">Logo Sekolah</th>
+                        <td className="border-l border-t px-2 py-1">
                             <img src={`/storage/${aboutData.logo_sekolah}`} alt="Logo Sekolah"
                                 className="size-fit mx-auto" />
                         </td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Profil Sekolah</th>
-                        <td className="border px-2 py-1">
+                        <th className="px-4 py-2 border-b border-r">Profil Sekolah</th>
+                        <td className="border-l border-t px-2 py-1">
                             <img src={`/storage/${aboutData.gambar}`} alt="Profil Sekolah"
                                 className="w-100 h-60 mx-auto" />
                         </td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Gambar Struktur</th>
-                        <td className="border px-2 py-1">
+                        <th className="px-4 py-2 border-b border-r">Gambar Struktur</th>
+                        <td className="border-l border-t px-2 py-1">
                             <img src={`/storage/${aboutData.gambar_struktur}`} alt="Gambar Struktur"
                                 className="w-100 h-60 mx-auto" />
                         </td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Barcode</th>
-                        <td className="border px-2 py-1">
+                        <th className="px-4 py-2 border-b border-r">Barcode</th>
+                        <td className="border-l border-t px-2 py-1">
                             <img src={`/storage/${aboutData.barcode}`} alt="Barcode" className="size-fit mx-auto" />
                         </td>
                     </tr>
                     <tr>
-                        <th className="px-4 py-2 border">Copyright</th>
-                        <td className="border px-2 py-1">{aboutData.copyright}</td>
+                        <th className="px-4 py-2 border-r">Copyright</th>
+                        <td className="border-l border-t px-2 py-1">{aboutData.copyright}</td>
                     </tr>
 
                 </>
@@ -364,7 +388,7 @@ return (
                     <label className="block font-medium">Nama Sekolah</label>
                     <input type="text" value={data.nama_sekolah} onChange={(e)=> setData("nama_sekolah",
                     e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                    className="w-full px-4 py-2 border-b border-r rounded-md focus:outline-none focus:ring focus:border-blue-300"
                     placeholder="Masukkan Nama Sekolah"
                     />
                 </div>
@@ -372,7 +396,7 @@ return (
                 <div>
                     <label className="block font-medium">Judul</label>
                     <input type="text" value={data.judul} onChange={(e)=> setData("judul", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                    className="w-full px-4 py-2 border-b border-r rounded-md focus:outline-none focus:ring focus:border-blue-300"
                     placeholder="Masukkan Judul"
                     />
                 </div>
@@ -380,7 +404,7 @@ return (
                 <div>
                     <label className="block font-medium">Judul 2</label>
                     <input type="text" value={data.sub_judul} onChange={(e)=> setData("sub_judul", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan Judul 2"
                     />
                 </div>
@@ -388,7 +412,7 @@ return (
                 <div>
                     <label className="block font-medium">About</label>
                     <textarea rows="4" value={data.about} onChange={(e)=> setData("about", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan About"
                     />
                 </div>
@@ -396,7 +420,7 @@ return (
                 <div>
                     <label className="block font-medium">Deskripsi Sekolah</label>
                     <textarea rows="4"  value={data.deskripsi} onChange={(e)=> setData("deskripsi", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan Deskripsi"
                     />
                 </div>
@@ -404,7 +428,7 @@ return (
                 <div>
                     <label className="block font-medium">Alamat</label>
                     <textarea rows="4" value={data.alamat} onChange={(e)=> setData("alamat", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan Alamat"
                     />
                 </div>
@@ -412,7 +436,7 @@ return (
                 <div>
                     <label className="block font-medium">No. HP</label>
                     <input type="text"  value={data.no_hp} onChange={(e)=> setData("no_hp", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan No. HP"
                     />
                 </div>
@@ -420,7 +444,7 @@ return (
                 <div>
                     <label className="block font-medium">Link Website</label>
                     <input type="text" value={data.website} onChange={(e)=> setData("website", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan Link Website"
                     />
                 </div>
@@ -428,7 +452,7 @@ return (
                 <div>
                     <label className="block font-medium">Email</label>
                     <input type="email" value={data.email} onChange={(e)=> setData("email", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan Email"
                     />
                 </div>
@@ -436,7 +460,7 @@ return (
                 <div>
                     <label className="block font-medium">Instagram</label>
                     <input type="text" value={data.instagram} onChange={(e)=> setData("instagram", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan Instagram"
                     />
                 </div>
@@ -445,7 +469,7 @@ return (
                     <label className="block font-medium">Jam Operasional 1</label>
                     <input type="text" value={data.jam_operasional_1} onChange={(e)=> setData("jam_operasional_1",
                     e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Contoh: Senin - Jumat: 07.00 - 13.00 WIB"
                     />
                 </div>
@@ -454,7 +478,7 @@ return (
                     <label className="block font-medium">Jam Operasional 2</label>
                     <input type="text" value={data.jam_operasional_2} onChange={(e)=> setData("jam_operasional_2",
                     e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Contoh: Sabtu - Minggu: Libur"
                     />
                 </div>
@@ -462,7 +486,7 @@ return (
                 <div>
                     <label className="block font-medium">Maps</label>
                     <textarea rows="5"  type="text" value={data.maps} onChange={(e)=> setData("maps", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Contoh: https://www.google.com/maps/embed?pb=... (ambil dari atribut src iframe Google
                     Maps)"
                     />
@@ -471,7 +495,7 @@ return (
                 <div>
                     <label className="block font-medium">Copyright</label>
                     <input type="text" value={data.copyright} onChange={(e)=> setData("copyright", e.target.value)}
-                    className="w-full px-4 py-2 border rounded-md"
+                    className="w-full px-4 py-2 border-b border-r rounded-md"
                     placeholder="Masukkan Copyright"
                     />
                 </div>
@@ -489,7 +513,7 @@ return (
                     />
                     <button
                         type="button"
-                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-700"
                         onClick={handlePreviewLogo}
                         disabled={!data.logo_sekolah && !(isEditing && aboutData.logo_sekolah)}
                     >
@@ -516,7 +540,7 @@ return (
                     />
                     <button
                         type="button"
-                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-700"
                         onClick={handlePreviewGambar}
                         disabled={!data.gambar && !(isEditing && aboutData.gambar)}
                     >
@@ -542,7 +566,7 @@ return (
                     />
                     <button
                         type="button"
-                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-700"
                         onClick={handlePreviewStruktur}
                         disabled={!data.gambar_struktur && !(isEditing && aboutData.gambar_struktur)}
                     >
@@ -568,7 +592,7 @@ return (
                     />
                     <button
                         type="button"
-                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        className="mt-2 px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-700"
                         onClick={handlePreviewBarcode}
                         disabled={!data.barcode && !(isEditing && aboutData.barcode)}
                     >
@@ -589,7 +613,7 @@ return (
                         Batal
                     </button>
                     <button type="submit" disabled={processing}
-                        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
                         Simpan
                     </button>
                 </div>

@@ -30,21 +30,21 @@ const Homepage = ({ news }) => {
 
     return (
         <div className="w-full min-h-screen p-5 md:p-10 bg-gray-100 font-sans">
-            <h1 className="text-3xl md:text-5xl italic font-bold text-center mb-4 text-blue-900 font-montserrat">
+            <h1 className="text-3xl md:text-5xl font-bold italic  font-montserrat text-center mb-4 text-[#1B3C53] transition-all duration-500 ease-in-out">
                 {aboutData?.judul ?? "Judul belum tersedia"}
             </h1>
 
-            <p className="text-sm md:text-md italic font-bold text-center mb-10 text-gray-700 font-montserrat">
+            <p className="text-sm md:text-md  italic  font-bold text-center mb-10 text-gray-700 font-montserrat">
                 {aboutData?.sub_judul ?? "Welcome! This is an official library website of SMAN 1 Baleendah"}
             </p>
 
             <div className="mb-8 mt-20">
                 <div className="flex flex-col md:flex-row md:gap-28 items-center">
-                    <div className="md:w-1/2 ml-10">
-                        <h2 className="text-xl md:text-3xl font-bold mb-4 text-gray-800 font-plusjakarta">
+                    <div className="md:w-1/2 ml-10 text-left">
+                        <h2 className="text-xl md:text-3xl font-bold mb-4 text-[#1B3C53] font-plusjakarta">
                             About Us
                         </h2>
-                        <p className="text-gray-700 leading-relaxed text-justify p-1 font-plusjakarta">
+                        <p className="text-[#1B3C53] leading-relaxed text-justify font-plusjakarta">
                             {aboutData?.about ?? "Deskripsi perpustakaan belum tersedia."}
                         </p>
                     </div>
@@ -60,7 +60,7 @@ const Homepage = ({ news }) => {
             <hr className="border-t-2 border-gray-300 my-12" />
 
             <div className="relative w-full">
-                <h2 className="text-4xl font-bold mb-6 text-center text-gray-800">
+                <h2 className="text-4xl font-bold mb-6 text-center text-[#1B3C53]">
                     News
                 </h2>
                 <div className="relative overflow-hidden">

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { usePage, router } from "@inertiajs/react";
 import AdminLayout from "../../Layouts/AdminLayout";
+import Swal from 'sweetalert2';
+
 
 const PengembalianFormAdmin = () => {
     const { peminjamans } = usePage().props; // Dapatkan peminjaman yang status pengembaliannya "belum melakukan pengembalian"
@@ -16,6 +18,12 @@ const PengembalianFormAdmin = () => {
                 {
                     onSuccess: () => {
                         // Setelah berhasil, arahkan kembali ke halaman transaksi admin
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pengembalian Berhasil Dilakukan',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }); // Set success message
                         router.get("/transaction");
                     },
                 }
@@ -113,7 +121,7 @@ const PengembalianFormAdmin = () => {
             <div className="mt-4">
                 <button
                     onClick={() => router.visit("/transaction")}
-                    className="bg-blue-600 text-white px-4 py-2 rounded"
+                    className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                 >
                     Kembali ke Transaksi Admin
                 </button>

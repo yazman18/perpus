@@ -32,7 +32,7 @@ const PeminjamanPage = ({ peminjamans }) => {
     return (
         <div className="min-h-screen bg-gray-100 px-6 py-10">
             <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-md">
-                <h1 className="text-2xl font-bold mb-4">Peminjaman</h1>
+                <h1 className="text-2xl font-bold mb-4 text-[#1B3C53]">Peminjaman</h1>
 
                 {flash.success && (
                     <div className="p-2 mb-4 bg-green-100 text-green-700 rounded">
@@ -42,12 +42,12 @@ const PeminjamanPage = ({ peminjamans }) => {
 
                 {!peminjamans.length && (
                     <div className="text-center py-10">
-                        <p className="mb-4 text-gray-600">
+                        <p className="mb-4 text-[#1B3C53]">
                             Tidak ada buku yang dipinjam
                         </p>
                         <Link
                             href="/katalog"
-                            className="px-4 py-2 bg-blue-600 text-white rounded"
+                            className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
                         >
                             Pinjam Buku
                         </Link>
@@ -56,7 +56,7 @@ const PeminjamanPage = ({ peminjamans }) => {
 
                 {!!peminjamans.length && (
                     <div>
-                        <h2 className="text-lg font-semibold mb-2">
+                        <h2 className="text-lg font-semibold mb-2 text-[#1B3C53]">
                             Daftar Buku yang Dipinjam
                         </h2>
                         {peminjamans.map((item) => {
@@ -86,7 +86,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                             return (
                                 <div
                                     key={item.id}
-                                    className="border p-4 my-2 bg-white rounded shadow"
+                                    className=" p-4 my-2 bg-white rounded-lg shadow-2xl"
                                 >
                                     <h2 className="text-lg font-bold">
                                         {item.book?.title}
@@ -176,7 +176,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                                                                     item.id
                                                                 );
                                                             }}
-                                                            className="bg-green-600 text-white px-4 py-2 rounded"
+                                                            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
                                                         >
                                                             Kembalikan Buku
                                                         </button>
@@ -187,7 +187,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                                                                     item.id
                                                                 )
                                                             }
-                                                            className="bg-blue-600 text-white px-4 py-2 rounded"
+                                                            className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                                                         >
                                                             Perpanjang
                                                         </button>
@@ -214,7 +214,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                 <div className="mt-6 text-center">
                     <Link
                         href="/katalog"
-                        className="px-4 py-2 bg-blue-600 text-white rounded"
+                        className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
                     >
                         Pinjam Buku
                     </Link>

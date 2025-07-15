@@ -51,7 +51,7 @@ const KatalogPage = () => {
                     <span className="text-gray-800 font-medium">Katalog</span>
                 </div>
 
-                <h1 className="text-3xl md:text-4xl mb-2 font-semibold font-inter">
+                <h1 className="text-3xl md:text-4xl mb-2 font-semibold font-inter text-[#1B3C53]">
                     Katalog Perpustakaan{" "}
                     <span className="font-bold font-inter">
                         SMAN 1 Baleendah
@@ -77,11 +77,11 @@ const KatalogPage = () => {
                         placeholder="Search here..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="flex-grow px-4 py-3 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="flex-grow px-4 py-3 border rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-green-600"
                     />
                     <button
                         onClick={handleSearch}
-                        className="px-8 py-3 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500"
+                        className="px-8 py-3 bg-green-600 text-white font-semibold rounded-md shadow-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600"
                     >
                         Search
                     </button>
@@ -102,7 +102,7 @@ const KatalogPage = () => {
                                 h={240}
                                 className="w-full h-[200px] items-center content-center justify-center object-fill mb-3 rounded-lg "
                             />
-                            <h4 className="text-sm font-bold text-left text-[#165BAA]">
+                            <h4 className="text-sm font-bold text-center text-[#165BAA]">
                                 {book.title}
                                 
                             </h4>

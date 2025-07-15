@@ -2,25 +2,38 @@ import { useState } from "react";
 import { Link } from "@inertiajs/react";
 import AdminLayout from "../../Layouts/AdminLayout";
 import { usePage, router } from "@inertiajs/react";
+import Swal from 'sweetalert2';
 
 const NewsIndex = ({ news }) => {
     const { flash } = usePage().props;
     const [loading, setLoading] = useState(false);
 
     const handleDelete = (id) => {
-        if (window.confirm("Apakah Anda yakin ingin menghapus berita ini?")) {
-            setLoading(true); // Show loading state
-            router.delete(`/news/${id}`, {
-                onSuccess: () => {
-                    alert("Berita berhasil dihapus.");
-                    setLoading(false); // Hide loading state
-                },
-                onError: () => {
-                    alert("Terjadi kesalahan saat menghapus berita.");
-                    setLoading(false); // Hide loading state
-                },
-            });
-        }
+        Swal.fire({
+                    title: 'Yakin ingin menghapus Berita ini?',
+                    text: "Tindakan ini tidak bisa dibatalkan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        router.delete(`/news/${id}`, {
+                            onSuccess: () => {
+                              
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'Berita berhasil dihapus!',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                            }
+                        });
+                    }
+                });
+       
     };
 
     return (
@@ -44,7 +57,7 @@ const NewsIndex = ({ news }) => {
                             {/* Edit Button */}
                             <Link
                                 href={`/news/edit/${item.id}`}
-                                className="bg-blue-600 text-white px-4 py-2 rounded"
+                                className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                             >
                                 Edit
                             </Link>
@@ -52,7 +65,7 @@ const NewsIndex = ({ news }) => {
                             {/* Delete Button */}
                             <button
                                 onClick={() => handleDelete(item.id)}
-                                className="bg-red-600 text-white px-4 py-2 rounded"
+                                className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded"
                                 disabled={loading} // Disable delete button while loading
                             >
                                 {loading ? "Menghapus..." : "Hapus"}

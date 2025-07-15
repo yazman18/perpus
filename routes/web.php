@@ -78,6 +78,8 @@ Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
 
 Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
     Route::get('/admin', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/admin/chart-data/{timeframe}', [AdminController::class, 'chartData']);
+
     Route::get('/addbook', function () {
     $aboutData = About::first(); // Ambil data pertama dari tabel about
     return Inertia::render('admin/Addbook', [
