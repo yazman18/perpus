@@ -39,18 +39,7 @@ const BookDetail = ({ book, books }) => {
                     <div className="w-full md:w-2/3 flex flex-col">
                         {/* Judul + Button */}
                         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                            <div>
-                                <h1 className="text-3xl font-bold">
-                                    {book.title}
-                                </h1>
-                                <p className="text-sm text-gray-700 mt-1">
-                                    By{" "}
-                                    <span className="text-blue-600 font-medium">
-                                        {book.author}
-                                    </span>{" "}
-                                    | ⭐ 4,5 ★
-                                </p>
-                            </div>
+                           
 
                             {/* Button & Status */}
                             <div className="text-right">
@@ -98,12 +87,12 @@ const BookDetail = ({ book, books }) => {
                                     </div>
                                     <div>: {book.title}</div>
                                 </div>
-                                <div className="flex">
+                                {/* <div className="flex">
                                     <div className="w-40 font-semibold">
                                         Format
                                     </div>
                                     <div>: 15x23cm</div>
-                                </div>
+                                </div> */}
                                 <div className="flex">
                                     <div className="w-40 font-semibold">
                                         ISBN
