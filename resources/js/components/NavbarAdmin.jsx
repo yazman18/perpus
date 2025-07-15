@@ -18,6 +18,11 @@ const NavbarAdmin = ({ toggleSidebar }) => {
             {
                 preserveScroll: true,
                 preserveState: true,
+                onSuccess: () => {
+                    router.get('/transaction');
+                    setShowNotifications(false);
+                },
+                
             }
         );
     };
@@ -43,7 +48,7 @@ const NavbarAdmin = ({ toggleSidebar }) => {
                     onClick={toggleNotificationDropdown}
                     className="relative"
                 >
-                    <FaBell size={20} className="text-gray-700" />
+                    <FaBell size={20} className="text-white" />
                     {notifications.filter((n) => !n.read).length > 0 && (
                         <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                             {notifications.filter((n) => !n.read).length}

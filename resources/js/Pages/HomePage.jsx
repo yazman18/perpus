@@ -30,7 +30,7 @@ const Homepage = ({ news }) => {
 
     return (
         <div className="w-full min-h-screen p-5 md:p-10 bg-gray-100 font-sans">
-            <h1 className="text-3xl md:text-5xl font-extrabold italic font-header text-center mb-4 text-[#1B3C53] font-montserrat transition-all duration-500 ease-in-out">
+            <h1 className="text-3xl md:text-5xl font-extrabold italic font-montserrat text-center mb-4 text-[#1B3C53] transition-all duration-500 ease-in-out">
                 {aboutData?.judul ?? "Judul belum tersedia"}
             </h1>
 
