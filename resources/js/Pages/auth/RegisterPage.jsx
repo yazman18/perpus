@@ -71,17 +71,17 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                        <div  className="text-left">
-                            <label className="block text-gray-700 text-sm mb-1">Alamat</label>
-                            <input
-                                type="text"
-                                name="alamat"
-                                value={data.alamat}
-                                onChange={handleChange}
-                                required
-                                className="w-full border border-gray-300 px-4 py-2 rounded"
-                            />
-                        </div>
+                            {/* <div  className="text-left">
+                                <label className="block text-gray-700 text-sm mb-1">Alamat</label>
+                                <input
+                                    type="text"
+                                    name="alamat"
+                                    value={data.alamat}
+                                    onChange={handleChange}
+                                    required
+                                    className="w-full border border-gray-300 px-4 py-2 rounded"
+                                />
+                            </div> */}
 
                         <div  className="text-left">
                             <label className="block text-gray-700 text-sm mb-1">Tanggal Lahir</label>
