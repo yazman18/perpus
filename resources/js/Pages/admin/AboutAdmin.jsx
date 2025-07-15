@@ -388,7 +388,7 @@ return (
                     <label className="block font-medium">Nama Sekolah</label>
                     <input type="text" value={data.nama_sekolah} onChange={(e)=> setData("nama_sekolah",
                     e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                     placeholder="Masukkan Nama Sekolah"
                     />
                 </div>
@@ -396,7 +396,7 @@ return (
                 <div>
                     <label className="block font-medium">Judul</label>
                     <input type="text" value={data.judul} onChange={(e)=> setData("judul", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md focus:outline-none focus:ring focus:border-blue-300"
+                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
                     placeholder="Masukkan Judul"
                     />
                 </div>
@@ -404,7 +404,7 @@ return (
                 <div>
                     <label className="block font-medium">Judul 2</label>
                     <input type="text" value={data.sub_judul} onChange={(e)=> setData("sub_judul", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Judul 2"
                     />
                 </div>
@@ -412,7 +412,7 @@ return (
                 <div>
                     <label className="block font-medium">About</label>
                     <textarea rows="4" value={data.about} onChange={(e)=> setData("about", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan About"
                     />
                 </div>
@@ -420,7 +420,7 @@ return (
                 <div>
                     <label className="block font-medium">Deskripsi Sekolah</label>
                     <textarea rows="4"  value={data.deskripsi} onChange={(e)=> setData("deskripsi", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Deskripsi"
                     />
                 </div>
@@ -428,7 +428,7 @@ return (
                 <div>
                     <label className="block font-medium">Alamat</label>
                     <textarea rows="4" value={data.alamat} onChange={(e)=> setData("alamat", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Alamat"
                     />
                 </div>
@@ -436,7 +436,7 @@ return (
                 <div>
                     <label className="block font-medium">No. HP</label>
                     <input type="text"  value={data.no_hp} onChange={(e)=> setData("no_hp", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan No. HP"
                     />
                 </div>
@@ -444,7 +444,7 @@ return (
                 <div>
                     <label className="block font-medium">Link Website</label>
                     <input type="text" value={data.website} onChange={(e)=> setData("website", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Link Website"
                     />
                 </div>
@@ -452,7 +452,7 @@ return (
                 <div>
                     <label className="block font-medium">Email</label>
                     <input type="email" value={data.email} onChange={(e)=> setData("email", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Email"
                     />
                 </div>
@@ -460,7 +460,7 @@ return (
                 <div>
                     <label className="block font-medium">Instagram</label>
                     <input type="text" value={data.instagram} onChange={(e)=> setData("instagram", e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Masukkan Instagram"
                     />
                 </div>
@@ -469,7 +469,7 @@ return (
                     <label className="block font-medium">Jam Operasional 1</label>
                     <input type="text" value={data.jam_operasional_1} onChange={(e)=> setData("jam_operasional_1",
                     e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Contoh: Senin - Jumat: 07.00 - 13.00 WIB"
                     />
                 </div>
@@ -478,7 +478,7 @@ return (
                     <label className="block font-medium">Jam Operasional 2</label>
                     <input type="text" value={data.jam_operasional_2} onChange={(e)=> setData("jam_operasional_2",
                     e.target.value)}
-                    className="w-full px-4 py-2 border-b border-r rounded-md"
+                    className="w-full px-4 py-2 border rounded-md"
                     placeholder="Contoh: Sabtu - Minggu: Libur"
                     />
                 </div>
