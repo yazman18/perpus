@@ -28,7 +28,7 @@ return new class extends Migration
         DB::table('users')->insert([
             [
                 'name' => 'Admin Utama',
-                'alamat' => 'Jl. Contoh No.1',
+                // 'alamat' => 'Jl. Contoh No.1',
                 'tanggal_lahir' => '1990-01-01',
                 'email' => 'admin@example.com',
                 'id_number' => 'ADM001',
@@ -39,7 +39,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Siswa Satu',
-                'alamat' => 'Jl. Pelajar No.2',
+                // 'alamat' => 'Jl. Pelajar No.2',
                 'tanggal_lahir' => '2005-05-10',
                 'email' => 'siswa@example.com',
                 'id_number' => 'SIS001',
@@ -50,7 +50,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Guru Hebat',
-                'alamat' => 'Jl. Pendidikan No.3',
+                // 'alamat' => 'Jl. Pendidikan No.3',
                 'tanggal_lahir' => '1985-03-20',
                 'email' => 'guru@example.com',
                 'id_number' => 'GUR001',
