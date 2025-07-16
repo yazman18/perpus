@@ -92,7 +92,7 @@ const ReportAdmin = () => {
                             <th className="p-2">Durasi</th>
                             <th className="p-2">Tanggal Pinjam</th>
                             <th className="p-2">Tenggat Kembali</th>
-                            <th className="p-2">Tanggal Kembali</th>
+                            {/* <th className="p-2">Tanggal Kembali</th> */}
                             <th className="p-2">Denda</th>
                         </tr>
                     </thead>
@@ -142,9 +142,9 @@ const ReportAdmin = () => {
                                     <td className=" p-2">
                                         {item.tanggal_kembali ?? "-"}
                                     </td>
-                                    <td className=" p-2">
+                                    {/* <td className=" p-2">
                                         {item.tanggal_pengembalian}
-                                    </td>
+                                    </td> */}
                                     <td className=" p-2">
                                         {(() => {
                                             const denda = hitungDenda(item.tanggal_kembali, item.tanggal_pengembalian);

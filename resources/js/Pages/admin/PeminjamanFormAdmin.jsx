@@ -50,8 +50,8 @@ const PeminjamanFormAdmin = ({ books, users }) => {
             }
         }, [data.tanggal_pinjam, setData]);
     return (
-        <div className="min-h-screen bg-gray-100 px-6 py-10">
-            <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow-md">
+        <div className="min-h-screen  px-6 py-10">
+            <div className="max-w-4xl mx-auto  p-6 rounded shadow-md">
                 <h1 className="text-2xl font-bold mb-4">
                     Form Peminjaman Buku oleh Admin
                 </h1>

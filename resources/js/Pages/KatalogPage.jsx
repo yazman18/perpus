@@ -102,32 +102,35 @@ const KatalogPage = () => {
                                 h={240}
                                 className="w-full h-[200px] items-center content-center justify-center object-fill mb-3 rounded-lg "
                             />
-                            <h4 className="text-sm font-bold text-center text-[#165BAA]  mb-1">
-                                {book.title}
-                                
-                            </h4>
-                            <div className=" w-full">
-                                <p className="text-xs text-left text-[#1E81B0] ">
-                                  by  {book.author} 
-                                </p>
-                                {book.description && (
-                                    <p className="text-xs mt-2 text-[#0B2545] text-justify">
-                                        {book.description.length > 100
-                                            ? book.description.substring(0, 40) +
-                                            "..."
-                                            : book.description}
+                            <div className="flex flex-col">
+                                <div className="title  items-center">
+                                    <h4 className="text-sm font-bold  text-[#165BAA] h-auto   mb-1 line-clamp-2 ">
+                                        {book.title}
+                                    </h4>
+                                </div>
+                                <div className=" w-full">
+                                    <p className="text-xs font-extralight text-left text-[#1E81B0] truncate ">
+                                        By: {book.author} 
                                     </p>
-                                )}
-                                <p className="text-xs  text-[#6B7280] mt-2">
-                                    ISBN: {book.isbn} <br /> {book.pages} Pages
-                                </p>
+                                    <p className="text-xs  text-[#6B7280] mt-2">
+                                        ISBN: {book.isbn} <br /> {book.pages} Pages
+                                    </p>
+                                    {book.description && (
+                                        <p className="text-xs mt-2 text-[#0B2545] text-justify">
+                                            {book.description.length > 100
+                                                ? book.description.substring(0, 40) +
+                                                "..."
+                                                : book.description}
+                                        </p>
+                                    )}
+                                </div>
+                                <Link
+                                    href={`/books/${book.id}`}
+                                    className="mt-3 inline-block text-center text-xs  text-blue-600 font-semibold hover:underline"
+                                >
+                                    Lihat Detail
+                                </Link>
                             </div>
-                            <Link
-                                href={`/books/${book.id}`}
-                                className="mt-3 inline-block text-center text-xs text-blue-600 font-semibold hover:underline"
-                            >
-                                Lihat Detail
-                            </Link>
                         </Link>
                     ))}
                 </div>
