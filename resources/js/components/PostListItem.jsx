@@ -4,7 +4,7 @@ import Image from "./Image";
 
 const PostListItem = ({ news }) => {
     return (
-        <div className="flex flex-col xl:flex-row gap-8 bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        <div className="flex flex-col xl:flex-row gap-8 bg-white p-6 rounded-lg shadow-md shadow-[#1B3C53] transition-shadow duration-300">
             {/* Image */}
             <div className="md:hidden xl:block xl:w-1/3">
                 <Image
@@ -18,7 +18,7 @@ const PostListItem = ({ news }) => {
             <div className="flex flex-col gap-4 xl:w-2/3">
                 <Link
                     href={`/news/${news.id}`}
-                    className="text-3xl font-semibold text-gray-900 hover:text-blue-600 transition-colors duration-200"
+                    className="text-3xl font-semibold text-gray-900 hover:text-[#1B3C53] transition-colors duration-200"
                 >
                     {news.title}
                 </Link>

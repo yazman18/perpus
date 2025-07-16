@@ -96,6 +96,7 @@ return (
                     <input type="password" name="password" value={data.password} onChange={(e)=>
                     setData("password", e.target.value)
                     }
+                    placeholder="Masukkan password"
                     disabled={!role}
                     required
                     className="w-full border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring-2

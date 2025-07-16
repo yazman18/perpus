@@ -131,7 +131,7 @@ import Image from "./Image";
                             <Link href="/manage-account" onClick={closeMobileMenu}>
                             Manage Account
                             </Link>
-                            <Link href="/logout" method="post" as="button" className="px-4 py-2">
+                            <Link href="/logout" method="post" as="button" className="px-4 py-2 hover:bg-red-900 hover:text-white">
                             Logout
                             </Link>
                         </div>
@@ -185,7 +185,7 @@ import Image from "./Image";
                         Profile
                         </Link>
                         <Link href="/logout" method="post" as="button"
-                            className="block w-full text-left px-4 py-2 hover:bg-blue-100 focus:outline-none appearance-none bg-transparent text-base">
+                            className="block w-full text-left px-4 py-2  hover:bg-red-600 hover:text-white focus:outline-none appearance-none bg-transparent text-base">
                         Logout
                         </Link>
                     </div>

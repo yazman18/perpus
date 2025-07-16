@@ -35,12 +35,15 @@ const RegisterPage = () => {
             <div className="w-full lg:w-1/2 flex justify-start items-center p-8 relative z-10">
                 <div className="flex items-center gap-4">
                     <img
-                        src={`/storage/${aboutData?.logo_sekolah ?? "images/logo.png"}`}
+                        src={`/storage/${
+                            aboutData?.logo_sekolah ?? "images/logo.png"
+                        }`}
                         alt="Logo SMAN 1 Baleendah"
                         style={{ maxWidth: "100px", height: "100px" }}
                     />
                     <h1 className="text-2xl md:text-3xl font-bold text-[#1E1B4B] text-left leading-tight">
-                        {aboutData?.nama_sekolah ?? "Nama sekolah belum ada"} <br /> E-Library
+                        {aboutData?.nama_sekolah ?? "Nama sekolah belum ada"}{" "}
+                        <br /> E-Library
                     </h1>
                 </div>
             </div>
@@ -59,9 +62,12 @@ const RegisterPage = () => {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-4">
-                        <div  className="text-left">
-                            <label className="block text-gray-700 text-sm mb-1">Nama</label>
+                        <div className="text-left">
+                            <label className="block text-gray-700 text-sm mb-1">
+                                Nama
+                            </label>
                             <input
+                                placeholder="Masukkan nama lengkap"
                                 type="text"
                                 name="name"
                                 value={data.name}
@@ -71,7 +77,7 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                            {/* <div  className="text-left">
+                        {/* <div  className="text-left">
                                 <label className="block text-gray-700 text-sm mb-1">Alamat</label>
                                 <input
                                     type="text"
@@ -83,8 +89,10 @@ const RegisterPage = () => {
                                 />
                             </div> */}
 
-                        <div  className="text-left">
-                            <label className="block text-gray-700 text-sm mb-1">Tanggal Lahir</label>
+                        <div className="text-left">
+                            <label className="block text-gray-700 text-sm mb-1">
+                                Tanggal Lahir
+                            </label>
                             <input
                                 type="date"
                                 name="tanggal_lahir"
@@ -95,9 +103,12 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                        <div  className="text-left">
-                            <label className="block text-gray-700 text-sm mb-1">Email</label>
+                        <div className="text-left">
+                            <label className="block text-gray-700 text-sm mb-1">
+                                Email
+                            </label>
                             <input
+                                placeholder="Masukkan email"
                                 type="email"
                                 name="email"
                                 value={data.email}
@@ -107,9 +118,12 @@ const RegisterPage = () => {
                             />
                         </div>
 
-                        <div  className="text-left">
-                            <label className="block text-gray-700 text-sm mb-1">Password</label>
+                        <div className="text-left">
+                            <label className="block text-gray-700 text-sm mb-1">
+                                Password
+                            </label>
                             <input
+                                placeholder="Masukkan password"
                                 type="password"
                                 name="password"
                                 value={data.password}
@@ -144,11 +158,12 @@ const RegisterPage = () => {
                             </button>
                         </div>
 
-                        <div  className="text-left">
+                        <div className="text-left">
                             <label className="block text-gray-700 text-sm mb-1">
                                 {data.role === "guru" ? "NIP" : "NISN"}
                             </label>
                             <input
+                                placeholder="Masukkan NIP/NISN"
                                 type="text"
                                 name="id_number"
                                 value={data.id_number}
@@ -186,9 +201,7 @@ const RegisterPage = () => {
 };
 
 RegisterPage.layout = (page) => (
-    <AuthLayout aboutData={page.props.aboutData}>
-        {page}
-    </AuthLayout>
+    <AuthLayout aboutData={page.props.aboutData}>{page}</AuthLayout>
 );
 
 export default RegisterPage;

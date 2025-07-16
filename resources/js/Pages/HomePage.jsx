@@ -2,10 +2,9 @@ import { useState } from "react";
 import Image from "../components/Image";
 import MainLayout from "../Layouts/MainLayout";
 import { Link } from "@inertiajs/react";
-import { usePage } from '@inertiajs/react';
+import { usePage } from "@inertiajs/react";
 
 const Homepage = ({ news }) => {
-    
     const [offset, setOffset] = useState(0);
     const cardsToShow = 4;
     const cardWidth = 280;
@@ -35,7 +34,8 @@ const Homepage = ({ news }) => {
             </h1>
 
             <p className="text-sm md:text-md  italic  font-bold text-center mb-10 text-gray-700 font-montserrat">
-                {aboutData?.sub_judul ?? "Welcome! This is an official library website of SMAN 1 Baleendah"}
+                {aboutData?.sub_judul ??
+                    "Welcome! This is an official library website of SMAN 1 Baleendah"}
             </p>
 
             <div className="mb-8 mt-20">
@@ -45,19 +45,22 @@ const Homepage = ({ news }) => {
                             About Us
                         </h2>
                         <p className="text-[#1B3C53] leading-relaxed text-justify font-plusjakarta">
-                            {aboutData?.about ?? "Deskripsi perpustakaan belum tersedia."}
+                            {aboutData?.about ??
+                                "Deskripsi perpustakaan belum tersedia."}
                         </p>
                     </div>
                     <img
-                        src={`/storage/${aboutData?.gambar ?? "images/default.png"}`}
+                        src={`/storage/${
+                            aboutData?.gambar ?? "images/default.png"
+                        }`}
                         alt="About Us"
                         className="rounded-lg shadow-md mx-auto"
                         style={{ maxWidth: "600px", height: "300px" }}
-                        />
+                    />
                 </div>
             </div>
 
-            <hr className="border-t-2 border-gray-300 my-12" />
+            <hr className="border-t-2 border-[#1B3C53] my-12" />
 
             <div className="relative w-full">
                 <h2 className="text-4xl font-bold mb-6 text-center text-[#1B3C53]">
@@ -67,11 +70,11 @@ const Homepage = ({ news }) => {
                     <div className="flex items-center">
                         <button
                             onClick={handlePrev}
-                            className="z-10 p-2 bg-white border border-gray-300 rounded-full shadow hover:bg-blue-100 transition"
+                            className="z-10 p-2 bg-[#1B3C53] border border-gray-300 rounded-full shadow hover:bg-white transition"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-6 w-6 text-blue-800"
+                                className="h-6 w-6 text-white hover:text-[#1B3C53]"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -101,7 +104,7 @@ const Homepage = ({ news }) => {
                                     <Link
                                         key={indexHome}
                                         href={`/news/${news.id}`} // Link to the single post page
-                                        className="flex-shrink-0 bg-white rounded-lg shadow-md overflow-hidden"
+                                        className="flex-shrink-0 bg-white rounded-lg shadow-md p-2 overflow-hidden "
                                         style={{
                                             width: `${cardWidth}px`,
                                             marginRight: `${
@@ -114,8 +117,7 @@ const Homepage = ({ news }) => {
                                         <Image
                                             src={news.cover}
                                             alt={news.title}
-                                            className="rounded-2xl object-cover"
-                                            w="735"
+                                            className="rounded-2xl object-cover w-[300px] h-[500px]"
                                         />
                                         <div className="p-4">
                                             <h3 className="text-md font-semibold mb-1 text-blue-800">
@@ -132,11 +134,11 @@ const Homepage = ({ news }) => {
 
                         <button
                             onClick={handleNext}
-                            className="z-10 p-2 bg-white border border-gray-300 rounded-full shadow hover:bg-blue-100 transition"
+                            className="z-10 p-2 bg-[#1B3C53] border border-gray-300 rounded-full shadow hover:bg-white transition"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
-                                className="h-6 w-6 text-blue-800"
+                                className="h-6 w-6 text-white hover:text-[#1B3C53]"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke="currentColor"
@@ -156,11 +158,8 @@ const Homepage = ({ news }) => {
     );
 };
 
-
 Homepage.layout = (page) => (
-    <MainLayout aboutData={page.props.aboutData}>
-        {page}
-    </MainLayout>
+    <MainLayout aboutData={page.props.aboutData}>{page}</MainLayout>
 );
 
 export default Homepage;

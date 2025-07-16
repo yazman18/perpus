@@ -165,7 +165,7 @@ const Addbook = () => {
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="p-2 border rounded"
+                    className="p-2 w-[300px]  border rounded"
                     placeholder="Cari Buku..."
                 />
                 <button
@@ -175,7 +175,7 @@ const Addbook = () => {
                     Cari
                 </button>
             </div>
-            <div>
+            <div className="flex justify-end">
                 <button
                     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700 mb-5"
                     onClick={() => {
@@ -217,7 +217,7 @@ const Addbook = () => {
                                     <td className="px-4 py-2">
                                         {book.stock_inLoan}
                                     </td>
-                                    <td className=" space-x-2  ">
+                                    <td className=" space-x-3  ">
                                         <button
                                             className="px-2 py-1 text-white bg-yellow-500 rounded hover:bg-yellow-700"
                                             onClick={() => handleEdit(book)}

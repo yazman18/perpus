@@ -88,12 +88,12 @@ const KatalogPage = () => {
                 </div>
 
                 {/* 📚 Catalog List */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 gap-8 bg-gray-200 p-6 rounded-md">
+                <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-6 gap-8 p-3 rounded-md">
                     {booksData?.map((book) => (
                         <Link
                             href={`/books/${book.id}`}
                             key={book.id}
-                            className="flex flex-col px-4 py-4 bg-[#F5F7FA] hover:scale-[1.02] transition duration-300 ease-in-out transform rounded-lg  shadow-2xl"
+                            className="flex flex-col px-4 py-4 bg-[#F5F7FA] hover:scale-[1.02] transition duration-300 ease-in-out transform rounded-lg  shadow-md shadow-[#1B3C53]"
                         >
                             <Image
                                 src={book.image}
@@ -144,7 +144,7 @@ const KatalogPage = () => {
                             disabled={!link.url}
                             className={`px-3 py-1 mx-1 rounded border ${
                                 link.active
-                                    ? "bg-green-600 text-white"
+                                    ? "bg-[#1B3C53] text-white"
                                     : "bg-white text-gray-700"
                             }`}
                         >

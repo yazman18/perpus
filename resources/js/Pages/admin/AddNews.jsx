@@ -4,7 +4,6 @@ import { useForm } from "@inertiajs/react";
 import AdminLayout from "../../Layouts/AdminLayout";
 import Swal from 'sweetalert2';
 
-
 const AddNews = () => {
     const { data, setData, post, processing, errors, reset } = useForm({
         title: "",
@@ -17,23 +16,22 @@ const AddNews = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         post(`/news`, {
-                forceFormData: true,
-                onSuccess: () => {
-                    reset();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Berita berhasil dibuat!',
-                        showConfirmButton: false,
-                        timer: 1500
+            forceFormData: true,
+            onSuccess: () => {
+                reset();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berita berhasil dibuat!',
+                    showConfirmButton: false,
+                    timer: 1500,
                 });
-                
-            }
+            },
         });
     };
 
     return (
-        <div className="p-6 md:p-10 bg-white rounded-lg shadow-sm">
-            <h1 className="text-3xl font-bold mb-8 text-gray-800">
+        <div className="p-6 md:p-10 bg-white rounded-lg shadow-sm max-w-5xl mx-auto">
+            <h1 className="text-3xl font-bold mb-8 text-gray-800 text-center">
                 Tambahkan Berita Baru
             </h1>
 
@@ -53,9 +51,7 @@ const AddNews = () => {
                         className="block w-full text-sm text-gray-700 bg-gray-50 border border-gray-300 rounded-lg file:mr-4 file:py-2 file:px-4 file:border-0 file:bg-blue-100 file:text-blue-700"
                     />
                     {errors.cover && (
-                        <p className="text-red-500 text-sm mt-1">
-                            {errors.cover}
-                        </p>
+                        <p className="text-red-500 text-sm mt-1">{errors.cover}</p>
                     )}
                 </div>
 
@@ -72,9 +68,7 @@ const AddNews = () => {
                         className="w-full p-3 border italic border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                     {errors.title && (
-                        <p className="text-red-500 text-sm mt-1">
-                            {errors.title}
-                        </p>
+                        <p className="text-red-500 text-sm mt-1">{errors.title}</p>
                     )}
                 </div>
 
@@ -93,9 +87,7 @@ const AddNews = () => {
                         <option value="development">Pengembangan</option>
                     </select>
                     {errors.category && (
-                        <p className="text-red-500 text-sm mt-1">
-                            {errors.category}
-                        </p>
+                        <p className="text-red-500 text-sm mt-1">{errors.category}</p>
                     )}
                 </div>
 
@@ -112,9 +104,7 @@ const AddNews = () => {
                         rows={4}
                     />
                     {errors.desc && (
-                        <p className="text-red-500 text-sm mt-1">
-                            {errors.desc}
-                        </p>
+                        <p className="text-red-500 text-sm mt-1">{errors.desc}</p>
                     )}
                 </div>
 
@@ -128,12 +118,10 @@ const AddNews = () => {
                         theme="snow"
                         value={data.content}
                         onChange={(value) => setData("content", value)}
-                        className="bg-white h-50"
+                        className="bg-white h-64 rounded shadow-sm"
                     />
                     {errors.content && (
-                        <p className="text-red-500 text-sm mt-1">
-                            {errors.content}
-                        </p>
+                        <p className="text-red-500 text-sm mt-1">{errors.content}</p>
                     )}
                 </div>
 

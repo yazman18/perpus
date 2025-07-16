@@ -9,7 +9,7 @@ const isAvailable = book.stock > 0;
 
 return (
 <div className="px-6 py-10 bg-gray-100 font-sans min-h-screen">
-    <div className="max-w-5xl mx-auto bg-white shadow-md p-6 rounded-md">
+    <div className="max-w-5xl mx-auto bg-white shadow-md shadow-[#1B3C53] p-6 rounded-md">
         {/* Breadcrumb */}
         <p className="text-sm text-gray-600 mb-4">
             <Link href="/" className="hover:underline">
@@ -104,7 +104,7 @@ return (
             </p>
         </div>
 
-        <div className="gap-4 mb-10">
+        <div className="gap-4 mb-10 mt-10">
             {/* Safe check: Ensure books is an array */}
             <TopPicksCarousel books={Array.isArray(books) ? books.slice(0, 5) : []} />
         </div>
