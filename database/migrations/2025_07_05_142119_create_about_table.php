@@ -38,7 +38,7 @@ return new class extends Migration
             'nama_sekolah' => 'SMAN 1 Baleendah',
             'judul' => 'Membangun Negeri Membangun Asah',
             'sub_judul' => 'Unggul dalam Prestasi dan Karakter',
-            'about' => 'SMAN 1 Baleendah adalah sekolah menengah atas yang berkomitmen dalam membentuk generasi penerus bangsa yang cerdas dan berakhlak mulia.',
+            'about' => 'SMAN 1 Baleendah adalah sekolah menengah atas yang berkomitmen dalam membentuk generasi penerus bangsa yang cerdas dan berakhlak mulia. Sekolah ini menjunjung tinggi nilai-nilai integritas, kedisiplinan, dan semangat belajar dalam setiap aspek pendidikan. Dengan dukungan tenaga pendidik yang profesional dan fasilitas yang memadai, SMAN 1 Baleendah terus berinovasi dalam menciptakan lingkungan belajar yang kondusif dan inklusif. Kami percaya bahwa pendidikan bukan hanya tentang pencapaian akademik, tetapi juga tentang pengembangan karakter, kepemimpinan, dan kepedulian sosial. Melalui berbagai kegiatan ekstrakurikuler, program pembinaan siswa, dan kemitraan dengan berbagai pihak, SMAN 1 Baleendah siap mencetak lulusan yang tidak hanya siap menghadapi tantangan masa depan, tetapi juga menjadi agen perubahan positif bagi masyarakat dan bangsa.',
             'deskripsi' => 'Sekolah ini memiliki program unggulan dalam bidang akademik dan non-akademik dengan fasilitas lengkap dan tenaga pengajar profesional.',
             'alamat' => 'Jl. R.A.A Wiranata Kusumah No.30, Baleendah, Kec. Baleendah, Kabupaten Bandung, Jawa Barat 40375',
             'no_hp' => '081234567890',
