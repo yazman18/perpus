@@ -110,7 +110,7 @@ const KatalogPage = () => {
                                 </div>
                                 <div className=" w-full">
                                     <p className="text-xs font-extralight text-left text-[#1E81B0] truncate ">
-                                         {book.author} 
+                                        By: {book.author} 
                                     </p>
                                     <p className="text-xs  text-[#6B7280] mt-2">
                                         ISBN: {book.isbn} <br /> {book.pages} Pages
