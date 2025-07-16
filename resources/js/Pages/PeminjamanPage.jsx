@@ -48,21 +48,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                     </div>
                 )}
 
-                {!peminjamans.length && (
-                    <div className="text-center py-10">
-                        <p className="mb-4 text-[#1B3C53]">
-                            Tidak ada buku yang dipinjam
-                        </p>
-                        <Link
-                            href="/katalog"
-                            className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white rounded"
-                        >
-                            Pinjam Buku
-                        </Link>
-                    </div>
-                )}
-
-                {!!peminjamans.length && (
+                {!!peminjamans.length ? (
                     <div>
                         {peminjamans.map((item) => {
                             const sisaDurasi = calculateSisaDurasi(
@@ -71,30 +57,20 @@ const PeminjamanPage = ({ peminjamans }) => {
                             );
                             const terlambat = sisaDurasi < 0;
                             const denda = item.denda || sisaDurasi * -10000;
-                            console.log("Tanggal Pinjam:", item.tanggal_pinjam);
-                            console.log("Durasi:", item.durasi);
-                            console.log(
-                                "Tanggal Kembali:",
-                                item.tanggal_kembali
-                            );
-                            console.log("Sisa Durasi:", sisaDurasi);
-                            console.log("Denda:", denda);
 
                             const isReturnPending =
                                 item.status_pengembalian === "pending";
                             const isReturned =
                                 item.status_pengembalian === "disetujui";
                             const notYetReturned =
-                                item.status_pengembalian ===
-                                "belum melakukan pengembalian";
-
+                                item.status_pengembalian === "belum melakukan pengembalian";
                             const isRejected =
-                                item.status_peminjaman === "ditolak"; // Check for rejected borrowing
+                                item.status_peminjaman === "ditolak";
 
                             return (
                                 <div
                                     key={item.id}
-                                    className=" p-4 my-8 bg-white rounded-lg shadow-md shadow-[#1B3C53]"
+                                    className="p-4 my-8 bg-white rounded-lg shadow-md shadow-[#1B3C53]"
                                 >
                                     <h2 className="text-lg font-bold">
                                         {item.book?.title}
@@ -102,36 +78,28 @@ const PeminjamanPage = ({ peminjamans }) => {
                                     <p>Penulis: {item.book?.author}</p>
                                     <p>Durasi: {item.durasi} hari</p>
 
-                                    {/* Tanggal Peminjaman */}
                                     <p>
                                         Tanggal Peminjaman:{" "}
-                                        {new Date(
-                                            item.tanggal_pinjam
-                                        ).toLocaleDateString()}
+                                        {new Date(item.tanggal_pinjam).toLocaleDateString()}
                                     </p>
 
-                                    {/* Tanggal Pengembalian */}
                                     {item.tanggal_kembali && (
                                         <p>
                                             Tenggat Kembali:{" "}
-                                            {new Date(
-                                                item.tanggal_kembali
-                                            ).toLocaleDateString()}
+                                            {new Date(item.tanggal_kembali).toLocaleDateString()}
                                         </p>
                                     )}
 
-                                    {/* Display rejection message if the borrowing is rejected */}
                                     {isRejected && (
                                         <p className="text-red-600 font-semibold">
                                             Peminjaman Ditolak
                                         </p>
                                     )}
+
                                     {isReturned && (
                                         <p>
                                             Tanggal Pengembalian:{" "}
-                                            {new Date(
-                                                item.tanggal_pengembalian
-                                            ).toLocaleDateString()}
+                                            {new Date(item.tanggal_pengembalian).toLocaleDateString()}
                                         </p>
                                     )}
 
@@ -147,9 +115,7 @@ const PeminjamanPage = ({ peminjamans }) => {
                                                     }
                                                 >
                                                     {terlambat
-                                                        ? `Terlambat ${Math.abs(
-                                                              sisaDurasi
-                                                          )} hari`
+                                                        ? `Terlambat ${Math.abs(sisaDurasi)} hari`
                                                         : `${sisaDurasi} hari`}
                                                 </span>
                                             </p>
@@ -160,13 +126,11 @@ const PeminjamanPage = ({ peminjamans }) => {
                                                         : "text-black"
                                                 }
                                             >
-                                                Denda: Rp{" "}
-                                                {denda.toLocaleString("id-ID")}
+                                                Denda: Rp {denda.toLocaleString("id-ID")}
                                             </p>
                                         </>
                                     )}
 
-                                    {/* STATUS */}
                                     {item.status_peminjaman !== "disetujui" ? (
                                         !isRejected && (
                                             <p className="font-semibold text-yellow-600 mt-2">
@@ -179,20 +143,13 @@ const PeminjamanPage = ({ peminjamans }) => {
                                         </p>
                                     ) : (
                                         <>
-                                            {/* Tombol jika belum return form */}
                                             {notYetReturned &&
-                                                selectedReturnId !==
-                                                    item.id && (
+                                                selectedReturnId !== item.id && (
                                                     <div className="flex gap-2 mt-2">
                                                         <button
                                                             onClick={(e) => {
-                                                                setSelectedReturnId(
-                                                                    item.id
-                                                                );
-                                                                handleReturnSubmit(
-                                                                    e,
-                                                                    item.id
-                                                                );
+                                                                setSelectedReturnId(item.id);
+                                                                handleReturnSubmit(e, item.id);
                                                             }}
                                                             className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
                                                         >
@@ -201,9 +158,7 @@ const PeminjamanPage = ({ peminjamans }) => {
 
                                                         <button
                                                             onClick={() =>
-                                                                handlePerpanjang(
-                                                                    item.id
-                                                                )
+                                                                handlePerpanjang(item.id)
                                                             }
                                                             className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
                                                         >
@@ -212,13 +167,10 @@ const PeminjamanPage = ({ peminjamans }) => {
                                                     </div>
                                                 )}
 
-                                            {/* STATUS PENGEMBALIAN PENDING */}
-                                            {item.status_pengembalian ===
-                                                "pending" &&
+                                            {item.status_pengembalian === "pending" &&
                                                 !selectedReturnId && (
                                                     <p className="font-semibold mt-2 text-yellow-600">
-                                                        Menunggu Konfirmasi
-                                                        Pengembalian Admin
+                                                        Menunggu Konfirmasi Pengembalian Admin
                                                     </p>
                                                 )}
                                         </>
@@ -226,6 +178,10 @@ const PeminjamanPage = ({ peminjamans }) => {
                                 </div>
                             );
                         })}
+                    </div>
+                ) : (
+                    <div className="text-center text-gray-500 py-10 text-lg italic">
+                        Tidak ada peminjaman.
                     </div>
                 )}
             </div>
