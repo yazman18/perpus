@@ -210,7 +210,7 @@ const Addbook = () => {
                                 <tr key={book.id} className="border-t text-center ">
                                     <td className="px-4 py-2">{index+1}</td>
                                     <td className="px-4 py-2">{book.uniqueId}</td>
-                                    <td className="px-4 py-2">{book.title}</td>
+                                    <td className="px-4 truncate max-w-40 py-2">{book.title}</td>
                                     <td className="px-4 py-2">{book.author}</td>
                                     <td className="px-4 py-2">{book.year}</td>
                                     <td className="px-4 py-2">{book.stock}</td>
@@ -235,7 +235,7 @@ const Addbook = () => {
                             ))
                         ) : (
                             <tr>
-                                <td className="p-4 text-center" colSpan="6">
+                                <td className="p-4 text-center" colSpan="8">
                                     Tidak ada data buku.
                                 </td>
                             </tr>
