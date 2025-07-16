@@ -53,7 +53,7 @@ class PeminjamanController extends Controller
         $user = Auth::user();
         $books = Book::where('stock', '>', 0)->get();
         $users = User::all();
-        return Inertia::render('PeminjamanForm', [
+        return Inertia::render('BookDetail', [
             'book' => $book,
             'user' => $user,
             'books' => $books,
@@ -80,8 +80,8 @@ class PeminjamanController extends Controller
         if ($book->stock <= 0) {
             return back()->withErrors(['book_id' => 'Stok buku habis']);
         }
-        // $book->decrement('stock');
-        // $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
+        $book->decrement('stock');
+        $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
 
         $tanggalPinjam = new \Carbon\Carbon($validated['tanggal_pinjam']);
         $tanggalKembali = $tanggalPinjam->addDays(7);

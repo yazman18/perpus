@@ -28,8 +28,16 @@ Route::get('/katalog', [BookController::class, 'katalog']);
 Route::get('/books/{book}', [BookController::class, 'show']);
 Route::get('/book/{id}', function ($id) {
     $book = \App\Models\Book::findOrFail($id);
-    $aboutData = About::first(); // Ambil data pertama dari tabel about
-    return Inertia::render('BookDetail', ['book' => $book, 'aboutData' => $aboutData,]);
+    $aboutData = About::first(); 
+    $user = Auth::user(); // ambil user yang sedang login
+    $books = \App\Models\Book::where('stock', '>', 0)->get();
+    
+    return Inertia::render('BookDetail', [
+        'book' => $book,
+        'aboutData' => $aboutData,
+        'user' => $user,
+        'books' => $books
+    ]);
 });
 Route::get('/about', [AboutController::class, 'About']);
 
