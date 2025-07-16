@@ -73,7 +73,7 @@ class NewsController extends Controller
 
     public function indexAdmin()
     {
-        $news = News::latest()->get();
+        $news = News::latest()->paginate(3);
         $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
         return Inertia::render('admin/NewsIndex', [
             'news' => $news,

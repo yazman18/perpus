@@ -6,8 +6,8 @@ import { usePage } from "@inertiajs/react";
 
 const Homepage = ({ news }) => {
     const [offset, setOffset] = useState(0);
-    const cardsToShow = 4;
-    const cardWidth = 280;
+    const cardsToShow = 8;
+    const cardWidth = 200;
     const gap = 20;
 
     const { props } = usePage();
@@ -88,9 +88,9 @@ const Homepage = ({ news }) => {
                             </svg>
                         </button>
 
-                        <div className="w-full overflow-hidden px-4">
+                        <div className="w-full overflow-hidden px-4 h-120   ">
                             <div
-                                className="flex transition-transform duration-500 ease-out"
+                                className="flex transition-transform duration-500 ease-out h-full"
                                 style={{
                                     width: `${
                                         newsData.length * (cardWidth + gap)
@@ -104,7 +104,7 @@ const Homepage = ({ news }) => {
                                     <Link
                                         key={indexHome}
                                         href={`/news/${news.id}`} // Link to the single post page
-                                        className="flex-shrink-0 bg-white rounded-lg shadow-md p-2 overflow-hidden "
+                                        className="flex-shrink-0 bg-white rounded-lg shadow-md p-2 overflow-hidden  h-full "
                                         style={{
                                             width: `${cardWidth}px`,
                                             marginRight: `${
@@ -117,13 +117,13 @@ const Homepage = ({ news }) => {
                                         <Image
                                             src={news.cover}
                                             alt={news.title}
-                                            className="rounded-2xl object-cover w-[300px] h-[500px]"
+                                            className="rounded-2xl object-fill w-full h-9/12 "
                                         />
-                                        <div className="p-4">
-                                            <h3 className="text-md font-semibold mb-1 text-blue-800">
+                                        <div className="p-4 flex h-3/12 flex-col justify-center">
+                                            <h3 className="text-md font-semibold mb-1 text-blue-800 truncate ">
                                                 {news.title}
                                             </h3>
-                                            <p className="text-gray-600 text-sm">
+                                            <p className="text-gray-600 text-sm line-clamp-2">
                                                 {news.short_description}
                                             </p>
                                         </div>
