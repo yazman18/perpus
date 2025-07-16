@@ -32,7 +32,7 @@ const NewsIndex = ({ news }) => {
     };
 
     return (
-        <div className="p-6 md:px-8 md:py-4 bg-white rounded-lg shadow-sm border">
+        <div className="p-6 md:px-8 md:py-4 bg-white rounded-lg shadow-sm ">
             <h1 className="text-3xl font-bold mb-6 text-gray-800">Daftar Berita</h1>
 
             <div className="space-y-3 pr-2">
