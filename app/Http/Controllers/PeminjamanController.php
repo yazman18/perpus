@@ -189,9 +189,15 @@ class PeminjamanController extends Controller
                             });
             })
             ->paginate(10);
+            $pengembalianOptions = Peminjaman::with('book')
+            ->where('status_pengembalian', 'belum melakukan pengembalian')
+            ->where('status_peminjaman', 'disetujui')
+            ->get();
 
         // Ambil notifikasi user admin (sementara user_id = 1)
         $notifications = Notification::where('user_id', 1)->get();
+        $books = Book::where('stock', '>', 0)->get();
+        $users = User::all();
 
         // Kirim data ke komponen Inertia
         return Inertia::render('admin/TransactionAdmin', [
@@ -200,6 +206,11 @@ class PeminjamanController extends Controller
             'search' => $search,
             'notifications' => $notifications,
             'aboutData' => $aboutData,
+            'books' => $books,   // <== ditambahkan
+            'users' => $users,   // <== ditambahkan
+            'pengembalianOptions' => $pengembalianOptions, // tambahan
+
+
         ]);
     }
 
@@ -304,7 +315,7 @@ class PeminjamanController extends Controller
             'status_pengembalian' => 'belum melakukan pengembalian',  // Status awal pengembalian
         ]);
 
-        return redirect()->route('admin.peminjaman.createForm')->with('success', 'Peminjaman berhasil dibuat');
+        return redirect()->route('admin.transaksi')->with('success', 'Peminjaman berhasil dibuat');
     }
 
 
@@ -313,7 +324,7 @@ class PeminjamanController extends Controller
         $books = Book::all(); // atau Book::where('stock', '>', 0)->get();
         $users = User::all(); // atau filter sesuai kebutuhan
 
-        return Inertia::render('admin/PeminjamanFormAdmin', [
+        return Inertia::render('admin/TransactionAdmin', [
             'books' => $books,
             'users' => $users,
         ]);
@@ -328,7 +339,7 @@ class PeminjamanController extends Controller
             ->get();
         $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
 
-        return Inertia::render('admin/PengembalianFormAdmin', [
+        return Inertia::render('admin/TransactionAdmin', [
             'peminjamans' => $peminjamans,
             'aboutData' => $aboutData,
         ]);

@@ -87,7 +87,7 @@ Route::middleware(['auth', CheckRole::class . ':admin'])->group(function () {
         ]);
     });
     Route::get('/reports', [AdminController::class, 'report'])->name('admin.report');
-    Route::get('/transaction', [PeminjamanController::class, 'adminTransaksi']);
+    Route::get('/transaction', [PeminjamanController::class, 'adminTransaksi'])->name('admin.transaksi');
 
     Route::get('/aboutadmin', [AboutController::class, 'aboutAdmin']);
     Route::post('/admin/about', [AboutController::class, 'store'])->name('admin.about.store');
