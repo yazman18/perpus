@@ -167,6 +167,7 @@ const TransactionAdmin = () => {
             </td>
         </tr>
     );
+    
 
     const renderPagination = (links) => (
         <div className="mt-6 flex flex-wrap justify-center gap-2">
@@ -253,18 +254,29 @@ const TransactionAdmin = () => {
                             <th>Aksi</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {(activeTab === "peminjaman"
-                            ? peminjamans.data
-                            : pengembalians.data
-                        ).map((item, index) =>
-                            renderTableRow(
-                                item,
-                                activeTab === "peminjaman",
-                                index + 1
-                            )
-                        )}
-                    </tbody>
+                  <tbody>
+    {(activeTab === "peminjaman"
+        ? peminjamans.data
+        : pengembalians.data
+    ).length > 0 ? (
+        (activeTab === "peminjaman"
+            ? peminjamans.data
+            : pengembalians.data
+        ).map((item, index) =>
+            renderTableRow(
+                item,
+                activeTab === "peminjaman",
+                index + 1
+            )
+        )
+    ) : (
+        <tr>
+            <td className="p-4 text-center" colSpan={9}>
+                Tidak ada data transaksi yang tersedia.
+            </td>
+        </tr>
+    )}
+</tbody>
                 </table>
             </div>
 

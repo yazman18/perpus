@@ -108,7 +108,7 @@ const ReportAdmin = () => {
                                     <td className=" p-2">{index + 1}</td>
                                     <td className=" p-2">{item.nama}</td>
                                     <td className=" p-2">{item.uniqueId}</td>
-                                    <td className=" p-2">{item.buku}</td>
+                                    <td className=" p-2 px-4 py-2 truncate max-w-40">{item.buku}</td>
                                     <td className=" p-2">{item.jenis}</td>
                                     <td className=" p-2">
                                         {(() => {
@@ -157,7 +157,7 @@ const ReportAdmin = () => {
                             ))
                         ) : (
                             <tr>
-                                <td className="p-4 text-center" colSpan={8}>
+                                <td className="p-4 text-center" colSpan={9}>
                                     Tidak ada data transaksi yang disetujui.
                                 </td>
                             </tr>

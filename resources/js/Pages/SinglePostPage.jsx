@@ -8,9 +8,9 @@ const SinglePostPage = ({ news }) => {
             {/* Header Section */}
             <div className="flex flex-col lg:flex-row lg:gap-12">
                 {/* Left Column for Title and Description */}
-                <div className="lg:w-3/5 flex flex-col gap-6">
+                <div className=" flex flex-col gap-6">
                     {/* Title */}
-                    <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+                    <h1 className="text-4xl md:text-5xl w-full font-bold text-gray-900 leading-tight ">
                         {news.title}
                     </h1>
 
@@ -40,13 +40,11 @@ const SinglePostPage = ({ news }) => {
             {/* News Cover Image */}
             {news.cover && (
                 <div className="w-full rounded-xl overflow-hidden shadow-md">
-                    <div className="relative w-full h-[300px] md:h-[400px] flex justify-center items-center bg-gray-50">
                         <Image
                             src={news.cover}
                             alt={news.title}
-                            className="object-contain max-w-full max-h-full"
+                            className="relative w-full h-[300px] md:h-[400px] flex justify-center items-center "
                         />
-                    </div>
                 </div>
             )}
 

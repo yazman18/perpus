@@ -53,7 +53,7 @@ class PeminjamanController extends Controller
         $user = Auth::user();
         $books = Book::where('stock', '>', 0)->get();
         $users = User::all();
-        return Inertia::render('PeminjamanForm', [
+        return Inertia::render('BookDetail', [
             'book' => $book,
             'user' => $user,
             'books' => $books,
@@ -80,8 +80,8 @@ class PeminjamanController extends Controller
         if ($book->stock <= 0) {
             return back()->withErrors(['book_id' => 'Stok buku habis']);
         }
-        // $book->decrement('stock');
-        // $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
+        $book->decrement('stock');
+        $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
 
         $tanggalPinjam = new \Carbon\Carbon($validated['tanggal_pinjam']);
         $tanggalKembali = $tanggalPinjam->addDays(7);
@@ -227,8 +227,7 @@ class PeminjamanController extends Controller
             $peminjaman->status_pengembalian = 'belum melakukan pengembalian';
         }
         $book = $peminjaman->book;
-        $book->decrement('stock');
-        $book->increment('stock_inLoan'); // Increment stock_inLoan when a book is borrowed
+        // Increment stock_inLoan when a book is borrowed
 
         $peminjaman->save();
 
@@ -263,6 +262,7 @@ class PeminjamanController extends Controller
         // Update stok buku
         $book = $peminjaman->book;
         $book->increment('stock');
+        $book->decrement('stock_inLoan');
         $book->save();
 
         return redirect()->back()->with('success', 'Pengembalian disetujui dan stok buku diperbarui.');
@@ -338,7 +338,7 @@ class PeminjamanController extends Controller
             ->where('status_peminjaman', '!=', 'ditolak') // Exclude rejected borrowings
             ->get();
         $aboutData = About::latest()->first(); // Ambil data terbaru dari tabel about
-
+        
         return Inertia::render('admin/TransactionAdmin', [
             'peminjamans' => $peminjamans,
             'aboutData' => $aboutData,

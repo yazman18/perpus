@@ -3,7 +3,7 @@ import PostListItem from "./PostListItem";
 
 const PostList = ({ newsList }) => {
     return (
-        <div className="grid grid-cols-2 gap-12 mb-8">
+        <div className="grid grid-cols-2 gap-12 mb-8 border-amber-400">
             {newsList.map((news) => (
                 <PostListItem key={news.id} news={news} />
             ))}
